@@ -8,6 +8,6 @@ urlpatterns = [
     path('devs/', views.devs),
     path('sample_para/', views.sample_para),
     path('submit_essay_instance/', views.submitEssayInstance),
-    
+    path('essay/check/', views.sampleProcess)
 
 ]

@@ -119,6 +119,31 @@ def submitEssayInstance(req):
 
     
     return JsonResponse({'message' : 'error to handle the \'submitEssayInstance\' views'})
+
+@csrf_exempt
+def sampleProcess(req):
+
+    if req.method == 'POST':
+
+        data = json.loads(req.body)
+
+        essaycomposition = data.get('composition')
+
+
+        #use the mlp module here
+        #convert the composition string into spacy doc object
+        #instantiate the PhraseExtract
+        #use the PhraseExtract to extract the phrases from the composition string
+        #use the SpellCheck class to indentify the spelling error in the composition
+
+        #--------------------------------------------------------------------------
+        #return the result object of the processed compostion
+
+        print(essaycomposition)
+
+        return JsonResponse({'result' : True})
+
+    return JsonResponse({'message' : 'method is not POST'})
         
 
 
