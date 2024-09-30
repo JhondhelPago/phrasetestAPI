@@ -2,6 +2,17 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+
+#module for nlp pre-processes
+import  sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'module')))
+
+from module.features_xtrct import PhraseExtract
+
+
 # Create your views here.
 
 #importing models
@@ -141,7 +152,12 @@ def sampleProcess(req):
 
         print(essaycomposition)
 
-        return JsonResponse({'result' : True})
+        question = 'This is sample question'
+
+        phrase_extract = PhraseExtract(question=question, text=essaycomposition)
+
+
+        return JsonResponse({'result' : phrase_extract.wordCount()})
 
     return JsonResponse({'message' : 'method is not POST'})
         
