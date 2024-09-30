@@ -108,13 +108,16 @@ class PhraseExtract:
 
         return wordCount(self.doc_sm)
     
+    
     def tokenSize(self):
 
         return tokenSize(self.doc_sm)
+    
 
     def tokenGenerator(self):
 
         tokenGenerator(self.doc_sm)
+
 
     def getSimilarityScore(self):
 
@@ -289,6 +292,29 @@ class PhraseExtract:
     def undefined_pos_(self):
 
         return self.__other
+    
+    def POS_frequency(self):
+
+        return {
+            'noun' : self.noun_count(),
+            'adjective' : self.adj_count(),
+            'adverb' : self.adv_count(),
+            'pronoun' : self.pronoun_count(),
+            'verb' : self.verb_count(),
+            'proper_noun' : self. proper_noun_count(),
+            'determiner' : self.determiner_count(),
+            'adpostion' : self.adposition_count(),
+            'connecting_conjuction' : self.connecting_conjuction_count(),
+            'subordination_conjunction' : self.subordination_conjunction_count(),
+            'interjection' : self.interjection_count(),
+            'numerical' : self.numerical_count(),
+            'auxiliary_verb' : self.auxiliary_verb_count(),
+            'punctuation' : self.punctuation_count(),
+            'auxiliary_verb' : self.auxiliary_verb_count(),
+            'punctuation' : self.punctuation_count(),
+            'symbol' : self.symbol_count(),
+            'undefined_pos' : self.undefined_pos_() 
+        }
 
     def ave_sentence_len(self):
         
@@ -313,6 +339,7 @@ class PhraseExtract:
             sent_quanti += 1
 
         return char_len / sent_quanti
+    
 
     def display_meta_pos(self):
 
@@ -321,6 +348,14 @@ class PhraseExtract:
         print(f"adverb count: {self.adv_count()}")
         print(f"pronoun count: {self.pronoun_count()}")
         print(f"verb count: {self.verb_count()}")
+
+
+    def sentence_count(self) -> int:
+
+        sentence_number = len([sent for sent in self.doc_sm.sents])
+
+        return sentence_number
+
 
     def cohesive_device_indentifier(self):
 
@@ -371,6 +406,8 @@ class PhraseExtract:
         similarity_score = self.doc_md_question.similarity(self.doc_md)
 
         return similarity_score
+    
+
 
         
 

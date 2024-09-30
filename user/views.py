@@ -11,6 +11,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'module')))
 
 from module.features_xtrct import PhraseExtract
+from module.token_tools import SpellingDetector
+from module.token_tools import SpellCorrection
 
 
 # Create your views here.
@@ -138,6 +140,8 @@ def sampleProcess(req):
 
         data = json.loads(req.body)
 
+
+        question = data.get('question1')
         essaycomposition = data.get('composition')
 
 
@@ -150,14 +154,34 @@ def sampleProcess(req):
         #--------------------------------------------------------------------------
         #return the result object of the processed compostion
 
-        print(essaycomposition)
-
-        question = 'This is sample question'
+        #print(essaycomposition)
 
         phrase_extract = PhraseExtract(question=question, text=essaycomposition)
 
 
-        return JsonResponse({'result' : phrase_extract.wordCount()})
+        composition_result = {
+            'word_count' : phrase_extract.wordCount(),
+            'sentence_count' : phrase_extract.sentence_count(),
+
+        }
+
+        #SpellingDetector
+
+        #instance of SpellingDetector
+        spellingDetector = SpellingDetector(phrase_extract.text)
+        print(spellingDetector.correctionCollection)
+
+
+        
+        
+
+        return JsonResponse(
+            {
+                'POS_tags' : phrase_extract.POS_frequency(),
+                'numberOfSentence' : phrase_extract.sentence_count(),
+                'spelling_errors' : spellingDetector.correctionCollection
+            }
+        )
 
     return JsonResponse({'message' : 'method is not POST'})
         

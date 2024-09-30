@@ -231,7 +231,7 @@ class SpellingDetector:
 
             spell_correction  = SpellCorrection(text=word, correction=self.__checker.correction(word), candidates=self.__checker.candidates(word))
 
-            self.correctionCollection.append(spell_correction)
+            self.correctionCollection.append(spell_correction.serialized_dict())
          
 
     
@@ -239,20 +239,27 @@ class SpellCorrection:
 
     def __init__(self, text, correction, candidates):
 
-        self.__original_text = text
-        self.__spelling_correction = correction
-        self.__spelling_candidates = candidates
+        self.original_text = text
+        self.spelling_correction = correction
+        self.spelling_candidates = candidates
 
-    def getOrignalText(self):
+    def getOriginalText(self):
 
-        return self.__original_text
+        return self.original_text
     
     def getCorrection(self):
 
-        return self.__spelling_correction
+        return self.spelling_correction
     
     def getCorrectionCandidates(self):
 
-        return self.__spelling_candidates
+        return self.spelling_candidates
+    
+    def serialized_dict(self):
 
+        return {
+            'original_text' : self.original_text,
+            'spelling_correction' : self.spelling_correction,
+            'spelling_candidates' : list(self.spelling_candidates) 
+        }
 
