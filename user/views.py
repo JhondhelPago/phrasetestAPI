@@ -2,6 +2,19 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+
+#module for nlp pre-processes
+import  sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'module')))
+
+from module.features_xtrct import PhraseExtract
+from module.token_tools import SpellingDetector
+from module.token_tools import SpellCorrection
+
+
 # Create your views here.
 
 #importing models
@@ -119,6 +132,61 @@ def submitEssayInstance(req):
 
     
     return JsonResponse({'message' : 'error to handle the \'submitEssayInstance\' views'})
+
+@csrf_exempt
+def sampleProcess(req):
+
+    if req.method == 'POST':
+
+        data = json.loads(req.body)
+
+
+        question = data.get('question1')
+        essaycomposition = data.get('composition')
+
+
+        #use the mlp module here
+        #convert the composition string into spacy doc object
+        #instantiate the PhraseExtract
+        #use the PhraseExtract to extract the phrases from the composition string
+        #use the SpellCheck class to indentify the spelling error in the composition
+
+        #--------------------------------------------------------------------------
+        #return the result object of the processed compostion
+
+        #print(essaycomposition)
+
+        phrase_extract = PhraseExtract(question=question, text=essaycomposition)
+
+
+        composition_result = {
+            'word_count' : phrase_extract.wordCount(),
+            'sentence_count' : phrase_extract.sentence_count(),
+
+        }
+
+        #SpellingDetector
+
+        #instance of SpellingDetector
+        print(phrase_extract.doc_sm)
+        spellingDetector = SpellingDetector(phrase_extract.doc_sm)
+        print(spellingDetector.correctionCollection)
+        print(phrase_extract.ArrayOfSents())
+
+
+        
+        
+
+        return JsonResponse(
+            {
+                'Original_Composition' : phrase_extract.ArrayOfSents(),
+                'POS_tags' : phrase_extract.POS_frequency(),
+                'numberOfSentence' : phrase_extract.sentence_count(),
+                'spelling_errors' : spellingDetector.correctionCollection
+            }
+        )
+
+    return JsonResponse({'message' : 'method is not POST'})
         
 
 
