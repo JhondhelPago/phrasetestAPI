@@ -168,8 +168,10 @@ def sampleProcess(req):
         #SpellingDetector
 
         #instance of SpellingDetector
-        spellingDetector = SpellingDetector(phrase_extract.text)
+        print(phrase_extract.doc_sm)
+        spellingDetector = SpellingDetector(phrase_extract.doc_sm)
         print(spellingDetector.correctionCollection)
+        print(phrase_extract.ArrayOfSents())
 
 
         
@@ -177,6 +179,7 @@ def sampleProcess(req):
 
         return JsonResponse(
             {
+                'Original_Composition' : phrase_extract.ArrayOfSents(),
                 'POS_tags' : phrase_extract.POS_frequency(),
                 'numberOfSentence' : phrase_extract.sentence_count(),
                 'spelling_errors' : spellingDetector.correctionCollection

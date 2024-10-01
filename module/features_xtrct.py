@@ -407,6 +407,10 @@ class PhraseExtract:
 
         return similarity_score
     
+    def ArrayOfSents(self):
+
+        return list(sent.text for sent in self.doc_sm.sents)
+    
 
 
         

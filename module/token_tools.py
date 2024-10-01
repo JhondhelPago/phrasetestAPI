@@ -214,10 +214,10 @@ class mini_nlp:
 
 class SpellingDetector:
 
-    def __init__(self, text):
+    def __init__(self, doc : spacy.tokens.doc):
 
         self.__checker = SpellChecker()
-        self.wordcollection_text = mini_nlp.tokenlist_alpha_lowered(text=text)
+        self.doc = doc
         self.correctionCollection = []
 
 
@@ -225,23 +225,50 @@ class SpellingDetector:
         self.InitializeErrorDetection()
 
 
+    def wordGenerator(self, sents):
+
+        return list(token.text for token in sents if token.is_alpha)
+    
+
+
     def InitializeErrorDetection(self):
 
-        for word in self.__checker.unknown(self.wordcollection_text):
+        # for word in self.__checker.unknown(self.wordcollection_text):
 
-            spell_correction  = SpellCorrection(text=word, correction=self.__checker.correction(word), candidates=self.__checker.candidates(word))
+        #     spell_correction  = SpellCorrection(text=word, correction=self.__checker.correction(word), candidates=self.__checker.candidates(word))
 
-            self.correctionCollection.append(spell_correction.serialized_dict())
-         
+        #     self.correctionCollection.append(spell_correction.serialized_dict())
+
+        sentence_list = self.SentsList()
+
+        
+        for index, sent in enumerate(sentence_list):
+
+            for word in self.__checker.unknown(self.wordGenerator(sent)):
+
+                word = word.lower()
+                spell_correction = SpellCorrection(text=word, correction=self.__checker.correction(word), candidates=self.__checker.candidates(word), index=index)
+
+                self.correctionCollection.append(spell_correction.serialized_dict())
+
+            
+
+
+
+    def SentsList(self):
+
+        return list(sent for sent in self.doc.sents)
+          
 
     
 class SpellCorrection:
 
-    def __init__(self, text, correction, candidates):
+    def __init__(self, text, correction, candidates, index):
 
         self.original_text = text
         self.spelling_correction = correction
         self.spelling_candidates = candidates
+        self.sent_index = index
 
     def getOriginalText(self):
 
@@ -258,6 +285,7 @@ class SpellCorrection:
     def serialized_dict(self):
 
         return {
+            'sent_index' : self.sent_index,
             'original_text' : self.original_text,
             'spelling_correction' : self.spelling_correction,
             'spelling_candidates' : list(self.spelling_candidates) 
