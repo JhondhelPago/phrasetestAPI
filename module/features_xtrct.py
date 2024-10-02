@@ -409,7 +409,7 @@ class PhraseExtract:
     
     def ArrayOfSents(self):
 
-        return list(sent.text for sent in self.doc_sm.sents)
+        return list(sent.text + ' ' for sent in self.doc_sm.sents)
     
 
 
