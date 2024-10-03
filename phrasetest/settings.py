@@ -43,12 +43,19 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    #restframework
+    "rest_framework",
+    "rest_framework.authtoken",
+    "dj_rest_auth",
+
+
     #cross origin resoruce sharing  dependency
     "corsheaders",
 
 
     #apps installed
-    "user" 
+    "user",
+    'userauth'
 ]
 
 MIDDLEWARE = [
@@ -152,3 +159,20 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+#configuration variable for rest authentication of app
+
+REST_AUTH = {
+    'USE_JWT' : True,
+    'JWT_AUTH_COOKIE' : 'djangojwtauth_cookie',
+    'JWT_AUTH_REFRESH_COOKIE' : 'djangojwtauth_refresh_cookie',
+
+}
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES" : (
+        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+    ),
+}

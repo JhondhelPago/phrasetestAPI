@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 
+
 #urls paths to fire the function associated
 
 urlpatterns = [
