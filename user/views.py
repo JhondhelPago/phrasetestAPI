@@ -18,7 +18,7 @@ from module.token_tools import SpellCorrection
 # Create your views here.
 
 #importing models
-from .models import user, student_essay
+from .models import student_essay
 
 def devs(req):
 
@@ -38,26 +38,7 @@ def devs(req):
 
 
     return JsonResponse(data, safe=False)
-    
-
-@csrf_exempt
-def sample_para(req):
-
-    if req.method  == 'GET':
-
-        id_params = req.GET.get('param1', 'default_value1')
-
-        data = {
-            'id_origin' : id_params ,
-            'message' : 'id received by the server'
-        }
-
-
-        found_user = user.objects.get(user_id=id_params)
-
-
-        return JsonResponse(found_user.getJSON_Properties(), safe=False)
-    
+        
 
 @csrf_exempt
 def submitEssayInstance(req):

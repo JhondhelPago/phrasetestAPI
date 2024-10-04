@@ -1,16 +1,76 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
-class user(models.Model):
+class User(AbstractUser):
 
-    user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=250)
 
+      # Add custom related names to avoid conflicts
+    groups = models.ManyToManyField(
+        Group,
+        related_name='custom_user_groups',  # Change the related_name
+        blank=True,
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='custom_user_permissions',  # Change the related_name
+        blank=True,
+    )
+
+
+    gender_choice = [
+        ('M', 'male'),
+        ('F', 'female')
+    ]
+
+    user_type = models.CharField(max_length=10, choices=(('student', 'Student'), ('teacher', 'Teacher')))
+    date_of_birth = models.DateField(null=True, blank=True) # Example of an extra field
+    grade_level = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    gender = models.CharField(max_length=1, choices=gender_choice)
+
+
+
+
+class studentuser(models.Model):
 
     class Meta:
 
-        db_table = 'user'
+        db_table = 'studentuser'
+
+        ordering = [
+            'id',
+            'email',
+            'firstname',
+            'middlename',
+            'lastname',
+            'age',
+            'gender',
+            'gradelevel',
+            'schoolname',
+            'school_id'
+        ]
+
+
+    #choice list for gender
+    gender_choice = [
+        ('M', 'male'),
+        ('F', 'female')
+    ]
+
+    id = models.AutoField(primary_key=True)
+    email = models.CharField(max_length=80)
+    username = models.CharField(max_length=250)
+    firstname = models.CharField(max_length=80)
+    middlename = models.CharField(max_length=80)
+    lastname = models.CharField(max_length=80)
+    age = models.IntegerField()
+    gender = models.CharField(max_length=1, choices=gender_choice)
+    gradelevel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    schoolname = models.CharField(max_length=250)
+    school_id = models.CharField(max_length=20)
+
 
 
     def display_info(self):
@@ -23,6 +83,7 @@ class user(models.Model):
             "user_id": self.user_id,
             "username": self.username
         }
+    
     
 class student_essay(models.Model):
 
