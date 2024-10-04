@@ -155,6 +155,10 @@ def sampleProcess(req):
         print(phrase_extract.ArrayOfSents())
 
 
+        print('./')
+
+        print(phrase_extract.cohesive_device_indentifier())
+
         
         
 
