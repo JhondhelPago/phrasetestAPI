@@ -1,7 +1,37 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
+
+class User(AbstractUser):
+
+
+      # Add custom related names to avoid conflicts
+    groups = models.ManyToManyField(
+        Group,
+        related_name='custom_user_groups',  # Change the related_name
+        blank=True,
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='custom_user_permissions',  # Change the related_name
+        blank=True,
+    )
+
+
+    gender_choice = [
+        ('M', 'male'),
+        ('F', 'female')
+    ]
+
+    user_type = models.CharField(max_length=10, choices=(('student', 'Student'), ('teacher', 'Teacher')))
+    date_of_birth = models.DateField(null=True, blank=True) # Example of an extra field
+    grade_level = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    gender = models.CharField(max_length=1, choices=gender_choice)
+
+
+
 
 class studentuser(models.Model):
 
