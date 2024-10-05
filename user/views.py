@@ -14,11 +14,52 @@ from module.features_xtrct import PhraseExtract
 from module.token_tools import SpellingDetector
 from module.token_tools import SpellCorrection
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from user.Myserializer import StudentUserSerializer
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from user.models import studentuser, CustomeUser
+
 
 # Create your views here.
 
 #importing models
 from .models import student_essay
+
+@api_view(['POST'])
+def login(req):
+
+    return Response({'mesage' : 'sample response from login view'})
+
+@api_view(['POST'])
+def signup(req):
+
+    user = list(CustomeUser.objects.filter(email='jhondhelpago2307@gmail.com', password='1234'))
+    
+    print(user[0].email)
+
+    return Response({'message' : f"sample response from signup view {user[0].email} "})
+
+@api_view(['GET'])
+def token_test(req):
+
+    return Response({'message' : 'sample response from token_test view'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def devs(req):
 
