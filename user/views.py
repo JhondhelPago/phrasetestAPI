@@ -35,11 +35,30 @@ def login(req):
 @api_view(['POST'])
 def signup(req):
 
-    user = list(CustomeUser.objects.filter(email='jhondhelpago2307@gmail.com', password='1234'))
+    data = json.loads(req.body)
     
-    print(user[0].email)
 
-    return Response({'message' : f"sample response from signup view {user[0].email} "})
+    firstname = data.get('firstname')
+    lastname = data.get('lastname')
+
+
+    #check for existing email?
+    # if not existing authenticate using otp
+    
+
+
+
+
+
+
+    # user = list(CustomeUser.objects.filter(email='jhondhelpago2307@gmail.com', password='1234'))
+    
+    # print(user[0].email)
+
+    # return Response({'message' : f"sample response from signup view {user[0].email}"})
+
+
+    return Response({'message' : firstname + ' ' + lastname})
 
 @api_view(['GET'])
 def token_test(req):
