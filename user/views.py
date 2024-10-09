@@ -37,9 +37,87 @@ def signup(req):
 
     data = json.loads(req.body)
     
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    middle_name = data.get('middle_name')
+    last_name = data.get('last_name')
+    age = data.get('age')
+    gender = data.get('gender')
+    gradelevel = data.get('gradelevel')
+    school_name = data.get('school_name')
+    institutional_id = data.get('institutional_id')
 
-    firstname = data.get('firstname')
-    lastname = data.get('lastname')
+
+    # checking the variable
+    print(
+        username,
+        email,
+        password,
+        first_name,
+        middle_name,
+        last_name,
+        gender,
+        gradelevel,
+        school_name,
+        institutional_id
+
+    )
+
+
+
+
+    record_list = list(CustomeUser.objects.filter(email=email))
+
+    if record_list:
+
+        #make an error here or return message to the request
+
+
+        data = {"message" : 'email is already taken by another user'}
+
+        return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+    else:
+        
+        #make signup process here
+
+        new_user = CustomeUser(
+            username = username,
+            email = email,
+            password = password,
+            first_name = first_name,
+            middle_name = middle_name,
+            last_name = last_name,
+            age = age,
+            gender = gender,
+            school_name = school_name
+
+        )
+
+    
+        #uploading the fields to the database on the table user_customeuser
+        new_user.save()
+
+
+        user_id = new_user.id
+
+        AsStudentUser = studentuser(user_id=user_id, gradelevel=gradelevel, institutional_id=institutional_id)
+
+        #upload the fields to the database on the table user_studentuser
+        AsStudentUser.save()
+
+
+        data = {
+
+            "message" : "server is creating you as new user"
+        }
+
+
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    
 
 
     #check for existing email?
@@ -58,7 +136,7 @@ def signup(req):
     # return Response({'message' : f"sample response from signup view {user[0].email}"})
 
 
-    return Response({'message' : firstname + ' ' + lastname})
+    return Response({'message' : first_name + ' ' + last_name})
 
 @api_view(['GET'])
 def token_test(req):

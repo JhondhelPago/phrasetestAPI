@@ -6,7 +6,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class CustomeUser(AbstractUser):
     
+    middle_name = models.CharField(max_length=80, null=True, blank=True)
     age = models.IntegerField(null=True)
+    gender = models.CharField(max_length=6, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)  # Change default to 'M' or 'F'
     is_teacher = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
     school_name = models.CharField(max_length=100)
@@ -25,26 +27,18 @@ class CustomeUser(AbstractUser):
 
 
 class studentuser(models.Model):
+    
     user = models.OneToOneField(CustomeUser, on_delete=models.CASCADE, primary_key=True, related_name='student_profile')
     
-    username = models.CharField(max_length=80, default='')
-    firstname= models.CharField(max_length=80, default='')
-    middlename = models.CharField(max_length=80, default='')
-    lastname = models.CharField(max_length=80, default='')
-    gender = models.CharField(max_length=6, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)  # Change default to 'M' or 'F'
+
     gradelevel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=0)
-    school_name = models.CharField(max_length=200, default='')
     institutional_id = models.CharField(max_length=20, default='')
 
 
 class teacheruser(models.Model):
+    
     user = models.OneToOneField(CustomeUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher_profile')
 
-    username = models.CharField(max_length=80, default='')
-    firstname= models.CharField(max_length=80, default='')
-    middlename = models.CharField(max_length=80, default='')
-    lastname = models.CharField(max_length=80, default='')
-    gender = models.CharField(max_length=6, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)  # Change default to 'M' or 'F'
     institutional_id = models.CharField(max_length=20, default='')
 
 
