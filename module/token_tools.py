@@ -4,6 +4,11 @@ import math
 from typing import Union
 from constants import cohesive_device
 from spellchecker import SpellChecker
+from collections.abc import Iterable
+
+def is_iterable(value):
+
+    return isinstance(value, Iterable)
 
 def nlp_loader_sm():
 
@@ -216,7 +221,7 @@ class SpellingDetector:
 
     def __init__(self, doc : spacy.tokens.doc):
 
-        self.__checker = SpellChecker()
+        self.__checker = SpellChecker(language='en')
         self.doc = doc
         self.correctionCollection = []
 
@@ -270,6 +275,26 @@ class SpellCorrection:
         self.spelling_candidates = candidates
         self.sent_index = index
 
+        #initial function to handle the types of this class property at the actual instance
+        self.IsSetStruct()
+        self.isNone()
+
+
+    #this function check if the property of this class is iterable
+    #if not this will modiy the property to a valid type for serialization
+    def IsSetStruct(self):
+
+        if not isinstance(self.spelling_candidates, Iterable):
+
+            self.spelling_candidates = {}
+
+    #this function check if the property of this a NoneType, then modify it to an empty string if the property is initially a NoneType
+    def isNone(self):
+
+        if self.spelling_correction is None:
+
+            self.spelling_correction = ''
+
     def getOriginalText(self):
 
         return self.original_text
@@ -288,6 +313,6 @@ class SpellCorrection:
             'sent_index' : self.sent_index,
             'original_text' : self.original_text,
             'spelling_correction' : self.spelling_correction,
-            'spelling_candidates' : list(self.spelling_candidates) 
+            'spelling_candidates' : list(self.spelling_candidates)
         }
 

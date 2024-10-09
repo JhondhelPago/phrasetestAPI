@@ -24,3 +24,5 @@ def LangTooChecker(text):
         print('Error post request to the langiage tool api')
         return "request did not satisfy. no feedback response."
     
+
+

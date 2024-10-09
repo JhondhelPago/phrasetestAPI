@@ -8,6 +8,9 @@ from . import views
 urlpatterns = [
     path('devs/', views.devs),
     path('submit_essay_instance/', views.submitEssayInstance),
-    path('essay/check/', views.sampleProcess)
+    path('essay/check/', views.sampleProcess),
+    path('auth/login', views.login),
+    path('auth/signup', views.signup),
+    path('auth/test', views.token_test)
 
 ]

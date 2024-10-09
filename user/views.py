@@ -14,11 +14,149 @@ from module.features_xtrct import PhraseExtract
 from module.token_tools import SpellingDetector
 from module.token_tools import SpellCorrection
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from user.Myserializer import StudentUserSerializer
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from user.models import studentuser, CustomeUser
+
 
 # Create your views here.
 
 #importing models
 from .models import student_essay
+
+@api_view(['POST'])
+def login(req):
+
+    return Response({'mesage' : 'sample response from login view'})
+
+@api_view(['POST'])
+def signup(req):
+
+    data = json.loads(req.body)
+    
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    middle_name = data.get('middle_name')
+    last_name = data.get('last_name')
+    age = data.get('age')
+    gender = data.get('gender')
+    gradelevel = data.get('gradelevel')
+    school_name = data.get('school_name')
+    institutional_id = data.get('institutional_id')
+
+
+    # checking the variable
+    print(
+        username,
+        email,
+        password,
+        first_name,
+        middle_name,
+        last_name,
+        gender,
+        gradelevel,
+        school_name,
+        institutional_id
+
+    )
+
+
+
+
+    record_list = list(CustomeUser.objects.filter(email=email))
+
+    if record_list:
+
+        #make an error here or return message to the request
+
+
+        data = {"message" : 'email is already taken by another user'}
+
+        return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+    else:
+        
+        #make signup process here
+
+        new_user = CustomeUser(
+            username = username,
+            email = email,
+            password = password,
+            first_name = first_name,
+            middle_name = middle_name,
+            last_name = last_name,
+            age = age,
+            gender = gender,
+            school_name = school_name
+
+        )
+
+    
+        #uploading the fields to the database on the table user_customeuser
+        new_user.save()
+
+
+        user_id = new_user.id
+
+        AsStudentUser = studentuser(user_id=user_id, gradelevel=gradelevel, institutional_id=institutional_id)
+
+        #upload the fields to the database on the table user_studentuser
+        AsStudentUser.save()
+
+
+        data = {
+
+            "message" : "server is creating you as new user"
+        }
+
+
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    
+
+
+    #check for existing email?
+    # if not existing authenticate using otp
+    
+
+
+
+
+
+
+    # user = list(CustomeUser.objects.filter(email='jhondhelpago2307@gmail.com', password='1234'))
+    
+    # print(user[0].email)
+
+    # return Response({'message' : f"sample response from signup view {user[0].email}"})
+
+
+    return Response({'message' : first_name + ' ' + last_name})
+
+@api_view(['GET'])
+def token_test(req):
+
+    return Response({'message' : 'sample response from token_test view'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def devs(req):
 
@@ -154,6 +292,10 @@ def sampleProcess(req):
         print(spellingDetector.correctionCollection)
         print(phrase_extract.ArrayOfSents())
 
+
+        print('./')
+
+        print(phrase_extract.cohesive_device_indentifier())
 
         
         

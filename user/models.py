@@ -4,85 +4,97 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
-class User(AbstractUser):
+class CustomeUser(AbstractUser):
+    
+    middle_name = models.CharField(max_length=80, null=True, blank=True)
+    age = models.IntegerField(null=True)
+    gender = models.CharField(max_length=6, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)  # Change default to 'M' or 'F'
+    is_teacher = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
+    school_name = models.CharField(max_length=100)
 
 
-      # Add custom related names to avoid conflicts
     groups = models.ManyToManyField(
-        Group,
-        related_name='custom_user_groups',  # Change the related_name
-        blank=True,
+        'auth.Group',
+        related_name='customuser_groups',  # Use custom related_name to prevent clashes
+        blank=True
     )
     user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='custom_user_permissions',  # Change the related_name
-        blank=True,
+        'auth.Permission',
+        related_name='customuser_permissions',  # Use custom related_name to prevent clashes
+        blank=True
     )
-
-
-    gender_choice = [
-        ('M', 'male'),
-        ('F', 'female')
-    ]
-
-    user_type = models.CharField(max_length=10, choices=(('student', 'Student'), ('teacher', 'Teacher')))
-    date_of_birth = models.DateField(null=True, blank=True) # Example of an extra field
-    grade_level = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
-    gender = models.CharField(max_length=1, choices=gender_choice)
-
-
 
 
 class studentuser(models.Model):
-
-    class Meta:
-
-        db_table = 'studentuser'
-
-        ordering = [
-            'id',
-            'email',
-            'firstname',
-            'middlename',
-            'lastname',
-            'age',
-            'gender',
-            'gradelevel',
-            'schoolname',
-            'school_id'
-        ]
-
-
-    #choice list for gender
-    gender_choice = [
-        ('M', 'male'),
-        ('F', 'female')
-    ]
-
-    id = models.AutoField(primary_key=True)
-    email = models.CharField(max_length=80)
-    username = models.CharField(max_length=250)
-    firstname = models.CharField(max_length=80)
-    middlename = models.CharField(max_length=80)
-    lastname = models.CharField(max_length=80)
-    age = models.IntegerField()
-    gender = models.CharField(max_length=1, choices=gender_choice)
-    gradelevel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
-    schoolname = models.CharField(max_length=250)
-    school_id = models.CharField(max_length=20)
-
-
-
-    def display_info(self):
-
-        return f"user_id: {self.user_id}, username: {self.username}"
     
-    def getJSON_Properties(self):
+    user = models.OneToOneField(CustomeUser, on_delete=models.CASCADE, primary_key=True, related_name='student_profile')
+    
 
-        return {
-            "user_id": self.user_id,
-            "username": self.username
-        }
+    gradelevel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=0)
+    institutional_id = models.CharField(max_length=20, default='')
+
+
+class teacheruser(models.Model):
+    
+    user = models.OneToOneField(CustomeUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher_profile')
+
+    institutional_id = models.CharField(max_length=20, default='')
+
+
+
+
+
+# class studentuser(models.Model):
+
+#     class Meta:
+
+#         db_table = 'studentuser'
+
+#         ordering = [
+#             'id',
+#             'email',
+#             'firstname',
+#             'middlename',
+#             'lastname',
+#             'age',
+#             'gender',
+#             'gradelevel',
+#             'schoolname',
+#             'school_id'
+#         ]
+
+
+#     #choice list for gender
+#     gender_choice = [
+#         ('M', 'male'),
+#         ('F', 'female')
+#     ]
+
+#     id = models.AutoField(primary_key=True)
+#     email = models.CharField(max_length=80)
+#     username = models.CharField(max_length=250)
+#     firstname = models.CharField(max_length=80)
+#     middlename = models.CharField(max_length=80)
+#     lastname = models.CharField(max_length=80)
+#     age = models.IntegerField()
+#     gender = models.CharField(max_length=1, choices=gender_choice)
+#     gradelevel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+#     schoolname = models.CharField(max_length=250)
+#     school_id = models.CharField(max_length=20)
+
+
+
+#     def display_info(self):
+
+#         return f"user_id: {self.user_id}, username: {self.username}"
+    
+#     def getJSON_Properties(self):
+
+#         return {
+#             "user_id": self.user_id,
+#             "username": self.username
+#         }
     
     
 class student_essay(models.Model):
