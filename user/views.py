@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, get_user_model
 import json
 
 
@@ -19,6 +20,7 @@ from rest_framework.response import Response
 from user.Myserializer import StudentUserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 from user.models import studentuser, CustomeUser
 
 
@@ -29,6 +31,45 @@ from .models import student_essay
 
 @api_view(['POST'])
 def login(req):
+
+    data = json.loads(req.body)
+
+    email = data.get('email')
+    password = data.get('password')
+
+
+    # user = authenticate(req, email=email, password=password)
+
+    # if user is not None:
+
+
+    #     refresh = RefreshToken.for_user(user)
+
+
+    #     return Response({
+    #         "refresh" : str(refresh),
+    #         "access" : str(refresh.access_token)
+    #     })
+    
+
+
+    UserModel = get_user_model()
+
+
+    user = UserModel.objects.get(email=email, password=password)
+
+
+    if user is not None:
+
+
+        refresh = RefreshToken.for_user(user)
+
+
+        return Response({
+            "refresh" : str(refresh),
+            "access" : str(refresh.access_token)
+        })
+
 
     return Response({'mesage' : 'sample response from login view'})
 
