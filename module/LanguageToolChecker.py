@@ -3,7 +3,7 @@ import json
 
 LanguageToolAPI = 'https://api.languagetool.org/v2/check'
 
-def LangTooChecker(text):
+def LangToolChecker(text):
 
     response = requests.post(LanguageToolAPI, 
         data={
@@ -24,5 +24,14 @@ def LangTooChecker(text):
         print('Error post request to the langiage tool api')
         return "request did not satisfy. no feedback response."
     
+
+
+#classes for structuring the response result of the LanguageToolAPI
+
+# class ErrorSpotter:
+
+#     def __init__(self, doc) -> None:
+#         self.doc = 
+
 
 

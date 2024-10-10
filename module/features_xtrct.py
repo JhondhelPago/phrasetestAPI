@@ -92,6 +92,11 @@ class PhraseExtract:
         # initial function opertions
         self.__tokenPOS_Identifier()
 
+        #self sapcy doc instance
+
+
+    #
+
     
     #load small english language model
     def __load_sm_Model(self): #private function only on the scope of the class
