@@ -1,5 +1,5 @@
 #import libraries
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer, util # need to be uninstall to he virtual envs
 from rake_nltk import Rake
 
 
@@ -10,6 +10,13 @@ from rake_nltk import Rake
 
 
 
+
+
+# this class should return a floating type that ranges to 1-4. 4 being the highest and 1 being the lowest
+# 1 - The ideas weren't connected to each other
+# 2 - The ideas were good but some weren't there
+# 3 - The ideas has shown a bit understanding with good details
+# 4 - The ideas flow logically and connected well.
 class Ideas:
 
     @staticmethod
