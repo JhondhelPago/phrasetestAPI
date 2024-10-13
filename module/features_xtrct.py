@@ -23,7 +23,7 @@ def nlp_loader_md():
 
 
 def wordCount(doc: spacy.tokens.doc):
-    
+    d
     # tokenization of the word
 
     token_list = [token for token in doc if token.is_alpha]
@@ -412,6 +412,11 @@ class PhraseExtract:
 
         return similarity_score
     
+    def SentenceVariationAnalyzer(self):
+
+
+        return
+    
     def ArrayOfSents(self):
 
         return list(sent.text + ' ' for sent in self.doc_sm.sents)
@@ -444,5 +449,16 @@ class TopicRelevance:
         similarity_score = self.essaycomposition.similarity(self.essaycomposition)
 
         return similarity_score
+    
+
+
+class Sent_Variation_Analyzer:
+
+
+
+    def main():
+
+
+        return
 
 
