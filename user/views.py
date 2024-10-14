@@ -55,23 +55,28 @@ def login(req):
 
     UserModel = get_user_model()
 
-
-    user = UserModel.objects.get(email=email, password=password)
-
-
-    if user is not None:
+    try: 
+        user = UserModel.objects.get(email=email, password=password)
 
 
-        refresh = RefreshToken.for_user(user)
+        if user is not None:
 
+
+            refresh = RefreshToken.for_user(user)
+
+
+            return Response({
+                "refresh" : str(refresh),
+                "access" : str(refresh.access_token)
+            })
+        
+    except CustomeUser.DoesNotExist:
 
         return Response({
-            "refresh" : str(refresh),
-            "access" : str(refresh.access_token)
+            "refresh" : "",
+            "access" : ""
         })
-
-
-    return Response({'mesage' : 'sample response from login view'})
+    
 
 @api_view(['POST'])
 def signup(req):

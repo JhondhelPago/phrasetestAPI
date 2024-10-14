@@ -1,6 +1,11 @@
 #import libraries
-from sentence_transformers import SentenceTransformer, util # need to be uninstall to he virtual envs
+# from sentence_transformers import SentenceTransformer, util # need to be uninstall to he virtual envs
 from rake_nltk import Rake
+
+
+
+
+
 
 
 
@@ -17,20 +22,8 @@ from rake_nltk import Rake
 # 2 - The ideas were good but some weren't there
 # 3 - The ideas has shown a bit understanding with good details
 # 4 - The ideas flow logically and connected well.
+# check the essay composition if the sentence follows a logical flow - inner_context1, inner_context2 
 class Ideas:
-
-    @staticmethod
-    def testingSimilarity(text_list):
-
-        model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-
-        sentence_list = text_list
-
-        embiddings = model.encode(sentence_list, convert_to_tensor=True)
-        similarity = util.pytorch_cos_sim(embiddings[0], embiddings[1])
-
-        return similarity
-
 
     #return a list of key words that relate to the topic or the contenxt of the essay composition
     @staticmethod
@@ -41,7 +34,6 @@ class Ideas:
 
         keywords = r.get_ranked_phrases()
         return keywords
-
 
 
 
