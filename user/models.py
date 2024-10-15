@@ -6,6 +6,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class CustomUser(AbstractUser):
     
+    username = models.CharField(max_length=100, unique=Falsed)
     middle_name = models.CharField(max_length=80, null=True, blank=True)
     age = models.IntegerField(null=True)
     gender = models.CharField(max_length=6, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)  # Change default to 'M' or 'F'

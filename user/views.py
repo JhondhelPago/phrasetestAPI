@@ -126,18 +126,20 @@ def signup(req):
 
         #return Response(data, status=status.HTTP_204_NO_CONTENT)
 
-        if record_list[0].verified == 1:
+        if record_list[0].verified == True:
 
             data = {"email_exist" : True}
 
             return Response(data, status=status.HTTP_204_NO_CONTENT)
 
         else:
+            print('dito ang control flow')
 
             record_list[0].delete()
+            
+    record_list = list(CustomUser.objects.filter(email=email))
 
-
-    else:
+    if not record_list:
         
         #make signup process here
 
