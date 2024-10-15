@@ -10,7 +10,7 @@ urlpatterns = [
     path('submit_essay_instance/', views.submitEssayInstance),
     path('essay/check/', views.sampleProcess),
     path('auth/login', views.login),
-    path('auth/signup', views.signup),
+    path('auth/student/signup', views.signup),
     path('auth/test', views.token_test)
 
 ]
