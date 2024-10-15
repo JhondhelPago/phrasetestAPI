@@ -21,7 +21,7 @@ from user.Myserializer import StudentUserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken
-from user.models import studentuser, CustomeUser
+from user.models import studentuser, CustomUser, UserOTP
 
 
 # Create your views here.
@@ -70,7 +70,7 @@ def login(req):
                 "access" : str(refresh.access_token)
             })
         
-    except CustomeUser.DoesNotExist:
+    except CustomUser.DoesNotExist:
 
         return Response({
             "refresh" : "",
@@ -114,22 +114,33 @@ def signup(req):
 
 
 
-    record_list = list(CustomeUser.objects.filter(email=email))
+    record_list = list(CustomUser.objects.filter(email=email))
 
     if record_list:
 
         #make an error here or return message to the request
 
 
-        data = {"email_exist" : True}
+        #data = {"email_exist" : True}
 
-        return Response(data, status=status.HTTP_204_NO_CONTENT)
+        #return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+        if record_list[0].verified == 1:
+
+            data = {"email_exist" : True}
+
+            return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+
+            record_list[0].delete()
+
 
     else:
         
         #make signup process here
 
-        new_user = CustomeUser(
+        new_user = CustomUser(
             username = username,
             email = email,
             password = password,
@@ -150,9 +161,13 @@ def signup(req):
         user_id = new_user.id
 
         AsStudentUser = studentuser(user_id=user_id, gradelevel=gradelevel, institutional_id=institutional_id)
-
         #upload the fields to the database on the table user_studentuser
         AsStudentUser.save()
+
+
+        #make an instance of userotp here
+        
+
 
 
         data = {
@@ -171,19 +186,11 @@ def signup(req):
     # if not existing authenticate using otp
     
 
-
-
-
-
-
     # user = list(CustomeUser.objects.filter(email='jhondhelpago2307@gmail.com', password='1234'))
     
     # print(user[0].email)
 
     # return Response({'message' : f"sample response from signup view {user[0].email}"})
-
-
-    return Response({'message' : first_name + ' ' + last_name})
 
 @api_view(['GET'])
 def token_test(req):
