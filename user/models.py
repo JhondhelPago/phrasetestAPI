@@ -47,7 +47,7 @@ class teacheruser(models.Model):
 
 class UserOTP(models.Model):
 
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='userotp_customeuser')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE,primary_key=True, related_name='userotp_customeuser')
     otp = models.CharField(max_length=6, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)

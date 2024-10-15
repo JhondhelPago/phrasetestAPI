@@ -22,6 +22,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken
 from user.models import studentuser, CustomUser, UserOTP
+from user.user_module import otp_generator
 
 
 # Create your views here.
@@ -166,7 +167,11 @@ def signup(req):
 
 
         #make an instance of userotp here
+        userotp = UserOTP(user_id=user_id)
+        userotp.otp = otp_generator()
         
+        #save the otp 
+        userotp.save()
 
 
 
