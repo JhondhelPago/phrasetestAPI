@@ -121,7 +121,7 @@ def signup(req):
         #make an error here or return message to the request
 
 
-        data = {"message" : 'email is already taken by another user'}
+        data = {"email_exist" : True}
 
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
@@ -157,7 +157,8 @@ def signup(req):
 
         data = {
 
-            "message" : "server is creating you as new user"
+            "email_exist" : False,
+            "message" : "signup successfully verified."
         }
 
 
