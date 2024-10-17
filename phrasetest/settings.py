@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 
 #loading the load_dotenv  function in this setting file
 load_dotenv()
@@ -177,6 +178,13 @@ REST_FRAMEWORK = {
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Access token expiration
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Refresh token expiration
+    'ROTATE_REFRESH_TOKENS': False,  # Disable or enable refresh token rotation
+    'BLACKLIST_AFTER_ROTATION': True,  # Blacklist old tokens after rotation
 }
 
 

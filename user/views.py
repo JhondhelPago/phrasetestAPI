@@ -20,7 +20,9 @@ from rest_framework.response import Response
 from user.Myserializer import StudentUserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from user.models import studentuser, CustomUser, UserOTP
 from user.user_module import otp_generator
 
@@ -204,20 +206,42 @@ def token_test(req):
 
     return Response({'message' : 'sample response from token_test view'})
 
+@api_view(['POST'])
+def new_accesstoken(req):
+
+    data = json.loads(req.body)
+
+    refresh_token = data.get('refresh')
+    access_token = data.get('access')
+
+    try:
+
+        decoded_refresh_token = RefreshToken(refresh_token)
+
+        print(f"token_type: {decoded_refresh_token['token_type']}")
+        print(f"exp: {decoded_refresh_token['exp']}")
+        print(f"iat: {decoded_refresh_token['iat']}")
+        print(f"jti: {decoded_refresh_token['jti']}")
+        print(f"user_id: {decoded_refresh_token['user_id']}")
 
 
 
+        decoded_access_token = AccessToken(access_token)
+        
+        print(f"token_type: {decoded_access_token['token_type']}")
+        print(f"exp: {decoded_access_token['exp']}")
+        print(f"iat: {decoded_access_token['iat']}")
+        print(f"jti: {decoded_access_token['jti']}")
+        print(f"user_id: {decoded_access_token['user_id']}")
 
 
+        return Response({"id" : decoded_refresh_token['user_id']})
+
+    except Exception as e:
 
 
-
-
-
-
-
-
-
+        return Response({"message" : "invalid token"})
+    
 
 def devs(req):
 
@@ -374,7 +398,13 @@ def sampleProcess(req):
         
 
 
-    
+class CustomTokenRefreshView(TokenRefreshView):
+
+    serializer_class = TokenRefreshSerializer
 
 
+    def post(self, request):
+
+
+        return super().post(request)
 
