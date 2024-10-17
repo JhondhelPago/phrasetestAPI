@@ -24,7 +24,10 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from user.models import studentuser, CustomUser, UserOTP
-from user.user_module import otp_generator
+
+#function and classe from the user_module
+from user.user_module import otp_generator, time_dissect, time_difference
+
 
 
 # Create your views here.
@@ -242,6 +245,34 @@ def new_accesstoken(req):
 
         return Response({"message" : "invalid token"})
     
+@api_view(['POST'])
+def otp_verify(req):
+
+    #get the id of the user using the email parameter
+    #find the generated otp of the user and get created_at
+    #created_at is time_diference() parameter1
+    #request_time is time_differnce() parameter2
+    #if under 2mins validate the otp, if validated verify the user using the orm 
+
+    data = json.loads(req.body)
+
+    print(data)
+
+    otp_time_generated = time_dissect('2024-10-18 00:24:40.821072')
+    print(otp_time_generated)
+
+    request_time = time_dissect(data.get('time_created'))
+    print(request_time)
+
+
+   
+    time_dif = time_difference('2024-10-18 00:24:40.821072', data.get('time_created'))
+    print(time_dif)
+
+
+
+    return Response({"message" : "otp_verify view  is runnung."})
+    
 
 def devs(req):
 
@@ -261,7 +292,7 @@ def devs(req):
 
 
     return JsonResponse(data, safe=False)
-        
+
 
 @csrf_exempt
 def submitEssayInstance(req):
