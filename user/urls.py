@@ -11,6 +11,9 @@ urlpatterns = [
     path('essay/check/', views.sampleProcess),
     path('auth/login', views.login),
     path('auth/student/signup', views.signup),
-    path('auth/test', views.token_test)
+    path('auth/test', views.token_test),
+    path('auth/token/test', views.new_accesstoken),
+    path('auth/token/new/access', views.CustomTokenRefreshView.as_view()),
+    path('auth/otp/verify', views.otp_verify)
 
 ]

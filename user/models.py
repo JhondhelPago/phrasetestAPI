@@ -1,17 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 # Create your models here.
 
-class CustomeUser(AbstractUser):
+class CustomUser(AbstractUser):
     
+    username = models.CharField(max_length=100, unique=False)
     middle_name = models.CharField(max_length=80, null=True, blank=True)
     age = models.IntegerField(null=True)
     gender = models.CharField(max_length=6, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)  # Change default to 'M' or 'F'
     is_teacher = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
     school_name = models.CharField(max_length=100)
+    verified = models.BooleanField(default=False)
+
 
 
     groups = models.ManyToManyField(
@@ -28,7 +32,7 @@ class CustomeUser(AbstractUser):
 
 class studentuser(models.Model):
     
-    user = models.OneToOneField(CustomeUser, on_delete=models.CASCADE, primary_key=True, related_name='student_profile')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='student_profile')
     
 
     gradelevel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=0)
@@ -37,9 +41,23 @@ class studentuser(models.Model):
 
 class teacheruser(models.Model):
     
-    user = models.OneToOneField(CustomeUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher_profile')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='teacher_profile')
 
     institutional_id = models.CharField(max_length=20, default='')
+
+
+
+class UserOTP(models.Model):
+
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE,primary_key=True, related_name='userotp_customeuser')
+    otp = models.CharField(max_length=6, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False)
+
+
+    def created_at_localtimezone(self):
+
+        return timezone.localtime(self.created_at)
 
 
 

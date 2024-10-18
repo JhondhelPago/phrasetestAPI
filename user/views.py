@@ -20,8 +20,14 @@ from rest_framework.response import Response
 from user.Myserializer import StudentUserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework_simplejwt.tokens import RefreshToken
-from user.models import studentuser, CustomeUser
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from user.models import studentuser, CustomUser, UserOTP
+
+#function and classe from the user_module
+from user.user_module import otp_generator, time_dissect, time_difference, time_dif_under2mins, removeUTC_symbol
+
 
 
 # Create your views here.
@@ -70,7 +76,7 @@ def login(req):
                 "access" : str(refresh.access_token)
             })
         
-    except CustomeUser.DoesNotExist:
+    except CustomUser.DoesNotExist:
 
         return Response({
             "refresh" : "",
@@ -114,22 +120,44 @@ def signup(req):
 
 
 
-    record_list = list(CustomeUser.objects.filter(email=email))
+    record_list = list(CustomUser.objects.filter(email=email))
 
     if record_list:
 
         #make an error here or return message to the request
 
 
-        data = {"email_exist" : True}
+        #data = {"email_exist" : True}
 
-        return Response(data, status=status.HTTP_204_NO_CONTENT)
+        #return Response(data, status=status.HTTP_204_NO_CONTENT)
 
-    else:
+        if record_list[0].verified == True:
+
+            data = {"email_exist" : True}
+
+            return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            print('dito ang control flow')
+            # delete the instance on the userotp, studentuser and customuser
+        
+            user_id = record_list[0].id
+
+            UserOTPInstance = UserOTP.objects.get(user_id=user_id)
+            UserOTPInstance.delete()
+
+            StudentUserInstance = studentuser.objects.get(user_id=user_id)
+            StudentUserInstance.delete()
+            
+            record_list[0].delete()
+            
+    record_list = list(CustomUser.objects.filter(email=email))
+
+    if not record_list:
         
         #make signup process here
 
-        new_user = CustomeUser(
+        new_user = CustomUser(
             username = username,
             email = email,
             password = password,
@@ -150,9 +178,19 @@ def signup(req):
         user_id = new_user.id
 
         AsStudentUser = studentuser(user_id=user_id, gradelevel=gradelevel, institutional_id=institutional_id)
-
         #upload the fields to the database on the table user_studentuser
         AsStudentUser.save()
+
+
+        #make an instance of userotp here
+        userotp = UserOTP(user_id=user_id)
+        userotp.otp = otp_generator()
+        
+        #save the otp 
+        userotp.save()
+
+
+        #send an email to provided email address and deliver the otp code
 
 
         data = {
@@ -171,39 +209,115 @@ def signup(req):
     # if not existing authenticate using otp
     
 
-
-
-
-
-
     # user = list(CustomeUser.objects.filter(email='jhondhelpago2307@gmail.com', password='1234'))
     
     # print(user[0].email)
 
     # return Response({'message' : f"sample response from signup view {user[0].email}"})
 
-
-    return Response({'message' : first_name + ' ' + last_name})
-
 @api_view(['GET'])
 def token_test(req):
 
     return Response({'message' : 'sample response from token_test view'})
 
+@api_view(['POST'])
+def new_accesstoken(req):
+
+    data = json.loads(req.body)
+
+    refresh_token = data.get('refresh')
+    access_token = data.get('access')
+
+    try:
+
+        decoded_refresh_token = RefreshToken(refresh_token)
+
+        print(f"token_type: {decoded_refresh_token['token_type']}")
+        print(f"exp: {decoded_refresh_token['exp']}")
+        print(f"iat: {decoded_refresh_token['iat']}")
+        print(f"jti: {decoded_refresh_token['jti']}")
+        print(f"user_id: {decoded_refresh_token['user_id']}")
 
 
 
+        decoded_access_token = AccessToken(access_token)
+        
+        print(f"token_type: {decoded_access_token['token_type']}")
+        print(f"exp: {decoded_access_token['exp']}")
+        print(f"iat: {decoded_access_token['iat']}")
+        print(f"jti: {decoded_access_token['jti']}")
+        print(f"user_id: {decoded_access_token['user_id']}")
 
 
+        return Response({"id" : decoded_refresh_token['user_id']})
+
+    except Exception as e:
 
 
+        return Response({"message" : "invalid token"})
+    
+@api_view(['POST'])
+def otp_verify(req):
+
+    #get the id of the user using the email parameter
+    #find the generated otp of the user and get created_at
+    #created_at is time_dif_under2mins() parameter1
+    #request_time is time_dif_under2mins() parameter2
+    #if under 2mins validate the otp, if validated verify the user using the orm 
+
+    data = json.loads(req.body)
+    print(data)
+
+    req_otp_code = data.get('otp_code')
+
+    request_time = data.get('time_created')
+    print(f"request_time: {request_time}")
+   
+
+    try:
+
+        user_instance = CustomUser.objects.get(email=data.get('email'))
+        print(user_instance)
+        
+        user_id = user_instance.id
+
+        user_opt_instance = UserOTP.objects.get(user_id=user_id)
+        
+        generated_Otp = user_opt_instance.otp
+
+        otp_created_at = removeUTC_symbol(user_opt_instance.created_at)
+        print(f"otp_created_at: {otp_created_at}")
+        
+
+    except CustomUser.DoesNotExist:
+
+        return Response({
+            "message" : "email not found", "result" : -1
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    if time_dif_under2mins(otp_created_at, request_time):
+
+        print(f"True: {time_dif_under2mins(otp_created_at, request_time)}")
+
+        if req_otp_code == generated_Otp:
+
+            user_opt_instance.is_verified = True
+            user_opt_instance.save()
+
+            user_instance.verified = True
+            user_instance.save()
+
+            return Response({"message" : "user validated", "result" : 1}, status=status.HTTP_202_ACCEPTED)
+
+    else:
+        print(f"False: {time_dif_under2mins(otp_created_at, request_time)}")
+
+        return Response({"message" : "otp expires", "result" : 0}, status=status.HTTP_408_REQUEST_TIMEOUT)
+    
 
 
-
-
-
-
-
+    return Response({"message" : "otp_verify view  is runnung."}, status=status.HTTP_102_PROCESSING)
+    
 
 def devs(req):
 
@@ -223,7 +337,7 @@ def devs(req):
 
 
     return JsonResponse(data, safe=False)
-        
+
 
 @csrf_exempt
 def submitEssayInstance(req):
@@ -360,7 +474,13 @@ def sampleProcess(req):
         
 
 
-    
+class CustomTokenRefreshView(TokenRefreshView):
+
+    serializer_class = TokenRefreshSerializer
 
 
+    def post(self, request):
+
+
+        return super().post(request)
 
