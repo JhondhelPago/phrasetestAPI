@@ -25,7 +25,10 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from user.models import studentuser, CustomUser, UserOTP
 
+from user.user_mail import send_mail
+
 #function and classe from the user_module
+from datetime import datetime, timezone
 from user.user_module import otp_generator, time_dissect, time_difference, time_dif_under2mins, removeUTC_symbol
 
 
@@ -35,6 +38,7 @@ from user.user_module import otp_generator, time_dissect, time_difference, time_
 #importing models
 from .models import student_essay
 
+@csrf_exempt
 @api_view(['POST'])
 def login(req):
 
@@ -83,7 +87,7 @@ def login(req):
             "access" : ""
         })
     
-
+@csrf_exempt
 @api_view(['POST'])
 def signup(req):
 
@@ -191,7 +195,8 @@ def signup(req):
 
 
         #send an email to provided email address and deliver the otp code
-
+        content_body = f"signup otp code {userotp.otp} for phrasetest app."
+        send_mail(email, content_body)
 
         data = {
 
@@ -214,12 +219,13 @@ def signup(req):
     # print(user[0].email)
 
     # return Response({'message' : f"sample response from signup view {user[0].email}"})
-
+@csrf_exempt
 @api_view(['GET'])
 def token_test(req):
 
     return Response({'message' : 'sample response from token_test view'})
 
+@csrf_exempt
 @api_view(['POST'])
 def new_accesstoken(req):
 
@@ -256,6 +262,7 @@ def new_accesstoken(req):
 
         return Response({"message" : "invalid token"})
     
+@csrf_exempt
 @api_view(['POST'])
 def otp_verify(req):
 
@@ -307,6 +314,8 @@ def otp_verify(req):
             user_instance.verified = True
             user_instance.save()
 
+            send_mail(data.get('email'), body='Welcome to Phrasetest! Login to PhaseTest and explore.', Subject='Account Verified')
+
             return Response({"message" : "user validated", "result" : 1}, status=status.HTTP_202_ACCEPTED)
 
     else:
@@ -317,7 +326,66 @@ def otp_verify(req):
 
 
     return Response({"message" : "otp_verify view  is runnung."}, status=status.HTTP_102_PROCESSING)
+
+
+@csrf_exempt
+@api_view(['POST'])
+def otp_reverify(req):
+
+    data = json.loads(req.body)
+
+    email = data.get("email")
+
+    try:
+
+        user = CustomUser.objects.get(email=email)
+
+    except CustomUser.DoesNotExist:
+
+        user = None
+
+
+    if user == None:
+
+        return Response({"message" : f"{email} is not yet registered to sign up"}, status=status.HTTP_404_NOT_FOUND)
     
+    else:
+
+        if user.verified:
+
+            return Response({"message" : "email is already verified user"}, status=status.HTTP_403_FORBIDDEN)
+        
+        else:
+
+            print(user)
+            print(user.id)
+
+            user_id = user.id
+
+            user_otp_instance = UserOTP.objects.get(user_id=user_id)
+            user_otp_instance.otp = otp_generator()
+            user_otp_instance.created_at = datetime.now(timezone.utc)
+            user_otp_instance.is_verified = False
+            user_otp_instance.save()
+
+            #send the new otp to the email here
+
+            try:
+
+                content_body = f"signup otp code {user_otp_instance.otp} for phrasetest app."
+                send_mail(email, body=content_body, Subject='New Otp')
+
+                return Response({"message" : "new otp generated"}, status=status.HTTP_200_OK)
+
+
+            except Exception as e:
+
+                print(e)
+
+                return Response({"message" : "otp resend failed."}, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"message" : "otp_reverify running"})
+
 
 def devs(req):
 
