@@ -26,7 +26,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from user.models import studentuser, CustomUser, UserOTP
 
 #function and classe from the user_module
-from user.user_module import otp_generator, time_dissect, time_difference
+from user.user_module import otp_generator, time_dissect, time_difference, time_dif_under2mins, removeUTC_symbol
 
 
 
@@ -139,7 +139,16 @@ def signup(req):
 
         else:
             print('dito ang control flow')
+            # delete the instance on the userotp, studentuser and customuser
+        
+            user_id = record_list[0].id
 
+            UserOTPInstance = UserOTP.objects.get(user_id=user_id)
+            UserOTPInstance.delete()
+
+            StudentUserInstance = studentuser.objects.get(user_id=user_id)
+            StudentUserInstance.delete()
+            
             record_list[0].delete()
             
     record_list = list(CustomUser.objects.filter(email=email))
@@ -180,6 +189,8 @@ def signup(req):
         #save the otp 
         userotp.save()
 
+
+        #send an email to provided email address and deliver the otp code
 
 
         data = {
@@ -250,28 +261,62 @@ def otp_verify(req):
 
     #get the id of the user using the email parameter
     #find the generated otp of the user and get created_at
-    #created_at is time_diference() parameter1
-    #request_time is time_differnce() parameter2
+    #created_at is time_dif_under2mins() parameter1
+    #request_time is time_dif_under2mins() parameter2
     #if under 2mins validate the otp, if validated verify the user using the orm 
 
     data = json.loads(req.body)
-
     print(data)
 
-    otp_time_generated = time_dissect('2024-10-18 00:24:40.821072')
-    print(otp_time_generated)
+    req_otp_code = data.get('otp_code')
 
-    request_time = time_dissect(data.get('time_created'))
-    print(request_time)
-
-
+    request_time = data.get('time_created')
+    print(f"request_time: {request_time}")
    
-    time_dif = time_difference('2024-10-18 00:24:40.821072', data.get('time_created'))
-    print(time_dif)
+
+    try:
+
+        user_instance = CustomUser.objects.get(email=data.get('email'))
+        print(user_instance)
+        
+        user_id = user_instance.id
+
+        user_opt_instance = UserOTP.objects.get(user_id=user_id)
+        
+        generated_Otp = user_opt_instance.otp
+
+        otp_created_at = removeUTC_symbol(user_opt_instance.created_at)
+        print(f"otp_created_at: {otp_created_at}")
+        
+
+    except CustomUser.DoesNotExist:
+
+        return Response({
+            "message" : "email not found", "result" : -1
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    if time_dif_under2mins(otp_created_at, request_time):
+
+        print(f"True: {time_dif_under2mins(otp_created_at, request_time)}")
+
+        if req_otp_code == generated_Otp:
+
+            user_opt_instance.is_verified = True
+            user_opt_instance.save()
+
+            user_instance.verified = True
+            user_instance.save()
+
+            return Response({"message" : "user validated", "result" : 1}, status=status.HTTP_202_ACCEPTED)
+
+    else:
+        print(f"False: {time_dif_under2mins(otp_created_at, request_time)}")
+
+        return Response({"message" : "otp expires", "result" : 0}, status=status.HTTP_408_REQUEST_TIMEOUT)
+    
 
 
-
-    return Response({"message" : "otp_verify view  is runnung."})
+    return Response({"message" : "otp_verify view  is runnung."}, status=status.HTTP_102_PROCESSING)
     
 
 def devs(req):

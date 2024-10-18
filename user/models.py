@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 # Create your models here.
 
@@ -52,6 +53,11 @@ class UserOTP(models.Model):
     otp = models.CharField(max_length=6, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
+
+
+    def created_at_localtimezone(self):
+
+        return timezone.localtime(self.created_at)
 
 
 

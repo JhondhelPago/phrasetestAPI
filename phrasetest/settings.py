@@ -190,3 +190,6 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'user.CustomUser'
 AUTHENTICATION_BACKENDS = ['user.custom_auth_backend.EmailBackend', 'django.contrib.auth.backends.ModelBackend']
+
+TIME_ZONE = 'Asia/Manila'
+USE_TZ = True  # This should remain True to use timezone support

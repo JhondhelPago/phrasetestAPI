@@ -36,8 +36,11 @@ def time_dissect(time_string):
 def time_difference(datetime1, datetime2):
 
     datetime1_param_list = time_dissect(datetime1)
+    print(f"datetime1_param_list: {datetime1_param_list}")
 
+    print(datetime2)
     datetime2_param_list = time_dissect(datetime2)
+    print(f"datetime2_param_list: {datetime2_param_list}")
 
     datetime1_instance = datetime(
         datetime1_param_list[0],
@@ -65,6 +68,28 @@ def time_difference(datetime1, datetime2):
 
 
     return time_dif_value.total_seconds()
+
+
+def time_dif_under2mins(datetime1, datetime2):
+
+    seconds_diffrence = time_difference(datetime1, datetime2)
+    print(f"seconds_difference: {seconds_diffrence}")
+
+    if seconds_diffrence <= 240:
+
+        return True
+    
+    else:
+
+        return False
+    
+def removeUTC_symbol(datetimeObject):
+
+    datetimeObject_string = str(datetimeObject)
+
+    return datetimeObject_string.replace("+00:00", "")
+    
+
 
 
 
