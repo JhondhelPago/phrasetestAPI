@@ -25,6 +25,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from user.models import studentuser, CustomUser, UserOTP
 
+from user.user_mail import send_mail
+
 #function and classe from the user_module
 from datetime import datetime, timezone
 from user.user_module import otp_generator, time_dissect, time_difference, time_dif_under2mins, removeUTC_symbol
@@ -193,7 +195,8 @@ def signup(req):
 
 
         #send an email to provided email address and deliver the otp code
-
+        content_body = f"signup otp code {userotp.otp} for phrasetest app."
+        send_mail(email, content_body)
 
         data = {
 
@@ -311,6 +314,8 @@ def otp_verify(req):
             user_instance.verified = True
             user_instance.save()
 
+            send_mail(data.get('email'), body='Welcome to Phrasetest! Login to PhaseTest and explore.', Subject='Account Verified')
+
             return Response({"message" : "user validated", "result" : 1}, status=status.HTTP_202_ACCEPTED)
 
     else:
@@ -348,7 +353,7 @@ def otp_reverify(req):
 
         if user.verified:
 
-            return Response({"message" : "email is already verified user"})
+            return Response({"message" : "email is already verified user"}, status=status.HTTP_403_FORBIDDEN)
         
         else:
 
@@ -365,11 +370,19 @@ def otp_reverify(req):
 
             #send the new otp to the email here
 
+            try:
 
-            return Response({"message" : "new otp generated"})
+                content_body = f"signup otp code {user_otp_instance.otp} for phrasetest app."
+                send_mail(email, body=content_body, Subject='New Otp')
+
+                return Response({"message" : "new otp generated"}, status=status.HTTP_200_OK)
 
 
-    
+            except Exception as e:
+
+                print(e)
+
+                return Response({"message" : "otp resend failed."}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message" : "otp_reverify running"})
 
