@@ -23,7 +23,7 @@ def nlp_loader_md():
 
 
 def wordCount(doc: spacy.tokens.doc):
-    d
+    
     # tokenization of the word
 
     token_list = [token for token in doc if token.is_alpha]
@@ -412,10 +412,61 @@ class PhraseExtract:
 
         return similarity_score
     
-    def SentenceVariationAnalyzer(self):
+    def SentenceVariationAnalyzer(self, with_sent_index=False):
+
+        #Diversity of Sentence Types approach
 
 
-        return
+        simple_sentence = 0
+        compound_sentence = 0
+        complex_sentence = 0
+
+        token_roots = []
+
+        sentence_index_variation = []
+
+        for index, sent in enumerate(self.doc_sm.sents):
+
+            root_token = [token for token in sent if token.dep_ == 'ROOT'][0]
+
+            if any([token.dep_ == 'cc' for token in sent]):
+
+                compound_sentence += 1
+
+                sentence_index_variation.append((index, 'compound'))
+
+            elif any([token.dep_ == 'mark' for token in sent]):
+
+                complex_sentence += 1
+
+                sentence_index_variation.append((index, 'complex'))
+
+            else:
+
+                simple_sentence += 1 
+
+                sentence_index_variation.append((index, 'simple'))
+
+            print(sent)
+
+        
+        if with_sent_index:
+
+            return  {
+                'simple_sentence' : simple_sentence,
+                'compound' : compound_sentence,
+                'complex' : complex_sentence,
+                'sentence_index_variation' : sentence_index_variation
+            }
+        
+        else: 
+
+            return  {
+                'simple_sentence' : simple_sentence,
+                'compound' : compound_sentence,
+                'complex' : complex_sentence,
+            }
+        
     
     def ArrayOfSents(self):
 

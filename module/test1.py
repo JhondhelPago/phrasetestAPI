@@ -1,6 +1,6 @@
 from features_xtrct import PhraseExtract
 from token_tools import SpellingDetector
-from LanguageToolChecker import LanguageToolPy, LangTooChecker
+from LanguageToolChecker import LangTooChecker
 
 
 
