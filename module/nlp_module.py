@@ -1,5 +1,5 @@
 import spacy
-
+import textstat
 
 class nlp_sm:
 
@@ -26,3 +26,11 @@ class nlp_sm:
 
         for token in self.doc:
             print(f"{token.text}, POS:{token.pos_}")
+
+
+
+class ReadbilityMeasure:
+
+    @staticmethod
+    def getReadabilityScore(text : str):
+        return textstat.flesch_reading_ease(text)
