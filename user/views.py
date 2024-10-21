@@ -66,7 +66,7 @@ def login(req):
     UserModel = get_user_model()
 
     try: 
-        user = UserModel.objects.get(email=email, password=password)
+        user = UserModel.objects.get(email=email, password=password, verified=1)
 
 
         if user is not None:
@@ -78,14 +78,14 @@ def login(req):
             return Response({
                 "refresh" : str(refresh),
                 "access" : str(refresh.access_token)
-            })
+            }, status=status.HTTP_200_OK)
         
     except CustomUser.DoesNotExist:
 
         return Response({
             "refresh" : "",
             "access" : ""
-        })
+        }, status=status.HTTP_404_NOT_FOUND)
     
 @csrf_exempt
 @api_view(['POST'])
