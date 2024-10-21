@@ -11,9 +11,11 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'module')))
 
+
 from module.features_xtrct import PhraseExtract
 from module.token_tools import SpellingDetector
 from module.token_tools import SpellCorrection
+from module.dummy_module_dir.module1 import greet
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -37,6 +39,12 @@ from user.user_module import otp_generator, time_dissect, time_difference, time_
 
 #importing models
 from .models import student_essay
+
+
+
+
+
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -164,7 +172,7 @@ def signup_student(req):
         new_user = CustomUser(
             username = username,
             email = email,
-            password = password,d
+            password = password,
             first_name = first_name,
             middle_name = middle_name,
             last_name = last_name,
@@ -641,6 +649,23 @@ def sampleProcess(req):
         )
 
     return JsonResponse({'message' : 'method is not POST'})
+
+
+@csrf_exempt
+@api_view(['GET'])
+def sample_view_get(req):
+
+    try:
+
+        email = req.GET.get('email')
+
+        return Response({"message" : greet(email)})
+
+    except Exception as e:
+
+        return Response({"error" : str(e)})
+
+
         
 
 

@@ -18,4 +18,6 @@ urlpatterns = [
     path('auth/otp/verify', views.otp_verify),
     path('auth/otp/reverify', views.otp_reverify),
 
+    path('student', views.sample_view_get)
+
 ]

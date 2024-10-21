@@ -54,7 +54,7 @@ class UserOTP(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
 
-
+    
     def created_at_localtimezone(self):
 
         return timezone.localtime(self.created_at)
