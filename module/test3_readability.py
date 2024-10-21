@@ -13,4 +13,4 @@ phraseInstance = PhraseExtract(question=question, text=essay)
 result =  phraseInstance.readability_score
 
 
-print(f"result : {result}")pang
+print(f"result : {result}")
