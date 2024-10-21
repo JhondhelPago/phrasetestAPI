@@ -5,6 +5,7 @@ import spacy.tokens
 from token_tools import MATTR
 from token_tools import CTTR
 from constants import cohesive_device
+from nlp_module import ReadbilityMeasure
 
 class TypeTokenRatioError(Exception):
     
@@ -76,7 +77,7 @@ class PhraseExtract:
         self.__symbl = 0
         self.__other = 0
 
-
+      
         # model instance in the inside the class
         self.en_core_web_sm = self.__load_sm_Model()
         self.en_core_web_md = self.__load_md_Model()
@@ -92,7 +93,8 @@ class PhraseExtract:
         # initial function opertions
         self.__tokenPOS_Identifier()
 
-        #self sapcy doc instance
+        #readability_score 
+        self.readability_score = self.__readability_score()
 
 
     #
@@ -411,6 +413,14 @@ class PhraseExtract:
         similarity_score = self.doc_md_question.similarity(self.doc_md)
 
         return similarity_score
+    
+    def __readability_score(self):
+
+        return ReadbilityMeasure.getReadabilityScore(self.text)
+    
+    def getReadabilityScore(self):
+
+        return 
     
     def SentenceVariationAnalyzer(self, with_sent_index=False):
 
