@@ -23,7 +23,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-from user.models import studentuser, CustomUser, UserOTP
+from user.models import teacheruser,studentuser, CustomUser, UserOTP
 
 from user.user_mail import send_mail
 
@@ -89,7 +89,7 @@ def login(req):
     
 @csrf_exempt
 @api_view(['POST'])
-def signup(req):
+def signup_student(req):
 
     data = json.loads(req.body)
     
@@ -164,12 +164,13 @@ def signup(req):
         new_user = CustomUser(
             username = username,
             email = email,
-            password = password,
+            password = password,d
             first_name = first_name,
             middle_name = middle_name,
             last_name = last_name,
             age = age,
             gender = gender,
+            is_student = True,
             school_name = school_name
 
         )
@@ -184,6 +185,107 @@ def signup(req):
         AsStudentUser = studentuser(user_id=user_id, gradelevel=gradelevel, institutional_id=institutional_id)
         #upload the fields to the database on the table user_studentuser
         AsStudentUser.save()
+
+
+        #make an instance of userotp here
+        userotp = UserOTP(user_id=user_id)
+        userotp.otp = otp_generator()
+        
+        #save the otp 
+        userotp.save()
+
+
+        #send an email to provided email address and deliver the otp code
+        content_body = f"signup otp code {userotp.otp} for phrasetest app."
+        send_mail(email, content_body)
+
+        data = {
+
+            "email_exist" : False,
+            "message" : "signup successfully verified."
+        }
+
+
+        return Response(data, status=status.HTTP_201_CREATED)
+    
+@csrf_exempt
+@api_view(['POST'])
+def signup_teacher(req):
+
+    data = json.loads(req.body)
+    
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    middle_name = data.get('middle_name')
+    last_name = data.get('last_name')
+    age = data.get('age')
+    gender = data.get('gender')
+    school_name = data.get('school_name')
+
+
+
+    record_list = list(CustomUser.objects.filter(email=email))
+
+    if record_list:
+
+        #make an error here or return message to the request
+
+        #data = {"email_exist" : True}
+
+        #return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+        if record_list[0].verified == True:
+
+            data = {"email_exist" : True}
+
+            return Response(data, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            print('dito ang control flow')
+            # delete the instance on the userotp, studentuser and customuser
+        
+            user_id = record_list[0].id
+
+            UserOTPInstance = UserOTP.objects.get(user_id=user_id)
+            UserOTPInstance.delete()
+
+            TeacherUserInstance = teacheruser.objects.get(user_id=user_id)
+            TeacherUserInstance.delete()
+            
+            record_list[0].delete()
+            
+    record_list = list(CustomUser.objects.filter(email=email))
+
+    if not record_list:
+        
+        #make signup process here
+
+        new_user = CustomUser(
+            username = username,
+            email = email,
+            password = password,
+            first_name = first_name,
+            middle_name = middle_name,
+            last_name = last_name,
+            age = age,
+            gender = gender,
+            is_teacher = True,
+            school_name = school_name
+
+        )
+
+    
+        #uploading the fields to the database on the table user_customeuser
+        new_user.save()
+
+
+        user_id = new_user.id
+
+        AsTeacherUser = teacheruser(user_id=user_id)
+        #upload the fields to the database on the table user_studentuser
+        AsTeacherUser.save()
 
 
         #make an instance of userotp here
