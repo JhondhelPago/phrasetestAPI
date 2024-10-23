@@ -47,7 +47,8 @@ def EssayExamineErrorSuggest(PhraseInstance : PhraseExtract):
             rule=result['rule'],
             ignoreForIncompleteSentence=result['ignoreForIncompleteSentence'],
             contextForSureMatch=result['contextForSureMatch']
-        ) 
+        ).getDictPropeties()
+
         for result in match_result
     ]
 
@@ -64,7 +65,22 @@ def EssayExamineErrorSuggest(PhraseInstance : PhraseExtract):
 
     print(sentence_list)
 
+
+    #loop to the match_result using foreach
+    # get the replacemet
+
+
+
+
+
+
+
     return True
+
+
+def OffsetFinder(text, offset_value):
+
+    return text[offset_value]
 
 
 class Match:
@@ -86,9 +102,25 @@ class Match:
 
         self.belongsToSentenceId = None
 
-    def setBelongsToSentenceId(self, id: int):
+    def BelongsToSentenceId(self, id: int):
 
         self.belongsToSentenceId = id
+
+    def getDictPropeties(self):
+
+        return {
+            'message' : self.message,
+            'shortMessage' : self.shortMessage,
+            'replacements' : self.replacements,
+            'offset' : self.offset,
+            'length' : self.length,
+            'context' : self.context,
+            'sentence' : self.sentence,
+            'type' : self.type,
+            'rule' : self.rule,
+            'ignoreForIncompleteSentence' : self.ignoreForIncompleteSentence,
+            'contextForSureMatch' : self.contextForSureMatch
+        }
 
 
 

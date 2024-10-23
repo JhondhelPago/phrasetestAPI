@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 from features_xtrct import PhraseExtract
-from LanguageToolChecker import LangToolChecker, EssayExamineErrorSuggest
+from LanguageToolChecker import LangToolChecker, EssayExamineErrorSuggest, OffsetFinder
 
 
 question = 'When you imagine yourself in 20 years, where do you want to be?'
@@ -19,3 +19,6 @@ Phrase = PhraseExtract(question=question, text=essay)
 return_value = EssayExamineErrorSuggest(PhraseInstance=Phrase)
 
 
+
+
+print(f"OffsetFinder: {OffsetFinder('...fore all of it I need to make sure that A have enough resources to support family...', 43)}")
