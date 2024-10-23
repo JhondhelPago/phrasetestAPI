@@ -1,0 +1,2 @@
+
+# result = LangToolChecker(Phrase.text)

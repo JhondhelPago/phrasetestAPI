@@ -1,7 +1,11 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from features_xtrct import PhraseExtract
 from token_tools import SpellingDetector
 from LanguageToolChecker import LangToolChecker
-
 
 
 question = 'When you imagine yourself in 20 years, where do you want to be?'
@@ -11,12 +15,7 @@ essay = 'In 20 years I imagined myself as a successful software engineer and a b
 phraseInstance = PhraseExtract(question=question, text=essay)
 
 
-result = phraseInstance.SentenceVariationAnalyzer(with_sent_index=True)
+result =  phraseInstance.readability_score
 
-print('\n\nresuts')
 
-print(result)
-
-print('\ntopic relevance')
-
-print(phraseInstance.TopicRelevance())
+print(f"result : {result}")
