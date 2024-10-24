@@ -482,6 +482,10 @@ class PhraseExtract:
 
         return list(sent.text + ' ' for sent in self.doc_sm.sents)
     
+    def ArrayOfSentNoEndSpace(self):
+
+        return list(sent.text for sent in self.doc_sm.sents)
+    
 
 
         

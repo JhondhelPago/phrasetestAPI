@@ -33,45 +33,103 @@ def EssayExamineErrorSuggest(PhraseInstance : PhraseExtract):
     
 
     match_result =  LangToolChecker(PhraseInstance.text)
+    sentence_list_original = PhraseInstance.ArrayOfSentNoEndSpace()
+
+    sentence_list_copy = sentence_list_original
+
+    
+    def findMatchingSent(MatchObject : Match):
+
+        nonlocal sentence_list_copy
+
+        #get the MatchObject.sentence
+        #find the associated sentence then assign the index using the MatchObject.BelongsToSetenceId(index)
+        
+        # index  = sentence_list_copy.index(MatchObject.sentence)
+
+        # MatchObject.BelongsToSentenceId(index)
+
+
+        return MatchObject
+
+
+
+    
 
     match_result = [
-        Match(
-            message=result['message'],
-            shortMessage=result['shortMessage'],
-            replacements=result['replacements'],
-            offset=result['offset'],
-            length=result['length'],
-            context=result['context'],
-            sentence=result['sentence'],
-            type=result['type'],
-            rule=result['rule'],
-            ignoreForIncompleteSentence=result['ignoreForIncompleteSentence'],
-            contextForSureMatch=result['contextForSureMatch']
-        ).getDictPropeties()
+        findMatchingSent(
+            Match(
+                message=result['message'],
+                shortMessage=result['shortMessage'],
+                replacements=result['replacements'],
+                offset=result['offset'],
+                length=result['length'],
+                context=result['context'],
+                sentence=result['sentence'],
+                type=result['type'],
+                rule=result['rule'],
+                ignoreForIncompleteSentence=result['ignoreForIncompleteSentence'],
+                contextForSureMatch=result['contextForSureMatch']
+            )
+        )
 
         for result in match_result
     ]
 
 
-    sentence_list = PhraseInstance.ArrayOfSents()
 
-
-    print(match_result)
-    print(isinstance(match_result[0], Match))
+    for sent in sentence_list_original:
+        print(sent)
 
 
 
     print('\n\n')
 
-    print(sentence_list)
+    print('sentence_list_copy')
+    for sentence in sentence_list_copy:
+
+        print(sentence)
+
+
+
+    print('\n\n')
+
+
+    
+
+    #inverted login in the for loop
+    # should first lopp to the sentence, then access eache element in the match_result and get the sentence property.
+    #then match if the MatchObject is == to the current sentece state
+    for MatchObject in match_result:
+
+
+        for index, sent in enumerate(sentence_list_copy):
+
+            print(f"index : {index}")
+            print('\n')
+
+            print(f"sent:{sent}")
+            print(f"MatchObject.sentence:{MatchObject.sentence}")
+            print(f"match resut:{sent == MatchObject.sentence}")
+
+            print('\n')
+
+            if sent == MatchObject.sentence:
+
+                MatchObject.BelongsToSentenceId(index)
+
+
+
+        print(f"MatchObject BelongsToSentenceID: {MatchObject.SentenceId}, MatchObject sentence: {MatchObject.sentence}")
+
 
 
     #loop to the match_result using foreach
-    # get the replacemet
+    #access the Match().sentence
+    #find the matching sent from the PhraseExtract.ArrayOfSent()
+        #if found pop the sent from the PhraseExract.ArrayOfSent(), and store it to another list
 
-
-
-
+    
 
 
 
@@ -100,7 +158,7 @@ class Match:
         self.contextForSureMatch = contextForSureMatch
 
 
-        self.belongsToSentenceId = None
+        self.SentenceId = None
 
     def BelongsToSentenceId(self, id: int):
 

@@ -19,6 +19,8 @@ Phrase = PhraseExtract(question=question, text=essay)
 return_value = EssayExamineErrorSuggest(PhraseInstance=Phrase)
 
 
-
-
 print(f"OffsetFinder: {OffsetFinder('...fore all of it I need to make sure that A have enough resources to support family...', 43)}")
+
+
+print(f"length of matches: {len(LangToolChecker(Phrase.text))}")
+
