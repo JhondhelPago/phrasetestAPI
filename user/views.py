@@ -17,7 +17,7 @@ from module.token_tools import SpellingDetector
 from module.token_tools import SpellCorrection
 from module.dummy_module_dir.module1 import greet
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from user.Myserializer import StudentUserSerializer
 from rest_framework import status
@@ -25,6 +25,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.views import TokenObtainPairView , TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenObtainPairSerializer
+from rest_framework.permissions import IsAuthenticated  
 from user.models import teacheruser,studentuser, CustomUser, UserOTP
 
 from user.user_mail import send_mail
@@ -495,6 +496,28 @@ def otp_reverify(req):
                 return Response({"message" : "otp resend failed."}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message" : "otp_reverify running"})
+
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def studentUserInfo(req):
+
+    try:
+        
+        email = req.GET.get('email')
+        user = CustomUser.objects.get(email=email)
+
+        id = user.id
+
+
+        return Response({
+            "message" : f"your user id is {id} and your username is {user.username}"
+        })
+
+    except Exception as e:
+
+        print(e)
 
 
 def devs(req):
