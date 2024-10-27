@@ -17,6 +17,7 @@ from module.token_tools import SpellingDetector
 from module.token_tools import SpellCorrection
 from module.dummy_module_dir.module1 import greet
 
+from urllib.parse import unquote
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from user.Myserializer import StudentUserSerializer
@@ -85,6 +86,7 @@ def login(req):
 
 
             return Response({
+                "email" : user.email,
                 "user_type" : 'student' if user.is_student else 'teacher',
                 "token" : {"refresh" : str(refresh), "access" : str(refresh.access_token)}
             }, status=status.HTTP_200_OK)
@@ -92,6 +94,7 @@ def login(req):
     except CustomUser.DoesNotExist:
 
         return Response({
+            "email" : None,
             "user_type" : None,
             "token" : {"refresh" : "", "access" : ""}
         }, status=status.HTTP_404_NOT_FOUND)
@@ -503,9 +506,19 @@ def otp_reverify(req):
 @permission_classes([IsAuthenticated])
 def studentUserInfo(req):
 
+    email = unquote(req.GET.get('email')) # jhondelpago2307%40gmail.com it should be jhondhelpago2307@gmail.com
+    print(f"email params: {email}" )
+
+
+    access_decode = AccessToken(str(unquote(req.GET.get('access'))))
+
+    print(f"user_id from  access_decode: {access_decode['user_id']}")
+    
+
     try:
         
-        email = req.GET.get('email')
+        email = str(unquote(req.GET.get('email')))
+        print(f"email params inside try block: {email}" )
         user = CustomUser.objects.get(email=email)
 
         id = user.id
@@ -518,6 +531,8 @@ def studentUserInfo(req):
     except Exception as e:
 
         print(e)
+
+        Response 
 
 
 def devs(req):
