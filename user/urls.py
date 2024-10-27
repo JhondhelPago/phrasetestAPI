@@ -15,6 +15,7 @@ urlpatterns = [
     path('auth/test', views.token_test),
     path('auth/token/test', views.new_accesstoken),
     path('auth/token/new/access', views.CustomTokenRefreshView.as_view()),
+    path('auth/token/new/pair', views.CustomeTokenObtainView.as_view()),
     path('auth/otp/verify', views.otp_verify),
     path('auth/otp/reverify', views.otp_reverify),
 

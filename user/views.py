@@ -23,8 +23,8 @@ from user.Myserializer import StudentUserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from rest_framework_simplejwt.views import TokenRefreshView
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView , TokenRefreshView
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenObtainPairSerializer
 from user.models import teacheruser,studentuser, CustomUser, UserOTP
 
 from user.user_mail import send_mail
@@ -84,15 +84,15 @@ def login(req):
 
 
             return Response({
-                "refresh" : str(refresh),
-                "access" : str(refresh.access_token)
+                "user_type" : 'student' if user.is_student else 'teacher',
+                "token" : {"refresh" : str(refresh), "access" : str(refresh.access_token)}
             }, status=status.HTTP_200_OK)
         
     except CustomUser.DoesNotExist:
 
         return Response({
-            "refresh" : "",
-            "access" : ""
+            "user_type" : None,
+            "token" : {"refresh" : "", "access" : ""}
         }, status=status.HTTP_404_NOT_FOUND)
     
 @csrf_exempt
@@ -676,6 +676,15 @@ class CustomTokenRefreshView(TokenRefreshView):
 
     def post(self, request):
 
+
+        return super().post(request)
+    
+
+class CustomeTokenObtainView(TokenObtainPairView):
+
+    serializer_class = TokenObtainPairSerializer
+
+    def post(self, request):
 
         return super().post(request)
 

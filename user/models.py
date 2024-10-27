@@ -3,11 +3,11 @@ from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 
-# Create your models here.
+# Create your models here.d
 
 class CustomUser(AbstractUser):
     
-    username = models.CharField(max_length=100, unique=False)
+    username = models.CharField(max_length=100, unique=True)
     middle_name = models.CharField(max_length=80, null=True, blank=True)
     age = models.IntegerField(null=True)
     gender = models.CharField(max_length=6, choices=[('M', 'Male'), ('F', 'Female')], null=True, blank=True)  # Change default to 'M' or 'F'
