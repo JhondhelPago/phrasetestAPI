@@ -37,10 +37,14 @@ def EssayExamineErrorSuggest(PhraseInstance : PhraseExtract):
 
     sentence_list_copy = sentence_list_original
 
+    #Dict for storing the sentence list
+    SentenceCollection = dict()
+
     
     def findMatchingSent(MatchObject : Match):
 
         nonlocal sentence_list_copy
+        nonlocal SentenceCollection
 
         #get the MatchObject.sentence
         #find the associated sentence then assign the index using the MatchObject.BelongsToSetenceId(index)
@@ -50,10 +54,24 @@ def EssayExamineErrorSuggest(PhraseInstance : PhraseExtract):
         # MatchObject.BelongsToSentenceId(index)
 
 
+        index = sentence_list_copy.index(MatchObject.sentence)
+
+        MatchObject.BelongsToSentenceId(index)
+
+        #check here if the key exist, if exist append the sentence to the list using the key
+        #else, instantiate the dictionary with key and assign an empty list
+
+        if index in SentenceCollection:
+
+            SentenceCollection[index].append(MatchObject)
+
+        else:
+
+            SentenceCollection[index] = list()
+            SentenceCollection[index].append(MatchObject)
+
+
         return MatchObject
-
-
-
     
 
     match_result = [
@@ -77,64 +95,41 @@ def EssayExamineErrorSuggest(PhraseInstance : PhraseExtract):
     ]
 
 
-
-    for sent in sentence_list_original:
-        print(sent)
+    print('SentenceCollection dictionary')
 
 
+    print(SentenceCollection)
 
-    print('\n\n')
-
-    print('sentence_list_copy')
-    for sentence in sentence_list_copy:
-
-        print(sentence)
+    SentenceCollection_keys = sorted(list(SentenceCollection.keys()))
+    print(f"keys: {SentenceCollection_keys}")
 
 
 
-    print('\n\n')
+    SentenceListContainer = list()
+
+    for index_key in SentenceCollection_keys:
+
+        if len(SentenceCollection[index_key]) > 1:
+
+            #Merging Process
 
 
-    
+            pass
 
-    #inverted login in the for loop
-    # should first lopp to the sentence, then access eache element in the match_result and get the sentence property.
-    #then match if the MatchObject is == to the current sentece state
-    for MatchObject in match_result:
+        else:
 
-
-        for index, sent in enumerate(sentence_list_copy):
-
-            print(f"index : {index}")
-            print('\n')
-
-            print(f"sent:{sent}")
-            print(f"MatchObject.sentence:{MatchObject.sentence}")
-            print(f"match resut:{sent == MatchObject.sentence}")
-
-            print('\n')
-
-            if sent == MatchObject.sentence:
-
-                MatchObject.BelongsToSentenceId(index)
+            #Append to a list
+            SentenceListContainer.append(SentenceCollection[index_key][0])
 
 
 
-        print(f"MatchObject BelongsToSentenceID: {MatchObject.SentenceId}, MatchObject sentence: {MatchObject.sentence}")
 
 
 
-    #loop to the match_result using foreach
-    #access the Match().sentence
-    #find the matching sent from the PhraseExtract.ArrayOfSent()
-        #if found pop the sent from the PhraseExract.ArrayOfSent(), and store it to another list
+
+    return match_result
 
     
-
-
-
-    return True
-
 
 def OffsetFinder(text, offset_value):
 
@@ -162,7 +157,7 @@ class Match:
 
     def BelongsToSentenceId(self, id: int):
 
-        self.belongsToSentenceId = id
+        self.SentenceId = id
 
     def getDictPropeties(self):
 
@@ -177,11 +172,41 @@ class Match:
             'type' : self.type,
             'rule' : self.rule,
             'ignoreForIncompleteSentence' : self.ignoreForIncompleteSentence,
-            'contextForSureMatch' : self.contextForSureMatch
+            'contextForSureMatch' : self.contextForSureMatch,
+            'SentenceId' : self.SentenceId
         }
+    
+    def Print_getDictProperites(self):
+
+        DictProperties = self.getDictPropeties()
+        
+
+        print(f"message: {DictProperties['message']}")
+        print(f"shortMessage: {DictProperties['shortMessage']}")
+        print(f"replacements: {DictProperties['replacements']}")
+        print(f"offset: {DictProperties['offset']}")
+        print(f"length: {DictProperties['length']}")
+        print(f"context: {DictProperties['context']}")
+        print(f"sentence: {DictProperties['sentence']}")
+        print(f"type: {DictProperties['type']}")
+        print(f"rule: {DictProperties['rule']}")
+        print(f"ignoreForIncompleteSentence: {DictProperties['ignoreForIncompleteSentence']}")
+        print(f"contextForSureMatch: {DictProperties['contextForSureMatch']}")
+        print(f"SentenceId: {DictProperties['SentenceId']}")
+
+        print('\n')
+
+
 
 #This function takes a list of MatchObject then merge the elements into single Matchobject then return.
 def MatchMerger(MatchObjectList : list[Match]) -> Match:
+
+
+    #SentencePlaceHolder
+
+    #For each MatchObject.sentence merge the replacement to the SentencePlaceHolder
+
+    #Return the merged MatchObject
 
 
     return 

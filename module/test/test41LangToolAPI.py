@@ -14,13 +14,25 @@ essay = 'In 20 years I imagined myself as a successful software engineer and a b
 
 Phrase = PhraseExtract(question=question, text=essay)
 
+#SentenceList
+sentence_list  = Phrase.ArrayOfSentNoEndSpace()
+
+for sent in sentence_list:
+    print(sent)
+
+
+print('\n')
+
 
 
 return_value = EssayExamineErrorSuggest(PhraseInstance=Phrase)
 
+#printing the MatchObject
 
-print(f"OffsetFinder: {OffsetFinder('...fore all of it I need to make sure that A have enough resources to support family...', 43)}")
+for match_object in return_value:
+    print(match_object.Print_getDictProperites())
 
 
-print(f"length of matches: {len(LangToolChecker(Phrase.text))}")
+
+
 
