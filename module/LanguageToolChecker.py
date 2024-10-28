@@ -180,6 +180,11 @@ class Match:
             'contextForSureMatch' : self.contextForSureMatch
         }
 
+#This function takes a list of MatchObject then merge the elements into single Matchobject then return.
+def MatchMerger(MatchObjectList : list[Match]) -> Match:
+
+
+    return 
 
 
 
