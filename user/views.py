@@ -528,11 +528,26 @@ def studentUserInfo(req):
             "message" : f"your user id is {id} and your username is {user.username}"
         })
 
-    except Exception as e:
+    except CustomUser.DoesNotExist as e:
 
         print(e)
 
-        Response 
+        return Response({
+            "message" : "user not found"
+        })
+    
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def teacherUserInfo(req):
+
+    try:
+
+        return
+
+    except Exception as e:
+
+        return 
 
 
 def devs(req):
