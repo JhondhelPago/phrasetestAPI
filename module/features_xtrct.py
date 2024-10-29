@@ -52,13 +52,30 @@ def tokenSize(doc : spacy.tokens.doc):
 
     return len([token for token in doc if not token.is_space])
 
+def text_precleaning(text):
+
+
+        nlp = nlp_loader_sm()
+
+        doc = nlp(text)
+
+        initial_string = ''
+
+        for sent in doc.sents:
+
+            new_sent = ' '.join(sent.text.split())
+            initial_string += new_sent + ' '
+      
+        return initial_string
+
 
 class PhraseExtract:
 
     def __init__(self,question: str, text: str):
 
-        self.text = text
-        self.question = question
+        self.text = text_precleaning(text)
+        self.question = text_precleaning(question)
+
 
         self.__noun_freq = 0
         self.__adj_freq = 0
@@ -109,7 +126,8 @@ class PhraseExtract:
     def __load_md_Model(self):  #private function only on the scope of the class
 
         return spacy.load('en_core_web_md')
-    
+
+
 
     def wordCount(self):
 

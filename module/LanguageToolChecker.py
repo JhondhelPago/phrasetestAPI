@@ -152,8 +152,14 @@ class Match:
         self.ignoreForIncompleteSentence = ignoreForIncompleteSentence
         self.contextForSureMatch = contextForSureMatch
 
-
         self.SentenceId = None
+
+        #applying the replacement to the sentence
+        self.modif_sentence = None
+        self.FinalSentence = None
+        self.applyReplacement()
+
+
 
     def BelongsToSentenceId(self, id: int):
 
@@ -173,7 +179,9 @@ class Match:
             'rule' : self.rule,
             'ignoreForIncompleteSentence' : self.ignoreForIncompleteSentence,
             'contextForSureMatch' : self.contextForSureMatch,
-            'SentenceId' : self.SentenceId
+            'SentenceId' : self.SentenceId,
+            'SentenceModif' : self.modif_sentence,
+            'FinalSentence' : self.FinalSentence
         }
     
     def Print_getDictProperites(self):
@@ -193,18 +201,64 @@ class Match:
         print(f"ignoreForIncompleteSentence: {DictProperties['ignoreForIncompleteSentence']}")
         print(f"contextForSureMatch: {DictProperties['contextForSureMatch']}")
         print(f"SentenceId: {DictProperties['SentenceId']}")
+        print(f"SentenceModif: {DictProperties['SentenceModif']}")
+        print(f"FinalSetence: {DictProperties['FinalSentence']}")
 
         print('\n')
 
+
+    def applyReplacement(self):
+
+        replacement_value = self.replacements[0]['value']
+
+        context_copy = self.context['text']
+
+        offset = self.context['offset']
+
+        pre_modif_sentence = removeBothEndsDots(SubStringInsertion(original_string=context_copy, start_index=offset, replacement_string=replacement_value))
+
+        pre_modif_sentence_offset = FindSubStringPosition(SuperString=self.sentence, Substring=removeBothEndsDots(context_copy))
+
+
+        self.modif_sentence = pre_modif_sentence
+        self.FinalSentence =  SubStringInsertion(original_string=self.sentence, start_index=pre_modif_sentence_offset, replacement_string=pre_modif_sentence)
+        #self.modif_sentence = pre_modif_sentence
+
+
+#charcter replacement -> Done
+#character removal -> Logical Error
+#there is a bug here in this function
+def SubStringInsertion(original_string, start_index, replacement_string):
+
+    end_index = start_index + len(replacement_string)
+
+    modif_string = original_string[:start_index] + replacement_string + original_string[end_index:]
+
+    return modif_string
+
+def removeBothEndsDots(String):
+
+    newString = String.replace('.', '')
+
+    return newString
+
+def FindSubStringPosition(SuperString, Substring):
+
+    index = SuperString.find(Substring)
+
+    return index
 
 
 #This function takes a list of MatchObject then merge the elements into single Matchobject then return.
 def MatchMerger(MatchObjectList : list[Match]) -> Match:
 
+    #OriginalSentenceRerence
 
     #SentencePlaceHolder
 
-    #For each MatchObject.sentence merge the replacement to the SentencePlaceHolder
+    #For each MatchObject.SentenceModif merge to the SentencePlaceHolder
+
+    #Set MatchObject.FinalSentence = SentencePlaceHolder
 
     #Return the merged MatchObject
 
