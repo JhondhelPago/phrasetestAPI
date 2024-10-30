@@ -41,4 +41,3 @@ offset_finder = OffsetFinder('...fore all of it I need to make sure that i have 
 
 print(offset_finder)
 
-x   
