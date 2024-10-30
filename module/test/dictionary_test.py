@@ -1,11 +1,26 @@
-my_dict = {1: 'apple', 2: 'banana', 3: 'cherry'}
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
+from features_xtrct import PhraseExtract
+from LanguageToolChecker import LangToolChecker, EssayExamineErrorSuggest, OffsetFinder, FindSubStringPosition
+
+
+print(len(' to discover on myself during my age of 20\'s and continue to improve my life quality'))
+print(len('to discover on myself during my age of 20s and continue to improve my life quality'))
 
 
 
-if 1 in my_dict:
+string = 'y'
+new_string = string[1:]
 
-    print(True)
+print(f'new_string:{new_string}')
 
-else:
 
-    print(False)
+offset_position = FindSubStringPosition('I know that there a lot to discover on myself during my age of 20\'s and continue to improve my life quality.',  'to discover on myself during my age of 20\'s and continue to improve my life quality')
+print(offset_position)
+print(len('to discover on myself during my age of 20\'s and continue to improve my life quality'))
+
+print(len('to discover on myself during my age of 20\'s and continue to improve my life quality.'))

@@ -1,2 +1,4 @@
+string = 'y'
+new_string = string[1:]
 
-# result = LangToolChecker(Phrase.text)
+print(f'new_string:{new_string}')

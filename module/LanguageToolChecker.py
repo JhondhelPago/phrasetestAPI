@@ -215,30 +215,52 @@ class Match:
 
         offset = self.context['offset']
 
-        pre_modif_sentence = removeBothEndsDots(SubStringInsertion(original_string=context_copy, start_index=offset, replacement_string=replacement_value))
+        pre_modif_sentence = removeBothEndsDots(SubStringInsertion(original_string=context_copy, start_index=offset, replacement_string=replacement_value, offset_length=self.context['length']))
 
         pre_modif_sentence_offset = FindSubStringPosition(SuperString=self.sentence, Substring=removeBothEndsDots(context_copy))
 
-
         self.modif_sentence = pre_modif_sentence
-        self.FinalSentence =  SubStringInsertion(original_string=self.sentence, start_index=pre_modif_sentence_offset, replacement_string=pre_modif_sentence)
+
+        #if pre_modif_sentence length is greater equal context copy -> use SubStringInsertion()
+
+        #else -> use SentenceMerginigSolution()
+
+
+        self.FinalSentence =  SubStringInsertion(original_string=self.sentence, start_index=pre_modif_sentence_offset, replacement_string=pre_modif_sentence, offset_length=len(removeBothEndsDots(context_copy)))
         #self.modif_sentence = pre_modif_sentence
 
 
 #charcter replacement -> Done
 #character removal -> Logical Error
 #there is a bug here in this function
-def SubStringInsertion(original_string, start_index, replacement_string):
+def SubStringInsertion(original_string, start_index, replacement_string, offset_length=0):
 
-    end_index = start_index + len(replacement_string)
+    #get here the left substrting using the start_index and the offset_length
+    #get here the right substring using the start_index and the offset_length
 
-    modif_string = original_string[:start_index] + replacement_string + original_string[end_index:]
+    left_sub = original_string[:start_index]
+    right_sub = original_string[start_index + offset_length:]
+
+    
+
+  
+    #char_length = len(replacement_string)
+
+    #end_index = start_index  + len(replacement_string)
+
+    #modif_string = original_string[:start_index] + replacement_string + original_string[end_index:]
+
+    modif_string = left_sub + replacement_string + right_sub
 
     return modif_string
 
-def removeBothEndsDots(String):
+def SentenceMerginSolution(orignal_string, start_index, process_substring):
 
-    newString = String.replace('.', '')
+    return
+
+def removeBothEndsDots(String):
+    end_index = len(String) - 3
+    newString = String[3:end_index]
 
     return newString
 
