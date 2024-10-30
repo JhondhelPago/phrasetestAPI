@@ -111,7 +111,31 @@ class PhraseExtract:
         self.__tokenPOS_Identifier()
 
         #readability_score 
+        #self.readability_score = self.__readability_score()
+
+
+
+        
+        self._word_Count = self.wordCount()
+        self.unique_words_ratio = self.unique_word()
+        self.average_word_length = self.avg_word_length()
+        self._noun_count = self.__noun_freq
+        self._adj_count = self.__adj_freq
+        self._adv_count = self.__adv_freq
+        self._pronoun_count = self.__pronoun_freq
+        self._verb_count = self.__verb_freq
+        #self.subordinate_clauses_count = None
+        #self.grammar_error_count = None
+        #self.spelling_error_count = None
+        #self.sentiment_polarity
+        self.cohesive_device_count = self.cohesive_device_indentifier(only_count=True)
         self.readability_score = self.__readability_score()
+        self.avg_sentence_length = self.ave_sentence_len()
+        self.sentence_variation = self.SentenceVariationAnalyzer()
+        self.sentence_simple = self.sentence_variation['simple_sentence']
+        self.sentence_compound = self.sentence_variation['compound']
+        self.sentence_complex = self.sentence_variation['complex']
+        self.topic_relevance_score = self.TopicRelevance()
 
 
     #
@@ -149,7 +173,7 @@ class PhraseExtract:
         return self.__SimilaritLevel
 
     ## MATTR or CTTR
-    def unique_word(self, token_ratio_technique='mattr'):
+    def unique_word(self, token_ratio_technique='mattr') -> float:
 
         #MATTR
         if token_ratio_technique == 'mattr':
@@ -354,12 +378,12 @@ class PhraseExtract:
         char_len = 0
         sent_quanti = 0
 
-        print('printing the sent from the generator')
+        #print('printing the sent from the generator')
 
         for sent in doc.sents:
 
-            print(f"sent: {sent}")
-            print(len(str(sent)))
+            # print(f"sent: {sent}")
+            # print(len(str(sent)))
             char_len += len(str(sent))
             sent_quanti += 1
 
@@ -382,7 +406,7 @@ class PhraseExtract:
         return sentence_number
 
 
-    def cohesive_device_indentifier(self):
+    def cohesive_device_indentifier(self, only_count=False):
 
         doc = self.doc_sm 
        
@@ -423,6 +447,17 @@ class PhraseExtract:
                         cohesive_devices_freq[key] += 1
 
                         device_found.append(device)
+
+        COHESIVE_DEVICE_COUNT = 0
+        if only_count:
+
+            for key in key_list:
+
+                COHESIVE_DEVICE_COUNT += cohesive_devices_freq[key]
+
+            return COHESIVE_DEVICE_COUNT
+        
+
 
         return cohesive_devices_freq
     
@@ -475,7 +510,7 @@ class PhraseExtract:
 
                 sentence_index_variation.append((index, 'simple'))
 
-            print(sent)
+            # print(sent)
 
         
         if with_sent_index:
@@ -503,6 +538,49 @@ class PhraseExtract:
     def ArrayOfSentNoEndSpace(self):
 
         return list(sent.text for sent in self.doc_sm.sents)
+    
+    def displayFeatures(self):
+
+        # self.wordCount = 0
+        # self.unique_words_ratio = 0
+        # self.avg_word_length = 0
+        # self.noun_count = self.__noun_freq
+        # self.adj_count = self.__adj_freq
+        # self.adv_count = self.__adv_freq
+        # self.pronoun_count = self.__pronoun_freq
+        # self.verb_count = self.__verb_freq
+        # #self.subordinate_clauses_count = None
+        # #self.grammar_error_count = None
+        # #self.spelling_error_count = None
+        # #self.sentiment_polarity
+        # #self.cohesive_device_count
+        # self.readability_score = self.__readability_score()
+        # self.sentence_variation = self.SentenceVariationAnalyzer()
+        # self.topic_relevance_score = self.TopicRelevance()
+
+        print(f"_word_count : {self._word_Count}")
+        print(f"unique_words_ratio: {self.unique_words_ratio}")
+        print(f"average_word_length : {self.average_word_length}")
+        print(f"_noun_count : {self._noun_count}")
+        print(f"_adj_count : {self._adj_count}")
+        print(f"_adv_count : {self._adv_count}")
+        print(f"_pronoun_count : {self._pronoun_count}")
+        print(f"_verb_count : {self._verb_count}")
+        print(f"subordinating_clauses_count : {'None for now'}")
+        print(f"grammar_error_count : {'None for now'}")
+        print(f"spelling_errpr_count : {'None for now'}")
+        print(f"sentiment_polarity : {'None for now'}")
+        print(f"cohesive_device_count : {self.cohesive_device_count}")
+        print(f"readability_score : {self.readability_score}")
+        print(f"avg_sentence_length : {self.avg_sentence_length}")
+        print(f"sentence_variation : {self.sentence_variation}")
+        print(f"sentence_simple : {self.sentence_simple}")
+        print(f"sentence compound : {self.sentence_compound}")
+        print(f"sentence complex : {self.sentence_complex}")
+        print(f"topic_relevance_score : {self.topic_relevance_score}")
+
+
+
     
 
 
