@@ -37,7 +37,8 @@ def student_api_test_run(req):
 
     param_value = unquote(req.GET.get('email'))
 
-    print(f"param_value : {param_value}")    
+    print(f"param_value : {param_value}")
+    
 
     return Response({'message the student_api_test_run is executing'})
 

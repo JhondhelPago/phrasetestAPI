@@ -58,8 +58,9 @@ INSTALLED_APPS = [
     #apps installed
     "user",
     'userauth',
+    'teacher',
     'student',
-    'teacher'
+    
 ]
 
 MIDDLEWARE = [

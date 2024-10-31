@@ -1,4 +1,7 @@
 from django.shortcuts import render
+
+# Create your views here.
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -32,15 +35,26 @@ from user.models import CustomUser
 
 @csrf_exempt
 @api_view(['GET'])
+def teacher_api_test_run(req):
+
+    param_value = unquote(req.GET.get('access'))
+    print(param_value)
+    print(param_value)
+
+    return Response({'message' : 'teacher_api_test_run is executing.'})
+
+@csrf_exempt
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def teacherInfo(req):
 
     access_token = req.GET.get('access')
+    print(f"access_token : {access_token}")
 
     try:
 
         decoded_access_token = AccessToken(access_token)
-        print(f"user_id: {decoded_access_token['']}")
+        print(f"user_id: {decoded_access_token['user_id']}")
 
         user_id = int(decoded_access_token['user_id'])
 

@@ -8,6 +8,6 @@ from . import views
 urlpatterns = [
 
     path('test/run/api', views.student_api_test_run),
-    path('info', views.studentInfo)
+    path('info/', views.studentInfo)
 
-]
+]   
