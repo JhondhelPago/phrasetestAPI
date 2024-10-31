@@ -12,7 +12,7 @@ question = Question1
 essay = 'When I grow up I\'d like to be a doctor of medicine. Doctors are very smart people and I want to be like them someday. I dreamed of treating the people sickness and cure them. I will study hard to attain my dreamed of becomeing a doctor. It may seem not easy but I will do best to one of them.'
 essay1 = 'I love seafood  dishes. When we go home to our province, my grandmother serves as crab and lobster'
 
-Phrase = PhraseExtract(question=question, text=essay)
+Phrase = PhraseExtract(question=question, text=essay1)
 
 
 Phrase.displayFeatures()

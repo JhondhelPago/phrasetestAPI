@@ -26,57 +26,32 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 #model imports
 from user.models import CustomUser
 
-#imports from other apps
 
 
-
-# Create your views here.
-@csrf_exempt
-@api_view(['GET'])
-def student_api_test_run(req):
-
-    param_value = unquote(req.GET.get('email'))
-
-    print(f"param_value : {param_value}")    
-
-    return Response({'message the student_api_test_run is executing'})
+#Create your views here
 
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def studentInfo(req):
-    #borrow the necessarry models from the user app to make this view process
+def teacherInfo(req):
 
-    #validate the token, if valid get the user_id and query using the ORM, get the neccesarry information of the user using the user_id
-    #if not valid return 401
-    
     access_token = req.GET.get('access')
-    #print(access_token)
-
 
     try:
 
         decoded_access_token = AccessToken(access_token)
-        
-        print(f"token_type: {decoded_access_token['token_type']}")
-        print(f"exp: {decoded_access_token['exp']}")
-        print(f"iat: {decoded_access_token['iat']}")
-        print(f"jti: {decoded_access_token['jti']}")
-        print(f"user_id: {decoded_access_token['user_id']}")
-
+        print(f"user_id: {decoded_access_token['']}")
 
         user_id = int(decoded_access_token['user_id'])
 
         user = CustomUser.objects.get(id=user_id)
 
-        #
 
-        return Response({"id" : decoded_access_token['user_id'], "username" : user.username})
+        return Response({'user_id' : user_id, 'username' : user.username})
 
     except Exception as e:
 
         print(e)
-        return Response({"message" : "invalid token"})
 
+        return Response({'message' : 'invalid token'})
 
-    return Response({'message' : 'studentInfo  view is executing'})
