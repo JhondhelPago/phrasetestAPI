@@ -9,7 +9,8 @@ urlpatterns = [
 
     path('test/run/api', views.teacher_api_test_run),
     path('info', views.teacherInfo),
-    path('section', views.section_list_view)
+    path('section', views.section_list_view),
+    path('create/essay/assingment', views.teacher_CreateEssayAssingment)
 
 
 ]   

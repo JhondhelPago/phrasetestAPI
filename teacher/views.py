@@ -104,3 +104,13 @@ def section_list_view(req):
     
     return Response({'message' : 'invalid token'})
 
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def teacher_CreateEssayAssingment(req):
+
+
+
+    return 
+
