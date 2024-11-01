@@ -13,8 +13,18 @@ def generate_section_code():
 
 class section(models.Model):
 
+    section_name = models.CharField(max_length=50, null=True)
     section_code = models.CharField(max_length=8, unique=True, blank=True)
     teacher_id = models.IntegerField(null=True)
+    
+
+
+    def propertiesToDict(self):
+
+        return {
+            'id' : self.id,
+            'section_code' : self.section_code
+        }
 
     def save(self, *args, **kwargs):
 
@@ -26,6 +36,9 @@ class section(models.Model):
                 self.section_code = generate_section_code()
 
             super(section, self).save(*args, **kwargs)
+
+
+
 
 
 

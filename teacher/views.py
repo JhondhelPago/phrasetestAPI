@@ -92,7 +92,7 @@ def section_list_view(req):
 
         for section_instance in section_QuerySet:
 
-            section_list.append(section_instance.section_code) 
+            section_list.append(section_instance.propertiesToDict()) 
 
         return Response({
             'section_list' : section_list
