@@ -8,7 +8,8 @@ from . import views
 urlpatterns = [
 
     path('test/run/api', views.teacher_api_test_run),
-    path('info', views.teacherInfo)
+    path('info', views.teacherInfo),
+    path('section', views.section_list_view)
 
 
 ]   

@@ -28,6 +28,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 #model imports
 from user.models import CustomUser
+from . models import section
 
 
 
@@ -68,4 +69,38 @@ def teacherInfo(req):
         print(e)
 
         return Response({'message' : 'invalid token'})
+    
+
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def section_list_view(req):
+
+
+    try:
+
+        access_token = req.GET.get('access')
+
+        decoded_access = AccessToken(access_token)
+
+        user_id = decoded_access['user_id']
+
+        section_QuerySet = section.objects.filter(teacher_id=user_id)
+        
+        section_list = list()
+
+        for section_instance in section_QuerySet:
+
+            section_list.append(section_instance.section_code) 
+
+        return Response({
+            'section_list' : section_list
+        })
+    
+    except Exception as e:
+
+        print(e) 
+    
+    return Response({'message' : 'invalid token'})
 
