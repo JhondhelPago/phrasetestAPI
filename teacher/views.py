@@ -181,11 +181,29 @@ def teacher_CreateEssayAssignment(req):
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def essay_assignment_details(req):
+def section_details(req):
 
     try:
 
-        assignment_id = int(req.GET.get('assignment_id'))
+        return
+
+    except Exception as e:
+
+        return
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def essay_assignment_details(req):
+
+    #extract necesarry information in this view block
+    #the information will be display on the teacherpage based on the Current_Section State
+
+
+    try:
+
+        assignment_id = int(req.GET.get('assignment_id')) 
+        
 
         assignment_instance = essay_assignment.objects.get(id=assignment_id)
 
