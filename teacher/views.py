@@ -28,7 +28,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 #model imports
 from user.models import CustomUser
-from . models import section
+from . models import section, essay_assignment
 
 
 
@@ -110,7 +110,67 @@ def section_list_view(req):
 @permission_classes([IsAuthenticated])
 def teacher_CreateEssayAssingment(req):
 
+    try:
+
+        data  = json.loads(req.body)
+
+        decoded_access_token = AccessToken(data.get('access'))
+
+        question_list = data.get('question_list')
+
+        section_body  = data.get('section_body')    
 
 
-    return 
+        print(f"decoded_access_token: {decoded_access_token['user_id']}")
+        print(f"question_list: {question_list}")
+        print(f"section_body: {section_body}")
+        print(section_body['id'])
+
+
+        #used_id of the teacher
+        user_id = int(decoded_access_token['user_id'])
+
+        #check if the current section is associated with the teacher
+
+        section_list = list(section.objects.filter(teacher_id=user_id))
+
+        is_SectionBelongsToTeacher = False
+        section_object = None
+
+        for index, section_obj in enumerate(section_list):
+
+            if section_body['section_code'] == section_obj.get_section_code():
+                is_SectionBelongsToTeacher = True
+                section_object = section_obj
+
+
+            print(section_obj.get_section_id(), section_obj.get_section_code())
+
+
+        # if belongs to the teacher
+        if is_SectionBelongsToTeacher:
+            #create an essay_assingment instance reference by section.id
+            #if successfull then return a Response with status created
+
+            assignment_instance = essay_assignment(section_key=section_object.id)
+            assignment_instance.context = question_list[0]
+            print('assigning to essay_assingment is executing')
+            assignment_instance.set_due_date(2024, 12, 21) 
+            #assingment_instance.time_created inside the model class
+
+            #save the property of the instance
+            assignment_instance.save()
+        
+        #Reconstruct the Response with status created
+        return Response({'message' : f"is_SectionBelongsToTeacher: {is_SectionBelongsToTeacher}"})
+
+    except Exception as e:
+
+        print(e)
+
+        return Response({'message' : F"exeception araise, {e}"})
+
+
+ 
+
 

@@ -1,6 +1,7 @@
 from django.db import models
 import string
 import random
+from datetime import date
 
 # Create your models here.
 
@@ -27,8 +28,18 @@ class section(models.Model):
 
         return {
             'id' : self.id,
-            'section_code' : self.section_code
+            'section_code' : self.section_code,
+            'section_name' : self.section_name
         }
+    
+    def get_section_id(self):
+
+        return self.id
+
+    def get_section_code(self):
+
+        return self.section_code
+    
 
     def save(self, *args, **kwargs):
 
@@ -47,10 +58,28 @@ class essay_assignment(models.Model):
     assignment_code = models.CharField(max_length=8, unique=True, blank=True)
     section_key = models.IntegerField(blank=True)
     context = models.CharField(max_length=500, blank=False)
-    due_date = models.DateField(blank=True, null=True) #parameter format -> due_date=date(2024, 11, 15) -> date(YYYY, DD, MM), import the date object.
+    due_date = models.DateField(blank=True, null=True) #parameter format -> due_date=date(2024, 11, 15) -> date(YYYY, MM, DD), import the date object.
 
 
+    def set_due_date(self, YYYY, MM, DD):
 
+        self.due_date = date(YYYY, MM, DD)
+
+
+    def save(self, *args, **kwargs):
+
+
+        if not self.assignment_code:
+
+            self.assignment_code = generate_assignment_code()
+
+            while essay_assignment.objects.filter(assignment_code=self.assignment_code).exists():
+
+                self.assignment_code = generate_assignment_code()
+
+            super(essay_assignment, self).save(*args, **kwargs)
+
+    
 
 
 
