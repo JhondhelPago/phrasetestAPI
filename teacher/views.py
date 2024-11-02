@@ -178,6 +178,32 @@ def teacher_CreateEssayAssignment(req):
         return Response({'message' : F"exeception araise, {e}"})
 
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def essay_assignment_details(req):
+
+    try:
+
+        assignment_id = int(req.GET.get('assignment_id'))
+
+        assignment_instance = essay_assignment.objects.get(id=assignment_id)
+
+
+        print(f"assignment_id : {assignment_id}")
+
+        return Response({
+            'message' : f"this is the assignment id : {assignment_id}",
+            'assignment_details' : assignment_instance.assignmentProperties()
+            }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+
+        print(e)
+
+        return
+
+
  
 
 

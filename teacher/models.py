@@ -65,6 +65,16 @@ class essay_assignment(models.Model):
 
         self.date_due = date(YYYY, MM, DD)
 
+    def assignmentProperties(self):
+
+        return {
+            'id' : self.id,
+            'assignment-code' : self.assignment_code,
+            'section_key' : self.section_key,
+            'date_created' : self.date_created,
+            'date_due' : self.date_due
+        }
+
 
     def save(self, *args, **kwargs):
 
