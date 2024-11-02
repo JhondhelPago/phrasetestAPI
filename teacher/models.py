@@ -1,7 +1,7 @@
 from django.db import models
 import string
 import random
-from datetime import date
+from datetime import date, datetime
 
 # Create your models here.
 
@@ -57,13 +57,13 @@ class essay_assignment(models.Model):
 
     assignment_code = models.CharField(max_length=8, unique=True, blank=True)
     section_key = models.IntegerField(blank=True)
-    context = models.CharField(max_length=500, blank=False)
-    due_date = models.DateField(blank=True, null=True) #parameter format -> due_date=date(2024, 11, 15) -> date(YYYY, MM, DD), import the date object.
+    date_created = models.DateField(default=datetime.now())
+    date_due = models.DateField(blank=True, null=True) #parameter format -> due_date=date(2024, 11, 15) -> date(YYYY, MM, DD), import the date object.
 
 
-    def set_due_date(self, YYYY, MM, DD):
+    def set_date_due(self, YYYY, MM, DD):
 
-        self.due_date = date(YYYY, MM, DD)
+        self.date_due = date(YYYY, MM, DD)
 
 
     def save(self, *args, **kwargs):
@@ -78,6 +78,18 @@ class essay_assignment(models.Model):
                 self.assignment_code = generate_assignment_code()
 
             super(essay_assignment, self).save(*args, **kwargs)
+
+        
+class context_question(models.Model):
+
+    essay_assignment_key = models.IntegerField(blank=True)
+    context = models.CharField(max_length=800, blank=True)
+
+    def get_assignment_key(self):
+
+        return self.essay_assignment_key
+    
+    
 
     
 

@@ -28,7 +28,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 #model imports
 from user.models import CustomUser
-from . models import section, essay_assignment
+from . models import section, essay_assignment, context_question
 
 
 
@@ -108,7 +108,7 @@ def section_list_view(req):
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def teacher_CreateEssayAssingment(req):
+def teacher_CreateEssayAssignment(req):
 
     try:
 
@@ -153,16 +153,23 @@ def teacher_CreateEssayAssingment(req):
             #if successfull then return a Response with status created
 
             assignment_instance = essay_assignment(section_key=section_object.id)
-            assignment_instance.context = question_list[0]
             print('assigning to essay_assingment is executing')
-            assignment_instance.set_due_date(2024, 12, 21) 
+            assignment_instance.set_date_due(2024, 12, 21) 
+            print(assignment_instance.date_due)
             #assingment_instance.time_created inside the model class
 
             #save the property of the instance
             assignment_instance.save()
-        
-        #Reconstruct the Response with status created
-        return Response({'message' : f"is_SectionBelongsToTeacher: {is_SectionBelongsToTeacher}"})
+
+            for context_q in question_list:
+
+                context_question_instance = context_question(essay_assignment_key= assignment_instance.id, context=context_q)
+                context_question_instance.save()
+
+            #Reconstruct the Response with status created
+            return Response({
+                'essay_assignement_id' : assignment_instance.id,
+                }, status=status.HTTP_201_CREATED)
 
     except Exception as e:
 
