@@ -186,11 +186,28 @@ def section_details(req):
 
     try:
 
-        return
+        section_code_params = req.GET.get('section_code')
+
+        section_instance = section.objects.get(section_code=section_code_params)
+
+        essay_assignment_QuerySet = essay_assignment.objects.filter(section_key=section_instance.id)
+
+        # make a dictionary structure for the element if the QuerySet
+
+        essay_assignment_info_list = [assignment.assignmentProperties() for assignment in essay_assignment_QuerySet]
+                
+        return Response({
+            'section_id' : section_instance.id,
+            'assignment_assoc' : essay_assignment_info_list
+        })
 
     except Exception as e:
 
-        return
+        print(e)
+        return Response({
+            'section_id' : None,
+            'assignment_assoc' : None
+        }, status=status.HTTP_406_NOT_ACCEPTABLE)   
 
 @csrf_exempt
 @api_view(['GET'])
