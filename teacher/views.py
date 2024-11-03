@@ -27,7 +27,8 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 
 #model imports
-from user.models import CustomUser
+from user.models import CustomUser, studentuser
+from student.models import essay_submitted
 from . models import section, essay_assignment, context_question
 
 
@@ -207,12 +208,38 @@ def essay_assignment_details(req):
 
         assignment_instance = essay_assignment.objects.get(id=assignment_id)
 
+        #Logic Here
+        #1.Get the number of student, out of total student how many are them have done the assingment
+        #Get the names of the student who have been submitted, name dateOfSubmission
+
+        print(f"assignment_instance.section_key: {assignment_instance.section_key}")
+        #1.
+        
+        #get the isntance of teh section using the section key of the assignment_instance
+        section_instance = section.objects.get(id=assignment_instance.section_key)
+
+        total_student = studentuser.objects.filter(section=section_instance.section_code).count() #filter() parameter should be section_code
+        list_student_submitted = essay_submitted.objects.filter(assignment_code=assignment_instance.assignment_code)
+        print(f"list_student_submitted: {list_student_submitted}")
+        total_student_submitted = list_student_submitted.count()
+        # print(f"total-student_submitted: {total_student_submitted}")
+
+
+
+
+        
+
 
         print(f"assignment_id : {assignment_id}")
 
+
+        #restructuring the Reponse body
         return Response({
             'message' : f"this is the assignment id : {assignment_id}",
-            'assignment_details' : assignment_instance.assignmentProperties()
+            'assignment_details' : assignment_instance.assignmentProperties(),
+            'student_total_in_section' : total_student,
+            'total_student_submtted' : total_student_submitted,
+            'submitted_student' : f"{total_student_submitted}/{total_student}"
             }, status=status.HTTP_200_OK)
 
     except Exception as e:

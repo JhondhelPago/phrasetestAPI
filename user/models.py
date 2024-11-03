@@ -34,7 +34,7 @@ class studentuser(models.Model):
     
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True, related_name='student_profile')
     
-
+    section = models.CharField(max_length=8, blank=True)
     gradelevel = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=0)
     institutional_id = models.CharField(max_length=20, default='')
 
