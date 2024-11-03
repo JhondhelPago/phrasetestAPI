@@ -69,7 +69,7 @@ class essay_assignment(models.Model):
 
         return {
             'id' : self.id,
-            'assignment-code' : self.assignment_code,
+            'assignment_code' : self.assignment_code,
             'section_key' : self.section_key,
             'date_created' : self.date_created,
             'date_due' : self.date_due

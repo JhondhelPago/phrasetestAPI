@@ -119,7 +119,9 @@ def teacher_CreateEssayAssignment(req):
 
         question_list = data.get('question_list')
 
-        section_body  = data.get('section_body')    
+        #using the section_code get teh section_instance of it
+
+        section_body  = data.get('section_body')
 
 
         print(f"decoded_access_token: {decoded_access_token['user_id']}")
@@ -263,7 +265,19 @@ def essay_assignment_details(req):
 
         print(e)
 
-        return
+        return Response({
+            "message": "assignment not found",
+            "assignment_details": {
+                "id": 0,
+                "assignment_code": "",
+                "section_key": 0,
+                "date_created": "",
+                "date_due": ""
+            },
+            "student_total_in_section": "",
+            "total_student_submtted": "",
+            "submitted_student": ""
+        }, status=status.HTTP_404_NOT_FOUND)
 
 
  
