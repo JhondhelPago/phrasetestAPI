@@ -57,6 +57,7 @@ class essay_assignment(models.Model):
 
     assignment_code = models.CharField(max_length=8, unique=True, blank=True)
     section_key = models.IntegerField(blank=True)
+    assignment_no = models.IntegerField(default=0)
     date_created = models.DateField(default=datetime.now())
     date_due = models.DateField(blank=True, null=True) #parameter format -> due_date=date(2024, 11, 15) -> date(YYYY, MM, DD), import the date object.
 
@@ -71,10 +72,14 @@ class essay_assignment(models.Model):
             'id' : self.id,
             'assignment_code' : self.assignment_code,
             'section_key' : self.section_key,
+            'assignment_no' : self.assignment_num_string(),
             'date_created' : self.date_created,
             'date_due' : self.date_due
         }
 
+    def assignment_num_string(self):
+
+        return f"Assignment: {self.assignment_no}"
 
     def save(self, *args, **kwargs):
 
