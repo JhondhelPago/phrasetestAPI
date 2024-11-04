@@ -106,29 +106,126 @@ def section_list_view(req):
     return Response({'message' : 'invalid token'})
 
 
+# @csrf_exempt
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+# def teacher_CreateEssayAssignment(req):
+
+#     #post request body structure
+
+#     # "access" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMwNjM3ODQxLCJpYXQiOjE3MzA2Mzc1NDEsImp0aSI6Ijg5ZWI2YjVhNzhjOTQ2YTlhZmYyY2I0MTYzMjllMTMzIiwidXNlcl9pZCI6Mzd9.DY4k3kIyYfSuKkVRRy-sU1Z8OvXAm7_ib5RIN6ThfhM",
+#     # "question_list" : ["Question 1"],
+#     # "section_body" : {
+#     #     "id" : "100",
+#     #     "section_code" : "70SMWBDO",
+#     #     "section_name" : "section 1"
+#     # "section_code" : "70SMWBDO", use this parameter instead
+
+
+#     try:
+
+    
+#         data  = json.loads(req.body)
+
+#         decoded_access_token = AccessToken(data.get('access'))
+
+#         question_list = data.get('question_list')
+
+#         #1. using the section_code get the section_instance of it
+
+#         section_body  = data.get('section_body') #2 section_instance.propertiesToDict()
+
+
+
+#         print(f"decoded_access_token: {decoded_access_token['user_id']}")
+#         print(f"question_list: {question_list}")
+#         print(f"section_body: {section_body}")
+#         print(section_body['id'])
+
+
+#         #used_id of the teacher
+#         user_id = int(decoded_access_token['user_id'])
+
+#         #check if the current section is associated with the teacher
+
+#         section_list = list(section.objects.filter(teacher_id=user_id))
+
+#         is_SectionBelongsToTeacher = False
+#         section_object = None
+
+#         for index, section_obj in enumerate(section_list):
+
+#             if section_body['section_code'] == section_obj.get_section_code():
+#                 is_SectionBelongsToTeacher = True
+#                 section_object = section_obj
+#                 #add break statement
+
+
+#             print(section_obj.get_section_id(), section_obj.get_section_code())
+
+
+#         # if belongs to the teacher
+#         if is_SectionBelongsToTeacher:
+#             #create an essay_assingment instance reference by section.id
+#             #if successfull then return a Response with status created
+
+#             assignment_instance = essay_assignment(section_key=section_object.id)
+#             print('assigning to essay_assingment is executing')
+#             assignment_instance.set_date_due(2024, 12, 21) 
+#             print(assignment_instance.date_due)
+#             #assingment_instance.time_created inside the model class
+
+#             #save the property of the instance
+#             assignment_instance.save()
+
+#             for context_q in question_list:
+
+#                 context_question_instance = context_question(essay_assignment_key= assignment_instance.id, context=context_q)
+#                 context_question_instance.save()
+
+#             #Reconstruct the Response with status created
+#             return Response({
+#                 'essay_assignement_id' : assignment_instance.id,
+#                 }, status=status.HTTP_201_CREATED)
+
+#     except Exception as e:
+
+#         print(e)
+
+#         return Response({'message' : F"exeception araise, {e}"})
+
+
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def teacher_CreateEssayAssignment(req):
 
+    # "access" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMwNjM3ODQxLCJpYXQiOjE3MzA2Mzc1NDEsImp0aSI6Ijg5ZWI2YjVhNzhjOTQ2YTlhZmYyY2I0MTYzMjllMTMzIiwidXNlcl9pZCI6Mzd9.DY4k3kIyYfSuKkVRRy-sU1Z8OvXAm7_ib5RIN6ThfhM",
+    # "question_list" : ["Question 1"],
+    # "context" : "string" add this parameter to the query parameter
+    # "section_body" : {
+    #     "id" : "100",
+    #     "section_code" : "70SMWBDO",
+    #     "section_name" : "section 1"
+
+
     try:
 
+    
         data  = json.loads(req.body)
 
         decoded_access_token = AccessToken(data.get('access'))
 
         question_list = data.get('question_list')
 
-        #using the section_code get teh section_instance of it
+        #1. using the section_code get the section_instance of it
 
-        section_body  = data.get('section_body')
+        # section_body  = data.get('section_body') 
+        section_code  = data.get('section_code')
 
-
-        print(f"decoded_access_token: {decoded_access_token['user_id']}")
-        print(f"question_list: {question_list}")
-        print(f"section_body: {section_body}")
-        print(section_body['id'])
-
+        section_instance = section.objects.get(section_code=section_code)
+    
 
         #used_id of the teacher
         user_id = int(decoded_access_token['user_id'])
@@ -142,9 +239,10 @@ def teacher_CreateEssayAssignment(req):
 
         for index, section_obj in enumerate(section_list):
 
-            if section_body['section_code'] == section_obj.get_section_code():
+            if section_instance.section_code == section_obj.get_section_code():
                 is_SectionBelongsToTeacher = True
                 section_object = section_obj
+                break
 
 
             print(section_obj.get_section_id(), section_obj.get_section_code())
@@ -179,6 +277,9 @@ def teacher_CreateEssayAssignment(req):
         print(e)
 
         return Response({'message' : F"exeception araise, {e}"})
+
+
+
 
 
 @csrf_exempt
