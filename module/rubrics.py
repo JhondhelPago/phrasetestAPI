@@ -4,12 +4,7 @@ from rake_nltk import Rake
 
 
 
-
-
-
-
-
-
+import random
 
 #helping functions
 
@@ -73,3 +68,45 @@ class Lang_Mechs:
     def mainfunction():
 
         pass
+
+
+
+class rubrics_benchmark: 
+
+
+    def __init__(self, writing_composition):
+        
+        self.Ideas_criterion = None
+        self.Gram_Punc_criterion = None
+        self.Transition_criterion = None
+        self.Clarity_criterion = None
+        self.WordChoice_criterion = None
+        self.Structure_criterion = None
+        self.Lang_Mechs_criterion = None
+
+
+        self.__prediction_values = [1, 2, 3, 4]
+
+
+    def Benchmark_result(self):
+
+
+        Ideas = random.choice(self.__prediction_values)
+        Gram_Punc = random.choice(self.__prediction_values)
+        Transition = random.choice(self.__prediction_values)
+        Clarity = random.choice(self.__prediction_values)
+        WordChoice = random.choice(self.__prediction_values)
+        Structure = random.choice(self.__prediction_values)
+        Lang_Mechs = random.choice(self.__prediction_values)
+
+        return {
+            
+            "Ideas": Ideas,
+            "Grammar and Punctuation" : Gram_Punc,
+            "Transition" : Transition,
+            "Clarity" : Clarity,
+            "Word Choice" : WordChoice,
+            "Structure" : Structure,
+            "Language Mechanics" : Lang_Mechs
+
+        }
