@@ -185,13 +185,33 @@ def checkAssignmentDone(req):
     try:
 
         #using orm get the instance of essay_submitted using the parameters assignment_id and studentuser.user_id
+
+        access_token = req.GET.get('access')
+        assign_id = req.GET.get('assignment_id')
+
+        decoded_access_token = AccessToken(access_token)
+
+        essay_assignment_instance = essay_assignment.objects.get(id=assign_id)
+
+
+        try:
+
+            essay_submitted_instance = essay_submitted.objects.get(student_id=decoded_access_token['user_id'], assignment_code=essay_assignment_instance.assignment_code)
+
+            return Response({
+                'message' : f"Submitted",
+                'found' : True
+            }, status=status.HTTP_200_OK)
+
+        except essay_submitted.DoesNotExist:
+
+            
+            return Response({
+                'message' : f"Not Submitted",
+                'found' : False
+            }, status=status.HTTP_200_OK)
         
 
-        access_token = req.Get.get('access')
-
-
-        return
-    
     except Exception as e:
 
         print(e)
