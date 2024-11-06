@@ -36,7 +36,7 @@ for match_object in return_value:
 
 
 #offset character
-offset_finder = OffsetFinder('...fore all of it I need to make sure that i have enough resources to support family...', 43)
+# offset_finder = OffsetFinder('...fore all of it I need to make sure that i have enough resources to support family...', 43)
 
-print(offset_finder)
+# print(offset_finder)
 

@@ -580,6 +580,32 @@ class PhraseExtract:
         print(f"topic_relevance_score : {self.topic_relevance_score}")
 
 
+    def getFeatures(self):
+
+        return {
+            "word_count": self._word_Count,
+            "unique_words_ratio": self.unique_words_ratio,
+            "average_word_length": self.average_word_length,
+            "noun_count": self._noun_count,
+            "adj_count": self._adj_count,
+            "adv_count": self._adv_count,
+            "pronoun_count": self._pronoun_count,
+            "verb_count": self._verb_count,
+            "subordinating_clauses_count": "None for now",
+            "grammar_error_count": "None for now",
+            "spelling_error_count": "None for now",
+            "sentiment_polarity": "None for now",
+            "cohesive_device_count": self.cohesive_device_count,
+            "readability_score" : self.readability_score,
+            "avg_sentence_length" : self.avg_sentence_length,
+            "sentence_variation" : self.sentence_variation,
+            "sentence_simple" : self.sentence_simple,
+            "sentence compound" : self.sentence_compound,
+            "sentence complex" : self.sentence_complex,
+            "topic_relevance_score" : self.topic_relevance_score
+        }
+
+
 
     
 

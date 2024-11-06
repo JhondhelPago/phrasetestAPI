@@ -9,6 +9,9 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'module')))
 
 from module.features_xtrct import PhraseExtract
+from module.token_tools import SpellingDetector
+from module.token_tools import SpellCorrection
+from module.ml_model import predict_level
 
 #libary tools, classes and methods
 from urllib.parse import unquote
@@ -25,6 +28,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 #module for nlp pre-processes
 from module.features_xtrct import PhraseExtract
+from module.LanguageToolChecker import EssayExamineErrorSuggest
 
 #model imports
 from user.models import CustomUser, studentuser
@@ -163,10 +167,38 @@ def studentEssaySubmit(req):
             quest_comp.save()
 
 
+
+
+        #here implement the logic of sampleProcess from the user app -> sampleProcess() view
+
+        question_para = quest_comp.question
+        essay_composition_para = quest_comp.composition
+
+        print(f"question_para : {question_para}")
+        print(f"essay_composition_para {question_para}")
+
+
+        #reinitialized variable for debugging
+        question_para = 'What is your biggest fear?'
+        essay_composition_para = 'The advancments in technolagy have revolutionized the way we comunicate and access information. With the rise of smartphons, tablets, and computers, people can now conect with others around the globe instanly. However, this rapid devlopment also comes with some challenges, such as the increase in cybercrime and the growing dependency on digital devices. As technolagy continues to evolve, it is crucial for societys to find a balance between embracing innovation and ensuring securty.'
+
+        phrase_instance = PhraseExtract(question=question_para, text=essay_composition_para)
+
+
+        # simulate the model prediction here
+        
+        Examine_result = [match.getDictPropeties() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
+        # for each match.getDictProperties, make an instance of match
+        # then balk_save 
+
         return Response({
             'message' : 'try block is executing',
             'assignment_details' : assignment_instance.assignmentProperties(),
-            'assignment_submitted_id' : assignment_submit_instance.id
+            'assignment_submitted_id' : assignment_submit_instance.id, 
+            'phrase_features' : phrase_instance.getFeatures(),
+            'label' : predict_level(phrase_instance.getFeatures()),
+            'suggestion' : Examine_result
+            
         })
 
     except Exception as e:

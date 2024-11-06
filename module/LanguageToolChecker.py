@@ -206,7 +206,6 @@ class Match:
 
         print('\n')
 
-
     def applyReplacement(self):
 
         replacement_value = self.replacements[0]['value']
