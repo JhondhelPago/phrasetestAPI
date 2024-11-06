@@ -30,8 +30,15 @@ return_value = EssayExamineErrorSuggest(PhraseInstance=Phrase)
 
 #printing the MatchObject
 
+# for match_object in return_value:
+#     print(match_object.Print_getDictProperites())
+
+
+print('match object loop \n')
+
 for match_object in return_value:
-    print(match_object.Print_getDictProperites())
+
+    print(match_object.getImportantBody())
 
 
 

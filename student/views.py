@@ -29,11 +29,12 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 #module for nlp pre-processes
 from module.features_xtrct import PhraseExtract
 from module.LanguageToolChecker import EssayExamineErrorSuggest
+from module.rubrics import rubrics_benchmark
 
 #model imports
 from user.models import CustomUser, studentuser
 from teacher.models import section, essay_assignment, context_question
-from .models import essay_submitted, question_composition
+from .models import essay_submitted, question_composition, langtool_suggestion, rubrics
 #imports from other apps
 
 
@@ -186,17 +187,56 @@ def studentEssaySubmit(req):
 
 
         # simulate the model prediction here
-        
-        Examine_result = [match.getDictPropeties() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
+
+        rubricsBenchmarkScores = rubrics_benchmark(phrase_instance)
+
+        rubrics_instance = rubrics()
+        rubrics_instance.essay_submitted = assignment_submit_instance.id
+        rubrics_instance.ideas = rubricsBenchmarkScores.Ideas_criterion
+        rubrics_instance.gram_punc = rubricsBenchmarkScores.Gram_Punc_criterion
+        rubrics_instance.transition = rubricsBenchmarkScores.Transition_criterion
+        rubrics_instance.clarity = rubricsBenchmarkScores.Clarity_criterion
+        rubrics_instance.word_choice = rubricsBenchmarkScores.WordChoice_criterion
+        rubrics_instance.structure = rubricsBenchmarkScores.Structure_criterion
+        rubrics_instance.lang_mechs = rubricsBenchmarkScores.Lang_Mechs_criterion
+        rubrics_instance.label = predict_level(phrase_instance.getFeatures())
+
+        rubrics_instance.save()
+
+
+        Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
         # for each match.getDictProperties, make an instance of match
         # then balk_save 
+
+        #list of match object
+        EssaySuggestionResult = list()
+
+        for matchObj in Examine_result:
+
+            match_parameters = matchObj
+
+            langtool_suggestion_instance = langtool_suggestion()
+            langtool_suggestion_instance.essay_submitted = assignment_submit_instance.id
+            langtool_suggestion_instance.message = match_parameters['message']
+            langtool_suggestion_instance.shortmessage = match_parameters['shortMessage']
+            langtool_suggestion_instance.replacements = match_parameters['replacements']
+            langtool_suggestion_instance.context = match_parameters['context']
+            langtool_suggestion_instance.sentence = match_parameters['sentence']
+            langtool_suggestion_instance.final_sentence = match_parameters['final_sentence']
+
+            EssaySuggestionResult.append(langtool_suggestion_instance)
+
+        langtool_suggestion.objects.bulk_create(EssaySuggestionResult)
+
+
 
         return Response({
             'message' : 'try block is executing',
             'assignment_details' : assignment_instance.assignmentProperties(),
             'assignment_submitted_id' : assignment_submit_instance.id, 
             'phrase_features' : phrase_instance.getFeatures(),
-            'label' : predict_level(phrase_instance.getFeatures()),
+            'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
+            'label' : rubrics_instance.label,
             'suggestion' : Examine_result
             
         })

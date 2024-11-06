@@ -74,7 +74,7 @@ class Lang_Mechs:
 class rubrics_benchmark: 
 
 
-    def __init__(self, writing_composition):
+    def __init__(self, phase_intance):
         
         self.Ideas_criterion = None
         self.Gram_Punc_criterion = None
@@ -86,27 +86,20 @@ class rubrics_benchmark:
 
 
         self.__prediction_values = [1, 2, 3, 4]
+        
+
+        self.Benchmark_run()
 
 
-    def Benchmark_result(self):
+    def Benchmark_run(self):
 
 
-        Ideas = random.choice(self.__prediction_values)
-        Gram_Punc = random.choice(self.__prediction_values)
-        Transition = random.choice(self.__prediction_values)
-        Clarity = random.choice(self.__prediction_values)
-        WordChoice = random.choice(self.__prediction_values)
-        Structure = random.choice(self.__prediction_values)
-        Lang_Mechs = random.choice(self.__prediction_values)
+        self.Ideas_criterion = random.choice(self.__prediction_values)
+        self.Gram_Punc_criterion = random.choice(self.__prediction_values)
+        self.Transition_criterion = random.choice(self.__prediction_values)
+        self.Clarity_criterion = random.choice(self.__prediction_values)
+        self.WordChoice_criterion = random.choice(self.__prediction_values)
+        self.Structure_criterion = random.choice(self.__prediction_values)
+        self.Lang_Mechs_criterion = random.choice(self.__prediction_values)
 
-        return {
-            
-            "Ideas": Ideas,
-            "Grammar and Punctuation" : Gram_Punc,
-            "Transition" : Transition,
-            "Clarity" : Clarity,
-            "Word Choice" : WordChoice,
-            "Structure" : Structure,
-            "Language Mechanics" : Lang_Mechs
-
-        }
+    

@@ -184,6 +184,18 @@ class Match:
             'FinalSentence' : self.FinalSentence
         }
     
+    def getImportantBody(self):
+
+        return{
+            'message' : self.message,
+            'shortMessage' : self.shortMessage,
+            'replacements' : self.replacements[0]['value'],
+            'context' : self.context['text'],
+            'sentence' : self.sentence, 
+            'final_sentence' : self.FinalSentence,
+            'sentence_id' : self.SentenceId
+        }
+    
     def Print_getDictProperites(self):
 
         DictProperties = self.getDictPropeties()
