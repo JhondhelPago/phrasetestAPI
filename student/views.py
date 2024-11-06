@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-#module for nlp pre-processes
+
 import sys
 import os
 
@@ -23,9 +23,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenObtainPairSerializer
 
 
-#model imports
-from user.models import CustomUser
+#module for nlp pre-processes
+from module.features_xtrct import PhraseExtract
 
+#model imports
+from user.models import CustomUser, studentuser
+from teacher.models import section, essay_assignment, context_question
+from .models import essay_submitted, question_composition
 #imports from other apps
 
 
@@ -51,11 +55,11 @@ def studentInfo(req):
     #validate the token, if valid get the user_id and query using the ORM, get the neccesarry information of the user using the user_id
     #if not valid return 401
     
-    access_token = req.GET.get('access')
     #print(access_token)
 
-
     try:
+
+        access_token = req.GET.get('access')
 
         decoded_access_token = AccessToken(access_token)
         
@@ -70,14 +74,126 @@ def studentInfo(req):
 
         user = CustomUser.objects.get(id=user_id)
 
-        #
+        #get the section using the id this student instance on the studentuser model
 
-        return Response({"id" : decoded_access_token['user_id'], "username" : user.username})
+        user_studentinfo = studentuser.objects.get(user_id=user.id)
+
+
+        return Response({
+            "id" : decoded_access_token['user_id'],
+            "username" : user.username,
+            "section" : user_studentinfo.section
+        })  
 
     except Exception as e:
 
         print(e)
         return Response({"message" : "invalid token"})
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def studentAssignments(req):
 
-    return Response({'message' : 'studentInfo  view is executing'})
+    #get the studentuser instance, then get the section
+    #get the section instance, then get the section_key
+    #get all the essay_assignment instance using the section_key
+
+    try:
+        
+        acces_token = req.GET.get('access')
+
+        decoded_access_token = AccessToken(acces_token)
+
+        user_id = decoded_access_token['user_id']
+
+        user =  studentuser.objects.get(user_id=user_id)
+
+        section_instance = section.objects.get(section_code = user.section)
+
+        assigmentQuerySet = essay_assignment.objects.filter(section_key=section_instance.id)
+
+        assignment_list = [assignment.assignmentProperties() for assignment in assigmentQuerySet] 
+
+        return Response({
+            'message' : 'assignment list extracted',
+            'assignments' : assignment_list
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+
+        print(e)
+    
+    return
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def studentEssaySubmit(req):
+
+    try:
+
+        data = json.loads(req.body)
+
+        
+        essaycomposition = data.get('composition')
+        assignment_id = data.get('assignment_id')
+
+        decoded_access_token = AccessToken(data.get('access'))
+
+        print('studentEssaySubmit in try block is executing')
+        print(f"student user id : {decoded_access_token['user_id']}")
+            
+
+        #get the assignment_instance using the parameter assignment_id
+        #create an assignment_submitted instance and set the assignment_code using the parameter assignment_instance.assignment_code
+        #after creating the assignment_submitted instance, save it, then get the assignment_submitted.id, it will be a paramter for the question_essay intance
+
+        assignment_instance = essay_assignment.objects.get(id=assignment_id)
+        assignment_context_question = context_question.objects.filter(essay_assignment_key=assignment_instance.id)
+        assignment_context_question_list = [question.getContext() for question in assignment_context_question]
+        
+        assignment_submit_instance = essay_submitted(student_id=decoded_access_token['user_id'], assignment_code=assignment_instance.assignment_code)
+        assignment_submit_instance.save()
+
+        for index, question in enumerate(assignment_context_question_list):
+
+            quest_comp = question_composition(essay_submitted=assignment_submit_instance.id, question=question, composition=essaycomposition[index])
+            quest_comp.save()
+
+
+        return Response({
+            'message' : 'try block is executing',
+            'assignment_details' : assignment_instance.assignmentProperties(),
+            'assignment_submitted_id' : assignment_submit_instance.id
+        })
+
+    except Exception as e:
+
+        print(e)
+
+        return 
+
+    return
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def checkAssignmentDone(req):
+
+    try:
+
+        #using orm get the instance of essay_submitted using the parameters assignment_id and studentuser.user_id
+        
+
+        access_token = req.Get.get('access')
+
+
+        return
+    
+    except Exception as e:
+
+        print(e)
+
+        return
