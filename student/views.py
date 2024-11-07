@@ -289,3 +289,63 @@ def checkAssignmentDone(req):
         print(e)
 
         return
+    
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getAssignmentResults(req):
+
+    #parameter needed
+    #assignment_id
+    #student_id
+
+    #get the instance of essay_submitted using the two parameter
+    #store the id of the instance, the id value will be the reference key to the other models
+    #make a structured reponse to return
+
+
+    try:
+
+        access_token  = req.GET.get('access')
+        assignment_id = req.GET.get('assignment_id')
+
+        decoded_access_token = AccessToken(access_token)
+
+        student_id = decoded_access_token['user_id']
+
+
+        #get the assignment_code here
+        essay_assignment_instance = essay_assignment.objects.get(id=assignment_id)
+
+        #essay_submitted_instance
+        essay_submitted_instance = essay_submitted.objects.get(student_id=student_id, assignment_code=essay_assignment_instance.assignment_code)
+
+        #usignthe essay_submitted_instance.id....
+        #get the question_composition_instance
+        #get the rubircs
+        #get the langtool_suggestion
+
+        question_composition_instance = question_composition.objects.get(essay_submitted=essay_submitted_instance.id)
+        rubrics_instance = rubrics.objects.get(essay_submitted=essay_submitted_instance.id)
+        langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
+        langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
+
+        return Response({
+            'message' : 'getAssignmentResults is executing',
+            'student_id' : student_id,
+            'assignment_id' : assignment_id,
+            'essay_submitted_info' : essay_submitted_instance.getDictProperties(),
+            'question_composition' : question_composition_instance.getDictProperties(),
+            'rubrics' : rubrics_instance.getBenchMarkScores(),
+            'langtool_suggestion' : langtool_suggestion_list
+            
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+
+        print(e)
+
+        return Response({
+            'error_message' : str(e)
+        },status=status.HTTP_400_BAD_REQUEST)
+    

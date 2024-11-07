@@ -10,6 +10,14 @@ class essay_submitted(models.Model):
     student_id = models.IntegerField()
     assignment_code = models.CharField(max_length=8, blank=True)
     date_submitted = models.DateField(default=datetime.now())
+
+    def getDictProperties(self):
+
+        return {
+            'id' : self.id,
+            'assignment_code' : self.assignment_code,
+            'date_submitted' : self.date_submitted
+        }
     
 
     
@@ -18,6 +26,15 @@ class question_composition(models.Model):
     essay_submitted = models.IntegerField()
     question = models.CharField(max_length=500, blank=True)
     composition = models.CharField(max_length=5000, blank=True)
+
+    def getDictProperties(self):
+
+        return {
+            'id' : self.id,
+            'essay_submitted' : self.essay_submitted,
+            'question' : self.question,
+            'composition' : self.composition
+        }
 
 
 class rubrics(models.Model):
@@ -56,6 +73,19 @@ class langtool_suggestion(models.Model):
     sentence = models.CharField(max_length=1500, blank=True, default='')
     final_sentence = models.CharField(max_length=1500, blank=True, default='')
 
+
+    def getDictProperties(self):
+
+        return {
+            'id' : self.id,
+            'message' : self.message,
+            'shortmessage' : self.shortmessage,
+            'replacements' : self.replacements,
+            'context' : self.context,
+            'sentence' : self.sentence,
+            'final_sentence' : self.final_sentence,
+            'essay_submitted' : self.essay_submitted
+        }
 
 
 
