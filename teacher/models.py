@@ -108,6 +108,23 @@ class context_question(models.Model):
         
         return self.context
     
+    def getProperties(self):
+
+        return {
+            'id' : self.id,
+            'essay_assignment_key' : self.essay_assignment_key,
+            'context' : self.context
+        }
+    
+    @staticmethod
+    def getNoneProperties(self):
+
+        return {
+            'id' : None,
+            'essay_assignment_key' : None,
+            'context' : None
+        }
+    
 
 
 

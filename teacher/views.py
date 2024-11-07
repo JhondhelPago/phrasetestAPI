@@ -252,6 +252,11 @@ def essay_assignment_details(req):
         # print(f"total-student_submitted: {total_student_submitted}")
 
 
+        #getting the context_question instance associated with this assignment
+        context_question_instance = context_question.objects.get(essay_assignment_key=assignment_id)
+
+
+
         print(f"assignment_id : {assignment_id}")
 
         #get the names of the student who submitted tot this assingment
@@ -266,7 +271,8 @@ def essay_assignment_details(req):
             'assignment_details' : assignment_instance.assignmentProperties(),
             'student_total_in_section' : total_student,
             'total_student_submtted' : total_student_submitted,
-            'submitted_student' : f"{total_student_submitted}/{total_student}"
+            'submitted_student' : f"{total_student_submitted}/{total_student}",
+            'context_question' : context_question_instance.getProperties()
             }, status=status.HTTP_200_OK)
 
     except Exception as e:
@@ -285,7 +291,8 @@ def essay_assignment_details(req):
             },
             "student_total_in_section": "",
             "total_student_submtted": "",
-            "submitted_student": ""
+            "submitted_student": "",
+            "context_question" : context_question.getNoneProperties()
         }, status=status.HTTP_404_NOT_FOUND)
 
 
