@@ -117,7 +117,7 @@ class context_question(models.Model):
         }
     
     @staticmethod
-    def getNoneProperties(self):
+    def getNoneProperties():
 
         return {
             'id' : None,
