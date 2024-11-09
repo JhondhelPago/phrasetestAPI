@@ -180,8 +180,8 @@ def studentEssaySubmit(req):
 
 
         #reinitialized variable for debugging
-        question_para = 'What is your biggest fear?'
-        essay_composition_para = 'The advancments in technolagy have revolutionized the way we comunicate and access information. With the rise of smartphons, tablets, and computers, people can now conect with others around the globe instanly. However, this rapid devlopment also comes with some challenges, such as the increase in cybercrime and the growing dependency on digital devices. As technolagy continues to evolve, it is crucial for societys to find a balance between embracing innovation and ensuring securty.'
+        # question_para = 'What is your biggest fear?'
+        # essay_composition_para = 'The advancments in technolagy have revolutionized the way we comunicate and access information. With the rise of smartphons, tablets, and computers, people can now conect with others around the globe instanly. However, this rapid devlopment also comes with some challenges, such as the increase in cybercrime and the growing dependency on digital devices. As technolagy continues to evolve, it is crucial for societys to find a balance between embracing innovation and ensuring securty.'
 
         phrase_instance = PhraseExtract(question=question_para, text=essay_composition_para)
 
@@ -223,6 +223,8 @@ def studentEssaySubmit(req):
             langtool_suggestion_instance.context = match_parameters['context']
             langtool_suggestion_instance.sentence = match_parameters['sentence']
             langtool_suggestion_instance.final_sentence = match_parameters['final_sentence']
+            langtool_suggestion_instance.sentence_index = match_parameters['sentence_id']
+            
 
             EssaySuggestionResult.append(langtool_suggestion_instance)
 

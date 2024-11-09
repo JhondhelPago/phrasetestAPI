@@ -72,6 +72,7 @@ class langtool_suggestion(models.Model):
     context = models.CharField(max_length=1500, blank=True, default='')
     sentence = models.CharField(max_length=1500, blank=True, default='')
     final_sentence = models.CharField(max_length=1500, blank=True, default='')
+    sentence_index = models.IntegerField(default=0)
 
 
     def getDictProperties(self):
@@ -84,7 +85,8 @@ class langtool_suggestion(models.Model):
             'context' : self.context,
             'sentence' : self.sentence,
             'final_sentence' : self.final_sentence,
-            'essay_submitted' : self.essay_submitted
+            'essay_submitted' : self.essay_submitted,
+            'sentence_index' : self.sentence_index
         }
 
 
