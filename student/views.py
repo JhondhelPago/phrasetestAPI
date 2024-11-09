@@ -34,7 +34,7 @@ from module.rubrics import rubrics_benchmark
 #model imports
 from user.models import CustomUser, studentuser
 from teacher.models import section, essay_assignment, context_question
-from .models import essay_submitted, question_composition, langtool_suggestion, rubrics
+from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features
 #imports from other apps
 
 
@@ -188,6 +188,37 @@ def studentEssaySubmit(req):
 
         # simulate the model prediction here
 
+        #feature instance
+        phrase_instance_features_dict = phrase_instance.getFeatures()
+        
+        print('Phase features')
+        print(phrase_instance_features_dict)
+
+        features_instance = features()
+        features_instance.essay_submitted = assignment_submit_instance.id
+
+        features_instance.word_count = phrase_instance_features_dict['word_count']
+        features_instance.unique_word_ratio = phrase_instance_features_dict['unique_word_ratio']
+        features_instance.average_word_length = phrase_instance_features_dict['average_word_length']
+        features_instance.noun_count = phrase_instance_features_dict['noun_count']
+        features_instance.adj_count = phrase_instance_features_dict['adj_count']
+        features_instance.adv_count = phrase_instance_features_dict['adv_count']
+        features_instance.pronoun_count = phrase_instance_features_dict['pronoun_count']
+        features_instance.verb_count = phrase_instance_features_dict['verb_count']
+        features_instance.subordinating_clauses_count = phrase_instance_features_dict['subordinating_clauses_count']
+        features_instance.grammar_error_count = phrase_instance_features_dict['spelling_error_count']
+        features_instance.sentiment_polarity = phrase_instance_features_dict['sentiment_polarity']
+        features_instance.cohesive_device_count = phrase_instance_features_dict['cohesive_device_count']
+        features_instance.readability_score = phrase_instance_features_dict['readability_score']
+        features_instance.avg_sentence_length = phrase_instance_features_dict['avg_sentence_length']
+        features_instance.sentence_simple = phrase_instance_features_dict['sentence_simple']
+        features_instance.sentence_compound = phrase_instance_features_dict['sentence_compound']
+        features_instance.sentence_complex = phrase_instance_features_dict['sentence_complex']
+        features_instance.topic_relevance_score = phrase_instance_features_dict['topic_relevance_score']
+
+        #saving the instance of features and inserting to the database
+        features_instance.save()
+
         rubricsBenchmarkScores = rubrics_benchmark(phrase_instance)
 
         rubrics_instance = rubrics()
@@ -329,6 +360,7 @@ def getAssignmentResults(req):
 
         question_composition_instance = question_composition.objects.get(essay_submitted=essay_submitted_instance.id)
         rubrics_instance = rubrics.objects.get(essay_submitted=essay_submitted_instance.id)
+        features_instance = features.objects.get(essay_submitted=essay_submitted_instance.id)
         langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
         langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
 
@@ -339,6 +371,7 @@ def getAssignmentResults(req):
             'essay_submitted_info' : essay_submitted_instance.getDictProperties(),
             'question_composition' : question_composition_instance.getDictProperties(),
             'rubrics' : rubrics_instance.getBenchMarkScores(),
+            'features' : features_instance.getProperties(),
             'langtool_suggestion' : langtool_suggestion_list
             
         }, status=status.HTTP_200_OK)

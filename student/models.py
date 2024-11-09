@@ -88,6 +88,55 @@ class langtool_suggestion(models.Model):
             'essay_submitted' : self.essay_submitted,
             'sentence_index' : self.sentence_index
         }
+    
 
+class features(models.Model):
+
+    essay_submitted = models.IntegerField(default=0)
+
+    word_count = models.FloatField(default=0)
+    unique_word_ratio = models.FloatField(default=0)
+    average_word_length = models.FloatField(default=0)
+    noun_count = models.FloatField(default=0)
+    adj_count = models.FloatField(default=0)
+    adv_count = models.FloatField(default=0)
+    pronoun_count = models.FloatField(default=0)
+    verb_count = models.FloatField(default=0)
+    subordinating_clauses_count = models.FloatField(default=0)
+    grammar_error_count = models.FloatField(default=0)
+    spelling_error_count = models.FloatField(default=0)
+    sentiment_polarity = models.FloatField(default=0)
+    cohesive_device_count = models.FloatField(default=0)
+    readability_score = models.FloatField(default=0)
+    avg_sentence_length = models.FloatField(default=0)
+    sentence_simple = models.FloatField(default=0)
+    sentence_compound = models.FloatField(default=0)
+    sentence_complex = models.FloatField(default=0)
+    topic_relevance_score = models.FloatField(default=0)
+
+
+    def getProperties(self):
+
+        return {
+            'word_count' : self.word_count,
+            'unique_word_ratio' : self.unique_word_ratio,
+            'average_word_length' : self.average_word_length,
+            'noun_count' : self.noun_count,
+            'adj_count' : self.adj_count,
+            'adv_count' : self.adv_count,
+            'pronoun_count' : self.pronoun_count,
+            'verb_count' : self.verb_count,
+            'subordinating_clauses_count' : self.subordinating_clauses_count,
+            'grammar_error_count' : self.grammar_error_count,
+            'spelling_error_count' : self.spelling_error_count,
+            'sentiment_polarity' : self.sentiment_polarity,
+            'cohesive_device_count' : self.cohesive_device_count,
+            'readability_score' : self.readability_score,
+            'avg_sentence_length' : self.avg_sentence_length,
+            'sentence_simple' : self.sentence_simple,
+            'sentence_compound' : self.sentence_compound,
+            'sentence_complex' : self.sentence_complex,
+            'topic_relevance_score' : self.topic_relevance_score
+        }
 
 

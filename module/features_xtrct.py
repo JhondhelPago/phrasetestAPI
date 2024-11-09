@@ -575,8 +575,8 @@ class PhraseExtract:
         print(f"avg_sentence_length : {self.avg_sentence_length}")
         print(f"sentence_variation : {self.sentence_variation}")
         print(f"sentence_simple : {self.sentence_simple}")
-        print(f"sentence compound : {self.sentence_compound}")
-        print(f"sentence complex : {self.sentence_complex}")
+        print(f"sentence_compound : {self.sentence_compound}")
+        print(f"sentence_complex : {self.sentence_complex}")
         print(f"topic_relevance_score : {self.topic_relevance_score}")
 
 
@@ -584,24 +584,24 @@ class PhraseExtract:
 
         return {
             "word_count": self._word_Count,
-            "unique_words_ratio": self.unique_words_ratio,
+            "unique_word_ratio": self.unique_words_ratio,
             "average_word_length": self.average_word_length,
             "noun_count": self._noun_count,
             "adj_count": self._adj_count,
             "adv_count": self._adv_count,
             "pronoun_count": self._pronoun_count,
             "verb_count": self._verb_count,
-            "subordinating_clauses_count": "None for now",
-            "grammar_error_count": "None for now",
-            "spelling_error_count": "None for now",
-            "sentiment_polarity": "None for now",
+            "subordinating_clauses_count": 0,
+            "grammar_error_count": 0,
+            "spelling_error_count": 0,
+            "sentiment_polarity": 0,
             "cohesive_device_count": self.cohesive_device_count,
             "readability_score" : self.readability_score,
             "avg_sentence_length" : self.avg_sentence_length,
             "sentence_variation" : self.sentence_variation,
             "sentence_simple" : self.sentence_simple,
-            "sentence compound" : self.sentence_compound,
-            "sentence complex" : self.sentence_complex,
+            "sentence_compound" : self.sentence_compound,
+            "sentence_complex" : self.sentence_complex,
             "topic_relevance_score" : self.topic_relevance_score
         }
 
