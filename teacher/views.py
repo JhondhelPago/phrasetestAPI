@@ -27,7 +27,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 
 #model imports
-from user.models import CustomUser, studentuser
+from user.models import CustomUser, studentuser, teacheruser
 from student.models import essay_submitted
 from . models import section, essay_assignment, context_question
 
@@ -104,6 +104,40 @@ def section_list_view(req):
         print(e) 
     
     return Response({'message' : 'invalid token'})
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+
+def add_new_section(req):
+
+    try:
+
+        data = json.loads(req.body)
+
+        section_name_param = data.get('section_name')
+        print(f"section_name_param: {section_name_param}")
+
+        access_token = data.get('access')
+
+        decoded_access_token = AccessToken(access_token)
+        print(f"teacher user id : {decoded_access_token['user_id']}")
+
+        if not teacheruser.objects.filter(user_id=decoded_access_token['user_id']).exists():
+            return Response({'message' : 'teacher not found and the view cannot process the request'}, status=status.HTTP_403_FORBIDDEN)
+        
+
+        section_instance = section()
+        section_instance.teacher_id = decoded_access_token['user_id']
+        section_instance.save()
+
+        return Response({
+            'message' : 'section added successfully'
+        }, status=status.HTTP_200_OK)
+    
+    except:
+
+        return
 
 
 
