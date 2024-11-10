@@ -4,7 +4,11 @@ import random
 from datetime import date, datetime
 
 # Create your models here.
+def dateforamatter(date):
+    
+    formatted_date = date.strftime("%B %d, %Y, %I:%M:%S %p")
 
+    return formatted_date
 
 def generate_section_code():
 
@@ -58,13 +62,16 @@ class essay_assignment(models.Model):
     assignment_code = models.CharField(max_length=8, unique=True, blank=True)
     section_key = models.IntegerField(blank=True)
     assignment_no = models.IntegerField(default=0)
-    date_created = models.DateField(default=datetime.now())
-    date_due = models.DateField(blank=True, null=True) #parameter format -> due_date=date(2024, 11, 15) -> date(YYYY, MM, DD), import the date object.
+    date_created = models.DateTimeField(default=datetime.now())
+    date_due = models.DateTimeField(blank=True, null=True) #parameter format -> due_date=date(2024, 11, 15) -> date(YYYY, MM, DD), import the date object.
 
 
-    def set_date_due(self, YYYY, MM, DD):
+    def set_date_due(self, date_str, time_str):
 
-        self.date_due = date(YYYY, MM, DD)
+        date_list = date_str.split('-')
+        time_list = time_str.split(':')
+
+        self.date_due = datetime(int(date_list[0]), int(date_list[1]), int(date_list[2]), int(time_list[0]), int(time_list[1]))
 
     def assignmentProperties(self):
 
@@ -73,8 +80,8 @@ class essay_assignment(models.Model):
             'assignment_code' : self.assignment_code,
             'section_key' : self.section_key,
             'assignment_no' : self.assignment_num_string(),
-            'date_created' : self.date_created,
-            'date_due' : self.date_due
+            'date_created' : dateforamatter(self.date_created),
+            'date_due' : dateforamatter(self.date_due)
         }
 
     def assignment_num_string(self):

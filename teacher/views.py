@@ -129,6 +129,7 @@ def add_new_section(req):
 
         section_instance = section()
         section_instance.teacher_id = decoded_access_token['user_id']
+        section_instance.section_name = section_name_param
         section_instance.save()
 
         return Response({
@@ -153,6 +154,12 @@ def teacher_CreateEssayAssignment(req):
         data  = json.loads(req.body)
 
         decoded_access_token = AccessToken(data.get('access'))
+
+        date_param = data.get('date')
+        time_param = data.get('time')
+
+        print(f"date_param = {date_param}")
+        print(f"time_param {time_param}")
 
         question_list = data.get('question_list')
 
@@ -196,7 +203,7 @@ def teacher_CreateEssayAssignment(req):
             assignment_instance = essay_assignment(section_key=section_object.id)
             assignment_instance.assignment_no = current_ass_number + 1
             print('assigning to essay_assingment is executing')
-            assignment_instance.set_date_due(2024, 12, 21) 
+            assignment_instance.set_date_due(date_param, time_param) 
             print(assignment_instance.date_due)
             #assingment_instance.time_created inside the model class
 
