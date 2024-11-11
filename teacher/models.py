@@ -2,11 +2,16 @@ from django.db import models
 import string
 import random
 from datetime import date, datetime
+import pytz
 
 # Create your models here.
-def dateforamatter(date):
+def dateforamatter(date, timezone='Asia/Manila'):
+
+    tz = pytz.timezone(timezone)
+
+    aware_date = date.astimezone(tz)
     
-    formatted_date = date.strftime("%B %d, %Y, %I:%M:%S %p")
+    formatted_date = aware_date.strftime("%B %d, %Y, %I:%M:%S %p")
 
     return formatted_date
 

@@ -30,6 +30,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 from user.models import CustomUser, studentuser, teacheruser
 from student.models import essay_submitted
 from . models import section, essay_assignment, context_question
+from . teacher_module import get_submitted_students
 
 
 
@@ -286,9 +287,27 @@ def essay_assignment_details(req):
         #get the isntance of teh section using the section key of the assignment_instance
         section_instance = section.objects.get(id=assignment_instance.section_key)
 
-        total_student = studentuser.objects.filter(section=section_instance.section_code).count() #filter() parameter should be section_code
+        #QuerySet of all of the student enrolled in the section
+        all_student= studentuser.objects.filter(section=section_instance.section_code)
+
+        total_student = all_student.count() #filter() parameter should be section_code
+
+        #extract here the date of submission, who's stuent_id, then get their names, the rubrics of their essay_submitted then reference to the rubrics
         list_student_submitted = essay_submitted.objects.filter(assignment_code=assignment_instance.assignment_code)
         print(f"list_student_submitted: {list_student_submitted}")
+
+
+
+
+
+
+        submitted_details = get_submitted_students(section_code=section_instance.section_code, assignment_instance=assignment_instance)
+        print(f"list of student ids in asociated in this assignment: {submitted_details}")
+
+
+
+
+        #count of student of submut on this assignment
         total_student_submitted = list_student_submitted.count()
         # print(f"total-student_submitted: {total_student_submitted}")
 
@@ -313,7 +332,10 @@ def essay_assignment_details(req):
             'student_total_in_section' : total_student,
             'total_student_submtted' : total_student_submitted,
             'submitted_student' : f"{total_student_submitted}/{total_student}",
-            'context_question' : context_question_instance.getProperties()
+            'context_question' : context_question_instance.getProperties(),
+            'submitted_names' : submitted_details['submitted_names'],
+            'submitted_dates' : submitted_details['dates'],
+            'submitted_labels' : submitted_details['labels'],
             }, status=status.HTTP_200_OK)
 
     except Exception as e:
@@ -333,7 +355,10 @@ def essay_assignment_details(req):
             "student_total_in_section": "",
             "total_student_submtted": "",
             "submitted_student": "",
-            "context_question" : context_question.getNoneProperties()
+            "context_question" : context_question.getNoneProperties(),
+            'submitted_names' : [],
+            'submitted_dates' : [],
+            'submitted_labels' : [],
         }, status=status.HTTP_404_NOT_FOUND)
 
 

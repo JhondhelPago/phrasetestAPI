@@ -2,14 +2,23 @@ from django.db import models
 import string
 import random
 from datetime import date, datetime
+import pytz
 
+def dateforamatter(date, timezone='Asia/Manila'):
 
+    tz = pytz.timezone(timezone)
+    
+    aware_date = date.astimezone(tz)
+
+    formatted_date = aware_date.strftime("%B %d, %Y, %I:%M:%S %p")
+
+    return formatted_date
 
 class essay_submitted(models.Model):
 
     student_id = models.IntegerField()
     assignment_code = models.CharField(max_length=8, blank=True)
-    date_submitted = models.DateField(default=datetime.now())
+    date_submitted = models.DateTimeField(default=datetime.now())
 
     def getDictProperties(self):
 
@@ -18,6 +27,10 @@ class essay_submitted(models.Model):
             'assignment_code' : self.assignment_code,
             'date_submitted' : self.date_submitted
         }
+    
+    def get_date_submitted(self):
+    
+        return dateforamatter(self.date_submitted)
     
 
     
