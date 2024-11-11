@@ -43,16 +43,23 @@ def get_submitted_students(section_code, assignment_instance : essay_assignment)
 
     # get all of the ids who submitted on the assignment
     submitted_student = essay_submitted.objects.filter(student_id__in=student_list_ids).filter(assignment_code=assignment_instance.assignment_code)
+    submitted_student_ids_demo = [student.student_id for student in submitted_student]
+    print(f"submitted_student_ids: {submitted_student_ids_demo}")
 
-    submitted_ids = student_list_ids
+    submitted_ids = submitted_student_ids_demo
     unsubmitted_ids = list()
 
-    for student in submitted_student:
+    print(f"pre loop submitted_ids : {submitted_ids}")
 
-        if not student.student_id in submitted_ids:
+    for id in student_list_ids:
 
-            unsubmitted_ids.append(student.student_id)
-            submitted_ids.remove(student.student_id)
+        if not id in submitted_student_ids_demo:
+
+            unsubmitted_ids.append(id)
+
+
+    print(f"post lopp submitted_ids : {submitted_ids}")
+    print(f"post loop unsubmitted_ids : {unsubmitted_ids}")
 
     submitted_student_count = len(submitted_ids)
     unsubmitted_student_count = len(unsubmitted_ids)
