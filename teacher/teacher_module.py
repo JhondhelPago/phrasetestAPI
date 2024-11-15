@@ -77,10 +77,26 @@ def get_submitted_students(section_code, assignment_instance : essay_assignment)
 
 
     # using the submitted_student get the date date properties
-    submitted_date_list = [essay_submitted_instance.get_date_submitted()  for essay_submitted_instance in essay_submitted_students]
+    submitted_date_list = [[essay_submitted_instance.get_date_submitted(), essay_submitted_instance.student_id]  for essay_submitted_instance in essay_submitted_students]
+
+    submitted_date_list = list()
+
+    id_line_up = list()
+
+    for essay_submitted_instance in essay_submitted_students:
+
+        submitted_date_list.append([essay_submitted_instance.get_date_submitted(), essay_submitted_instance.student_id])
+        id_line_up.append(essay_submitted_instance.student_id)
+        
 
     #get the names of submitted student
     submmited_names = [student.last_name + ', '  + student.first_name for student in submitted_student]
+
+    submmited_names = list()
+
+    for index, student in enumerate(submitted_student):
+
+        submmited_names.append([student.last_name + ', ' + student.first_name, id_line_up[index]])
 
 
     #get the label os the student using the essay_submitted.id
@@ -88,6 +104,12 @@ def get_submitted_students(section_code, assignment_instance : essay_assignment)
 
     rubrics_instances = rubrics.objects.filter(essay_submitted__in=essay_submitted_FK_from_submitted_student)
     rubrics_label_list = [rubrics_instance.label for rubrics_instance in rubrics_instances]
+
+    rubrics_label_list = list()
+
+    for index, rubrics_instance in enumerate(rubrics_instances):
+
+        rubrics_label_list.append([rubrics_instance.label, id_line_up[index]])
 
 
 

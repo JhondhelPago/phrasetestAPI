@@ -361,7 +361,23 @@ def essay_assignment_details(req):
             'submitted_labels' : [],
         }, status=status.HTTP_404_NOT_FOUND)
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def OpenStudentExamineResult(req):
 
- 
+    #parameter needed
+    #assignment_id
+    #student_id
 
+
+
+
+    try:
+
+        return
+    
+    except Exception as e:
+
+        return
 
