@@ -12,6 +12,7 @@ urlpatterns = [
     path('assignments/', views.studentAssignments),
     path('submit/assignment/', views.studentEssaySubmit),
     path('check/assignment/submit', views.checkAssignmentDone),
-    path('assignment/results', views.getAssignmentResults)
+    path('assignment/results/', views.getAssignmentResults),
+    path('join/class/', views.JoinClass)
 
 ]   

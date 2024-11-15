@@ -384,3 +384,38 @@ def getAssignmentResults(req):
             'error_message' : str(e)
         },status=status.HTTP_400_BAD_REQUEST)
     
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def JoinClass(req):
+
+    try:
+
+        data = json.loads(req.body)
+        section_code_param = data.get('section_code')
+        access = data.get('access')
+        print(f"access:{access}")
+        decoded_access_token = AccessToken(access)
+        user_id = decoded_access_token['user_id']
+        print(user_id)
+        print(section_code_param)
+
+
+        #get the studentuser instance using the user_id parameter to the getfunction of orm
+        stud = studentuser.objects.get(user_id=user_id)
+        stud.section = section_code_param
+        stud.save()
+
+
+        return Response({
+            'message' : F"your id is {user_id}"
+        }, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+
+        print(e)
+
+        return Response({
+            'message' : str(e)
+        })

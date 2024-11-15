@@ -39,6 +39,7 @@ class question_composition(models.Model):
     essay_submitted = models.IntegerField()
     question = models.CharField(max_length=500, blank=True)
     composition = models.CharField(max_length=5000, blank=True)
+    comment = models.CharField(max_length=4000, default='')
 
     def getDictProperties(self):
 
@@ -46,7 +47,8 @@ class question_composition(models.Model):
             'id' : self.id,
             'essay_submitted' : self.essay_submitted,
             'question' : self.question,
-            'composition' : self.composition
+            'composition' : self.composition,
+            'comment' : self.comment
         }
 
 
