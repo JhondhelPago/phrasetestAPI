@@ -321,7 +321,7 @@ def checkAssignmentDone(req):
 
         print(e)
 
-        return
+        return 
     
 @csrf_exempt
 @api_view(['GET'])
@@ -401,6 +401,18 @@ def JoinClass(req):
         print(user_id)
         print(section_code_param)
 
+        #validate first if the section_code exist
+        #section_is_exist = section.objects.filter(section_code=section_code).exist
+        #if the section_is_exist == True the proceed the process else return a Response with status that tells the section_code is invalid
+
+        section_is_exist = section.objects.filter(section_code=section_code_param).exists()
+
+        if not section_is_exist:
+            print('section_is _exist control flow')
+            return Response({
+                'message' : f"'{section_code_param}' is invalid section code"
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
 
         #get the studentuser instance using the user_id parameter to the getfunction of orm
         stud = studentuser.objects.get(user_id=user_id)
