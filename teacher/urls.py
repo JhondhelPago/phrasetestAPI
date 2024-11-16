@@ -13,7 +13,8 @@ urlpatterns = [
     path('create/essay/assignment', views.teacher_CreateEssayAssignment),
     path('assignment/info/details', views.essay_assignment_details),
     path('section/info', views.section_details),
-    path('section/new/', views.add_new_section)
+    path('section/new/', views.add_new_section),
+    path('view/examineresults', views.TeacherViewExamineResult)
 
 
 ]   
