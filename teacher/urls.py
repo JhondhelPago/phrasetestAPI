@@ -14,7 +14,8 @@ urlpatterns = [
     path('assignment/info/details', views.essay_assignment_details),
     path('section/info', views.section_details),
     path('section/new/', views.add_new_section),
-    path('view/examineresults', views.TeacherViewExamineResult)
+    path('view/examineresults', views.TeacherViewExamineResult),
+    path('add/comment/', views.AddCommentExamineResult)
 
 
 ]   

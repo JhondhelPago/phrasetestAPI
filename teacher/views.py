@@ -380,6 +380,10 @@ def TeacherViewExamineResult(req):
         # student_id = decoded_access_token['user_id']
         student_id = req.GET.get('student_id')
 
+        studentuser_instance = CustomUser.objects.get(id=student_id)
+
+        student_name = f"{studentuser_instance.last_name}, {studentuser_instance.first_name}" 
+
 
         #get the assignment_code here
         essay_assignment_instance = essay_assignment.objects.get(id=assignment_id)
@@ -400,6 +404,7 @@ def TeacherViewExamineResult(req):
 
         return Response({
             'message' : 'getAssignmentResults is executing',
+            'student_name' : student_name,
             'student_id' : student_id,
             'assignment_id' : assignment_id,
             'essay_submitted_info' : essay_submitted_instance.getDictProperties(),
@@ -417,3 +422,46 @@ def TeacherViewExamineResult(req):
         return Response({
             'error_message' : str(e)
         },status=status.HTTP_400_BAD_REQUEST)
+    
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def AddCommentExamineResult(req):
+
+    #parameter needed
+    #student_id
+    #assignment_id
+
+    try:
+
+        #get the essay_submited instance by passing the parameter student_id and essay_assignment.assignment_code
+
+        data = json.loads(req.body)
+        student_id = data.get('student_id')
+        assignment_id = data.get('assignment_id')
+        comment_string = data.get('comment')
+        print(comment_string)
+
+        essay_assignment_instance = essay_assignment.objects.get(id=assignment_id)
+
+        essay_submitted_instance = essay_submitted.objects.get(student_id=student_id, assignment_code=essay_assignment_instance.assignment_code)
+
+        #access the question_compostion isntance here by passing the parameter essay_submitted_instance.id
+
+        question_composition_instance = question_composition.objects.get(essay_submitted=essay_submitted_instance.id)
+        question_composition_instance.comment = comment_string
+        question_composition_instance.save()
+        
+        #essay_assignment_instance = essay_assignment.objects.get(id=assignment_id)
+
+        return Response({
+            'message' : 'comment added.',
+            'essay_submitted_altered' : essay_submitted_instance.id
+
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+
+        print(e)
+
+        return 
