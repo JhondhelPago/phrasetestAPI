@@ -97,7 +97,21 @@ def login(req):
             "email" : None,
             "user_type" : None,
             "token" : {"refresh" : "", "access" : ""}
-        }, status=status.HTTP_404_NOT_FOUND)
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    except Exception as e:
+
+        print(e)
+
+        return Response({
+            'message' : str(e),
+            'email' : None,
+            'user_type' : None,
+            'token' : {'refresh' : '', 'access' : '' }
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    
+
     
 @csrf_exempt
 @api_view(['POST'])
