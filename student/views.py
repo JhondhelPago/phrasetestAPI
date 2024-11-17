@@ -133,6 +133,52 @@ def studentAssignments(req):
 
 
 @csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def studentAssignmentFinished(req):
+
+    #get the studentuser instance, then get the section
+    #get the section instance, then get the section_key
+    #get all the essay_assignment instance using the section_key
+
+    try:
+
+        access_token = req.GET.get('access')
+
+        decoded_access_token = AccessToken(access_token)
+
+        user_id = decoded_access_token['user_id']
+
+        user_instance = studentuser.objects.get(user_id=user_id)
+
+        section_instance = section.objects.get(section_code=user_instance.section)
+
+        #all of the assignment in this student section
+        essay_assignment_QuerySet = essay_assignment.objects.filter(section_key=section_instance.id)
+        essay_assignment_id_list = [essay_assignment_instance.id for essay_assignment_instance in essay_assignment_QuerySet]
+        essay_assignment_code_list = [essay_assignment_instance.assignment_code for essay_assignment_instance in essay_assignment_QuerySet]
+
+        #instead of query from the essay_assignment, query from the essay_submitted
+        FinishedAssignmentQuerySet = essay_submitted.objects.filter(student_id=user_instance.user_id, assignment_code__in=essay_assignment_code_list)
+        FinishedAssignmentList = [essay_submitted_instance.getDictProperties() for essay_submitted_instance in FinishedAssignmentQuerySet]
+
+        #should return the a list of assignment id containing the 21, 23
+        #should retunr empty list
+        return Response({
+            'message' : 'assingment list extracted.',
+            'assignment_keys' : essay_assignment_id_list,
+            'assignment_codes' : essay_assignment_code_list,
+            'assignment_prop_list' : FinishedAssignmentList
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+    
+        print(e)
+    
+    return 
+
+
+@csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def studentEssaySubmit(req):

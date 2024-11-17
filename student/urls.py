@@ -10,6 +10,7 @@ urlpatterns = [
     path('test/run/api', views.student_api_test_run),
     path('info/', views.studentInfo),
     path('assignments/', views.studentAssignments),
+    path('assignment/finished/', views.studentAssignmentFinished),
     path('submit/assignment/', views.studentEssaySubmit),
     path('check/assignment/submit', views.checkAssignmentDone),
     path('assignment/results/', views.getAssignmentResults),
