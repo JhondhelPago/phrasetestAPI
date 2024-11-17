@@ -35,9 +35,11 @@ from module.rubrics import rubrics_benchmark
 from user.models import CustomUser, studentuser
 from teacher.models import section, essay_assignment, context_question
 from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features
+
 #imports from other apps
 
-
+#import from student module
+from student.module import get_unfinished_essay_assignment_id
 
 # Create your views here.
 @csrf_exempt
@@ -95,41 +97,111 @@ def studentInfo(req):
         print(e)
         return Response({"message" : "invalid token"})
 
+# @csrf_exempt
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def studentAssignments(req):
+
+#     #get the studentuser instance, then get the section
+#     #get the section instance, then get the section_key
+#     #get all the essay_assignment instance using the section_key
+
+#     try:
+        
+#         acces_token = req.GET.get('access')
+
+#         decoded_access_token = AccessToken(acces_token)
+
+#         user_id = decoded_access_token['user_id']
+
+#         user =  studentuser.objects.get(user_id=user_id)
+
+#         section_instance = section.objects.get(section_code = user.section)
+
+#         assigmentQuerySet = essay_assignment.objects.filter(section_key=section_instance.id)
+
+#         assignment_list = [assignment.assignmentProperties() for assignment in assigmentQuerySet] 
+
+#         return Response({
+#             'message' : 'assignment list extracted',
+#             'assignments' : assignment_list
+#         }, status=status.HTTP_200_OK)
+
+#     except Exception as e:
+
+#         print(e)
+    
+#     return
+
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def studentAssignments(req):
 
-    #get the studentuser instance, then get the section
-    #get the section instance, then get the section_key
-    #get all the essay_assignment instance using the section_key
+    #parameter needed
+    #acesstoken
+
 
     try:
-        
-        acces_token = req.GET.get('access')
 
-        decoded_access_token = AccessToken(acces_token)
+        #get all of the id from essay_assignments in the student section
 
+        #get all of the id from essay_submitted in the student section
+
+        access_token = req.GET.get('access')
+        decoded_access_token = AccessToken(access_token)
         user_id = decoded_access_token['user_id']
 
-        user =  studentuser.objects.get(user_id=user_id)
+        user_instance = studentuser.objects.get(user_id=user_id)
 
-        section_instance = section.objects.get(section_code = user.section)
+        section_instance = section.objects.get(section_code=user_instance.section)
 
-        assigmentQuerySet = essay_assignment.objects.filter(section_key=section_instance.id)
+        essay_assignment_QuerySet = essay_assignment.objects.filter(section_key=section_instance.id)
+        essay_assignment_id_list = [essay_assignment_instance.id for essay_assignment_instance in essay_assignment_QuerySet]
+        essay_assignment_code_list = [essay_assignment_instance.assignment_code for essay_assignment_instance in essay_assignment_QuerySet]
 
-        assignment_list = [assignment.assignmentProperties() for assignment in assigmentQuerySet] 
+        #instead of query from the essay_assignment, query from the essay_submitted
+        FinishedAssignmentQuerySet = essay_submitted.objects.filter(student_id=user_instance.user_id, assignment_code__in=essay_assignment_code_list)
+        FinishedAssignmentList_codes = [essay_submitted_instance.assignment_code for essay_submitted_instance in FinishedAssignmentQuerySet]
+
+
+        assignmentQuerySet = essay_assignment.objects.filter(assignment_code__in=FinishedAssignmentList_codes)
+        assignmentFinished_ids = [assignmentDone.id for assignmentDone in assignmentQuerySet]
+
+
+        #only get the essay_assingment_id of un finished
+        unfinished_ids = get_unfinished_essay_assignment_id(essay_assignment_id_list, assignmentFinished_ids)
+
+
+        #filter to the queryset of essay_assignment_QuerySet
+        #append only the instance with the matching id from unfinished_ids
+
+        unfinished_assignmentObj_list = list()
+
+        for id in unfinished_ids:
+
+            for assignment in essay_assignment_QuerySet:
+
+                if id == assignment.id:
+
+                    unfinished_assignmentObj_list.append(assignment.assignmentProperties())
+
+                    break
+
+
 
         return Response({
             'message' : 'assignment list extracted',
-            'assignments' : assignment_list
-        }, status=status.HTTP_200_OK)
-
+            'assignment_ids' : essay_assignment_id_list,
+            'assingment_done_ids' : assignmentFinished_ids,
+            'unfinished_assignment_id' : unfinished_ids,
+            'assignments' : unfinished_assignmentObj_list
+        })
+    
     except Exception as e:
 
-        print(e)
-    
-    return
+        return
+
 
 
 @csrf_exempt
@@ -160,7 +232,6 @@ def studentAssignmentFinished(req):
 
         #instead of query from the essay_assignment, query from the essay_submitted
         FinishedAssignmentQuerySet = essay_submitted.objects.filter(student_id=user_instance.user_id, assignment_code__in=essay_assignment_code_list)
-        FinishedAssignmentList = [essay_submitted_instance.getDictProperties() for essay_submitted_instance in FinishedAssignmentQuerySet]
         FinishedAssignmentList_codes = [essay_submitted_instance.assignment_code for essay_submitted_instance in FinishedAssignmentQuerySet]
 
 
