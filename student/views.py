@@ -161,6 +161,12 @@ def studentAssignmentFinished(req):
         #instead of query from the essay_assignment, query from the essay_submitted
         FinishedAssignmentQuerySet = essay_submitted.objects.filter(student_id=user_instance.user_id, assignment_code__in=essay_assignment_code_list)
         FinishedAssignmentList = [essay_submitted_instance.getDictProperties() for essay_submitted_instance in FinishedAssignmentQuerySet]
+        FinishedAssignmentList_codes = [essay_submitted_instance.assignment_code for essay_submitted_instance in FinishedAssignmentQuerySet]
+
+
+        assignmentQuerySet = essay_assignment.objects.filter(assignment_code__in=FinishedAssignmentList_codes)
+        FinishedAssignmentList = [assignmentObj.assignmentProperties() for assignmentObj in assignmentQuerySet]
+
 
         #should return the a list of assignment id containing the 21, 23
         #should retunr empty list
@@ -168,7 +174,7 @@ def studentAssignmentFinished(req):
             'message' : 'assingment list extracted.',
             'assignment_keys' : essay_assignment_id_list,
             'assignment_codes' : essay_assignment_code_list,
-            'assignment_prop_list' : FinishedAssignmentList
+            'assignment_finished' : FinishedAssignmentList
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
