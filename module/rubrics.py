@@ -230,9 +230,34 @@ def IdeaCriterion(PhraseObj : PhraseExtract):
 
 
 #use the parameter readability_score from the PhraseExtract instance
-def ClarityAndConciseness(PhraseAObj: PhraseExtract):
+def ClarityAndConciseness(PhraseObj: PhraseExtract):
 
 
-    return None
+    alternative_return = None
+
+
+    readability_score = PhraseObj.readability_score
+
+
+    if readability_score <= .3:
+
+        alternative_return = 1
+
+    elif readability_score > .3 and readability_score <= .4:
+
+        alternative_return = 2
+
+    elif readability_score > .4 and readability_score <= .5:
+
+        alternative_return = 3
+
+    elif readability_score > .5:
+
+        alternative_return = 4
+
+
+    return  alternative_return
+
+
     
 

@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from rubrics import grade_corpus, IdeaCriterion
+from rubrics import grade_corpus, IdeaCriterion, ClarityAndConciseness
 from features_xtrct import PhraseExtract, PhraseExtract1
 
 Question1 = 'What do you want to be when you grow up? How will you get there?'
@@ -21,8 +21,14 @@ print(Phrase.FeatureList())
 
 
 IdeaCriterion_result = IdeaCriterion(Phrase)
+ClarityConcisenessCriterion_result = ClarityAndConciseness(Phrase)
 
-print('\n\n' + f"IdeaCriterion_result : {IdeaCriterion_result}")
+print('\n\n' + f"IdeaCriterion_result: {IdeaCriterion_result}")
+
+print('\n\n' + f"ClarityConcisenessCriterion: {ClarityConcisenessCriterion_result}")
+
+
+
 
 
 
