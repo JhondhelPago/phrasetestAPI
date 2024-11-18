@@ -619,7 +619,7 @@ class PhraseExtract1(PhraseExtract):
         print(f"_adv_count : {self._adv_count}")
         print(f"_pronoun_count : {self._pronoun_count}")
         print(f"_verb_count : {self._verb_count}")
-        print(f"subordinating_clauses_count : {'None for now'}")
+        # print(f"subordinating_clauses_count : {'None for now'}")
         # print(f"grammar_error_count : {'None for now'}")
         # print(f"spelling_errpr_count : {'None for now'}")
         # print(f"sentiment_polarity : {'None for now'}")
@@ -633,6 +633,26 @@ class PhraseExtract1(PhraseExtract):
         print(f"topic_relevance_score : {self.topic_relevance_score}")
 
         return
+    
+    def FeatureList(self):
+
+        return [
+            self._word_Count,
+            self.unique_words_ratio,
+            self.average_word_length,
+            self._noun_count,
+            self._adj_count,
+            self._adv_count,
+            self._pronoun_count,
+            self._verb_count,
+            self.cohesive_device_count,
+            self.readability_score,
+            self.avg_sentence_length,
+            self.sentence_simple,
+            self.sentence_compound,
+            self.sentence_complex,
+            self.topic_relevance_score
+        ]
     
 
 

@@ -16,11 +16,14 @@ text1 = 'In 20 years I imagined myself as a successful software engineer and a b
 Phrase = PhraseExtract1(question=Question1, text=text1)
 
 Phrase.displayFeatures()
+print('Feature List')
+print(Phrase.FeatureList())
 
 
 IdeaCriterion_result = IdeaCriterion(Phrase)
 
 print('\n\n' + f"IdeaCriterion_result : {IdeaCriterion_result}")
+
 
 
 

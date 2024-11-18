@@ -4,7 +4,7 @@ import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from rake_nltk import Rake
-from features_xtrct import PhraseExtract
+from features_xtrct import PhraseExtract, PhraseExtract1
 
 
 import random
@@ -226,5 +226,13 @@ def IdeaCriterion(PhraseObj : PhraseExtract):
 
 
     return alternative_return
+
+
+
+#use the parameter readability_score from the PhraseExtract instance
+def ClarityAndConciseness(PhraseAObj: PhraseExtract):
+
+
+    return None
     
 
