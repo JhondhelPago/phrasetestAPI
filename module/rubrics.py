@@ -153,28 +153,78 @@ def IdeaCriterion(PhraseObj : PhraseExtract):
 
 
     similarity_score = PhraseObj.getSimilarityScore()
-
+    cohesive_device_count = PhraseObj.cohesive_device_count
     #threshold = 0.4
 
-    if (similarity_score < .4) and (PhraseObj.cohesive_device_count <= 1):
-
-        return  1
+    #need to have an alternative return if the parameter do not pass the condition ladder
+    alternative_return = None
     
-    elif (similarity_score < .5) and (PhraseObj.cohesive_device_count <= 3 and PhraseObj.cohesive_device_count >= 1):
 
-        return 2
+    if similarity_score < .4: 
 
-    elif (similarity_score < .6) and (PhraseObj.cohesive_device_count <= 3 and PhraseObj.cohesive_device_count > 1):
+        if PhraseObj.cohesive_device_count <=1: 
 
-        return 3
+            print('alter 1')
+            alternative_return = 1
+
+        elif PhraseObj.cohesive_device_count >= 2 and PhraseObj.cohesive_device_count <=4:
+
+            print('alter 2')
+            alternative_return = 2
+        
+        else:
+            print('alter 3')
+            alternative_return = 1
+
     
-    elif (similarity_score < .75) and (PhraseObj.cohesive_device_count <= 3 and PhraseObj.cohesive_device_count > 2):
+    if similarity_score < .5 and similarity_score >= .4:
 
-        return 4
-    
-    elif (similarity_score < .8) and (PhraseObj.cohesive_device_count > 4):
+        if cohesive_device_count >= 2 and cohesive_device_count <= 4: 
 
-        return 4
+            print('alter 4')
+            alternative_return = 2
 
+        elif cohesive_device_count > 4:
+
+            print('alter 5')
+            alternative_return = 3
+
+        else:
+
+            print('alter 6')
+            alternative_return = 2 
+
+    if similarity_score < .6 and similarity_score >= .5:
+
+        if cohesive_device_count >= 3 and cohesive_device_count <= 5:
+
+            print('alter 7')
+            alternative_return = 3
+
+        elif cohesive_device_count > 5:
+
+            print('alter 8')
+            alternative_return = 4
+
+        else: 
+
+            print('alter 9')
+            alternative_return = 3
+   
+    if similarity_score < .75 and similarity_score >= .6:
+
+
+        if cohesive_device_count >= 4:
+
+            print('alter 10')
+            alternative_return = 4
+
+        else:
+
+            print('alter 11')
+            alternative_return = 3
+
+
+    return alternative_return
     
 

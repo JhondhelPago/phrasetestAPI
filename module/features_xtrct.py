@@ -604,7 +604,7 @@ class PhraseExtract:
             "sentence_complex" : self.sentence_complex,
             "topic_relevance_score" : self.topic_relevance_score
         }
-
+    
 
 
 class PhraseExtract1(PhraseExtract):
@@ -634,7 +634,7 @@ class PhraseExtract1(PhraseExtract):
 
         return
     
-    
+
 
 
 
