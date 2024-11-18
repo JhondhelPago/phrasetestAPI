@@ -1,10 +1,15 @@
 #import libraries
 # from sentence_transformers import SentenceTransformer, util # need to be uninstall to he virtual envs
+import spacy
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from rake_nltk import Rake
-
+from features_xtrct import PhraseExtract
 
 
 import random
+
+import spacy.tokens
 
 #helping functions
 
@@ -102,4 +107,74 @@ class rubrics_benchmark:
         self.Structure_criterion = random.choice(self.__prediction_values)
         self.Lang_Mechs_criterion = random.choice(self.__prediction_values)
 
+
+
+def grade_corpus(text):
+
+    nlp = spacy.load("en_core_web_sm")
+    # Step 1: Analyze the coherence and flow of the text using NLP
+    doc = nlp(text)
+
+    # Step 2: Check for cohesive devices (e.g., conjunctions like "but", "and", "however")
+    cohesive_devices = {"however", "but", "and", "therefore", "because", "since"}
+    cohesive_count = sum(1 for token in doc if token.text.lower() in cohesive_devices)
     
+    # Step 3: Analyze topic consistency by measuring sentence similarity
+    sentences = list(doc.sents)
+    if len(sentences) > 1:
+        vectorizer = TfidfVectorizer().fit_transform([sent.text for sent in sentences])
+        similarity_matrix = cosine_similarity(vectorizer)
+        avg_similarity = similarity_matrix.mean()
+    else:
+        avg_similarity = 1  # If there's only one sentence, it's fully consistent   
+
+    print(f"avg_similarity:{avg_similarity}")
+
+    # Step 4: Assign a grade based on flow and cohesion
+    if avg_similarity > 0.7 and cohesive_count > 2:
+        return 4  # Ideas flow logically and are well-connected
+    elif avg_similarity > 0.5 and cohesive_count > 1:
+        return 3  # Shows understanding with some good detail
+    elif avg_similarity > 0.3:
+        return 2  # Some ideas are there but incomplete
+    else:
+        return 1  # Ideas are not connected to each other
+
+
+
+#def IdeaCreterion(doc : spacy.)
+
+
+#adjust the grade_corpus using the PhraseExtract similarity return value
+#then define the condition ladder
+
+#this function is suject to be tested
+def IdeaCriterion(PhraseObj : PhraseExtract):
+
+
+    similarity_score = PhraseObj.getSimilarityScore()
+
+    #threshold = 0.4
+
+    if (similarity_score < .4) and (PhraseObj.cohesive_device_count <= 1):
+
+        return  1
+    
+    elif (similarity_score < .5) and (PhraseObj.cohesive_device_count <= 3 and PhraseObj.cohesive_device_count >= 1):
+
+        return 2
+
+    elif (similarity_score < .6) and (PhraseObj.cohesive_device_count <= 3 and PhraseObj.cohesive_device_count > 1):
+
+        return 3
+    
+    elif (similarity_score < .75) and (PhraseObj.cohesive_device_count <= 3 and PhraseObj.cohesive_device_count > 2):
+
+        return 4
+    
+    elif (similarity_score < .8) and (PhraseObj.cohesive_device_count > 4):
+
+        return 4
+
+    
+

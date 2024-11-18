@@ -607,6 +607,37 @@ class PhraseExtract:
 
 
 
+class PhraseExtract1(PhraseExtract):
+
+    def displayFeatures(self):
+        
+        print(f"_word_count : {self._word_Count}")
+        print(f"unique_words_ratio: {self.unique_words_ratio}")
+        print(f"average_word_length : {self.average_word_length}")
+        print(f"_noun_count : {self._noun_count}")
+        print(f"_adj_count : {self._adj_count}")
+        print(f"_adv_count : {self._adv_count}")
+        print(f"_pronoun_count : {self._pronoun_count}")
+        print(f"_verb_count : {self._verb_count}")
+        print(f"subordinating_clauses_count : {'None for now'}")
+        # print(f"grammar_error_count : {'None for now'}")
+        # print(f"spelling_errpr_count : {'None for now'}")
+        # print(f"sentiment_polarity : {'None for now'}")
+        print(f"cohesive_device_count : {self.cohesive_device_count}")
+        print(f"readability_score : {self.readability_score}")
+        print(f"avg_sentence_length : {self.avg_sentence_length}")
+        # print(f"sentence_variation : {self.sentence_variation}")
+        print(f"sentence_simple : {self.sentence_simple}")
+        print(f"sentence_compound : {self.sentence_compound}")
+        print(f"sentence_complex : {self.sentence_complex}")
+        print(f"topic_relevance_score : {self.topic_relevance_score}")
+
+        return
+    
+    
+
+
+
     
 
 
