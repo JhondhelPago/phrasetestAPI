@@ -654,7 +654,25 @@ class PhraseExtract1(PhraseExtract):
             float(self.topic_relevance_score)
         ]
     
-
+    def FeatureList1(self):
+       
+         return [
+            # float(self._word_Count),
+            float(self.unique_words_ratio),
+            float(self.average_word_length),
+            float(self._noun_count),
+            float(self._adj_count),
+            float(self._adv_count),
+            float(self._pronoun_count),
+            float(self._verb_count),
+            float(self.cohesive_device_count),
+            float(self.readability_score),
+            # float(self.avg_sentence_length),
+            float(self.sentence_simple),
+            float(self.sentence_compound),
+            float(self.sentence_complex),
+            float(self.topic_relevance_score)
+        ]
 
 
 
