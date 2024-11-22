@@ -14,7 +14,7 @@ text5 = """When I grow up I wanna Be a Police Officer so I can help everybody an
 text6 = """I want to be an IT professional. I can achieve this pursuing a relevant education (a degree in computer science or a related field), gaining practical experience through internships or entry-level positions, and continuing to study of new technologies and skills throughout my career. By combining education, skills, and experience, you can build a successful career in the dynamic world of IT. """
 
 
-Phrase = PhraseExtract1(question=Question1, text=text6)
+Phrase = PhraseExtract1(question=Question1, text=text1)
 
 
 print(Phrase.FeatureList1())

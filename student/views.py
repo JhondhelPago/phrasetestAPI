@@ -27,7 +27,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 
 #module for nlp pre-processes
-from module.features_xtrct import PhraseExtract
+from module.features_xtrct import PhraseExtract, PhraseExtract1
 from module.LanguageToolChecker import EssayExamineErrorSuggest
 from module.rubrics import rubrics_benchmark
 
@@ -306,7 +306,7 @@ def studentEssaySubmit(req):
         # question_para = 'What is your biggest fear?'
         # essay_composition_para = 'The advancments in technolagy have revolutionized the way we comunicate and access information. With the rise of smartphons, tablets, and computers, people can now conect with others around the globe instanly. However, this rapid devlopment also comes with some challenges, such as the increase in cybercrime and the growing dependency on digital devices. As technolagy continues to evolve, it is crucial for societys to find a balance between embracing innovation and ensuring securty.'
 
-        phrase_instance = PhraseExtract(question=question_para, text=essay_composition_para)
+        phrase_instance = PhraseExtract1(question=question_para, text=essay_composition_para)
 
 
         # simulate the model prediction here
@@ -353,7 +353,7 @@ def studentEssaySubmit(req):
         rubrics_instance.word_choice = rubricsBenchmarkScores.WordChoice_criterion
         rubrics_instance.structure = rubricsBenchmarkScores.Structure_criterion
         rubrics_instance.lang_mechs = rubricsBenchmarkScores.Lang_Mechs_criterion
-        rubrics_instance.label = predict_level(phrase_instance.getFeatures())
+        rubrics_instance.label = predict_level(phrase_instance.FeatureList1())
 
         rubrics_instance.save()
 
