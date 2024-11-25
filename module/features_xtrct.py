@@ -93,7 +93,7 @@ class PhraseExtract:
         self.__punc = 0
         self.__symbl = 0
         self.__other = 0
-
+        self.__sentence_count = 0
       
         # model instance in the inside the class
         self.en_core_web_sm = self.__load_sm_Model()
@@ -132,6 +132,7 @@ class PhraseExtract:
         self.readability_score = self.__readability_score()
         self.avg_sentence_length = self.ave_sentence_len()
         self.sentence_variation = self.SentenceVariationAnalyzer()
+        self.number_of_sentence = self.get_NumberOfSentence()
         self.sentence_simple = self.sentence_variation['simple_sentence']
         self.sentence_compound = self.sentence_variation['compound']
         self.sentence_complex = self.sentence_variation['complex']
@@ -205,7 +206,16 @@ class PhraseExtract:
                 list_token_len.append(len(token.text))
 
         return sum(list_token_len)/len(list_token_len)
+    
+    def __SetSelf_NumberOfSentence(self):
 
+        self.__sentence_count = len(self.ArrayOfSents())
+    
+    def get_NumberOfSentence(self):
+
+        sentence_list =  self.ArrayOfSents()
+
+        return len(sentence_list)
 
     def __tokenPOS_Identifier(self):
 
@@ -626,6 +636,7 @@ class PhraseExtract1(PhraseExtract):
         print(f"cohesive_device_count : {self.cohesive_device_count}")
         print(f"readability_score : {self.readability_score}")
         print(f"avg_sentence_length : {self.avg_sentence_length}")
+        print(f"sentence_count: {self.number_of_sentence}")
         # print(f"sentence_variation : {self.sentence_variation}")
         print(f"sentence_simple : {self.sentence_simple}")
         print(f"sentence_compound : {self.sentence_compound}")
