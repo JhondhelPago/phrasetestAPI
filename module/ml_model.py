@@ -1,8 +1,13 @@
 import joblib
 import numpy as np
 import random
+import pickle
+import os 
 
-rf_model = joblib.load(r'C:\Users\jhondhelpago\Documents\GitHub\phrasetestAPI\module\rf_model.pkl')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+rf_model_path = os.path.join(current_dir, 'rf_model.pkl')
+
+rf_model = joblib.load(rf_model_path)
 
 def predict_writing_level(writing_composition: str):
 

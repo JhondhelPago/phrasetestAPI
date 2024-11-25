@@ -710,7 +710,6 @@ class TopicRelevance:
 
         return doc
 
-
     def calculateRelevance(self):
 
         similarity_score = self.essaycomposition.similarity(self.essaycomposition)
