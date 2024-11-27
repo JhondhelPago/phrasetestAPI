@@ -357,32 +357,48 @@ def studentEssaySubmit(req):
 
         rubrics_instance.save()
 
+        try:
 
-        Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
-        # for each match.getDictProperties, make an instance of match
-        # then balk_save 
+            Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
+            # for each match.getDictProperties, make an instance of match
+            # then balk_save 
 
-        #list of match object
-        EssaySuggestionResult = list()
+            #list of match object
+            EssaySuggestionResult = list()
 
-        for matchObj in Examine_result:
+            for matchObj in Examine_result:
 
-            match_parameters = matchObj
+                match_parameters = matchObj
 
-            langtool_suggestion_instance = langtool_suggestion()
-            langtool_suggestion_instance.essay_submitted = assignment_submit_instance.id
-            langtool_suggestion_instance.message = match_parameters['message']
-            langtool_suggestion_instance.shortmessage = match_parameters['shortMessage']
-            langtool_suggestion_instance.replacements = match_parameters['replacements']
-            langtool_suggestion_instance.context = match_parameters['context']
-            langtool_suggestion_instance.sentence = match_parameters['sentence']
-            langtool_suggestion_instance.final_sentence = match_parameters['final_sentence']
-            langtool_suggestion_instance.sentence_index = match_parameters['sentence_id']
-            
+                langtool_suggestion_instance = langtool_suggestion()
+                langtool_suggestion_instance.essay_submitted = assignment_submit_instance.id
+                langtool_suggestion_instance.message = match_parameters['message']
+                langtool_suggestion_instance.shortmessage = match_parameters['shortMessage']
+                langtool_suggestion_instance.replacements = match_parameters['replacements']
+                langtool_suggestion_instance.context = match_parameters['context']
+                langtool_suggestion_instance.sentence = match_parameters['sentence']
+                langtool_suggestion_instance.final_sentence = match_parameters['final_sentence']
+                langtool_suggestion_instance.sentence_index = match_parameters['sentence_id']
+                
 
-            EssaySuggestionResult.append(langtool_suggestion_instance)
+                EssaySuggestionResult.append(langtool_suggestion_instance)
 
-        langtool_suggestion.objects.bulk_create(EssaySuggestionResult)
+            langtool_suggestion.objects.bulk_create(EssaySuggestionResult)
+
+        except Exception as e:
+
+            print('EssayExamineErrorSuggestion function failed.')
+
+            return Response({
+                'message' : 'try block is executing',
+                'assignment_details' : assignment_instance.assignmentProperties(),
+                'assignment_submitted_id' : assignment_submit_instance.id, 
+                'phrase_features' : phrase_instance.getFeatures(),
+                'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
+                'label' : rubrics_instance.label,
+                'suggestion' : []
+                
+            })
 
 
 

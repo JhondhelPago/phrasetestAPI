@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 import string
 import random
 from datetime import date, datetime
@@ -18,7 +19,7 @@ class essay_submitted(models.Model):
 
     student_id = models.IntegerField()
     assignment_code = models.CharField(max_length=8, blank=True)
-    date_submitted = models.DateTimeField(default=datetime.now())
+    date_submitted = timezone.now()
 
     def getDictProperties(self):
 
