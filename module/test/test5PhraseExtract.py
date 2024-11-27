@@ -18,3 +18,5 @@ Phrase = PhraseExtract1(question=question, text=essay2)
 
 # Phrase.displayFeatures()
 print(Phrase.displayFeatures())
+print(Phrase.FeatureList())
+print(f"len of parameters: {len(Phrase.FeatureList())}")

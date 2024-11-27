@@ -82,17 +82,17 @@ class PhraseExtract:
         self.__adv_freq = 0
         self.__verb_freq = 0
         self.__pronoun_freq = 0
-        self.__proper_noun_freq = 0
-        self.__determiner = 0
-        self.__adpostiton = 0
-        self.__connecting_conjuction = 0
-        self.__subor_conjunc = 0
-        self.__interjection = 0
-        self.__numeral = 0
-        self.__aux = 0
-        self.__punc = 0
-        self.__symbl = 0
-        self.__other = 0
+        self._proper_noun_freq = 0
+        self._determiner = 0
+        self._adpostiton = 0
+        self._connecting_conjuction = 0
+        self._subor_conjunc = 0
+        self._interjection = 0
+        self._numeral = 0
+        self._aux = 0
+        self._punc = 0
+        self._symbl = 0
+        self._other = 0
         self.__sentence_count = 0
       
         # model instance in the inside the class
@@ -245,47 +245,47 @@ class PhraseExtract:
 
             elif token.pos_ == 'DET':
 
-                self.__determiner += 1
+                self._determiner += 1
 
             elif token.pos_ == 'PROPN':
 
-                self.__proper_noun_freq += 1
+                self._proper_noun_freq += 1
 
             elif token.pos_ == 'ADP':
 
-                self.__adpostiton += 1
+                self._adpostiton += 1
 
             elif token.pos_ == 'CCONJ': 
 
-                self.__connecting_conjuction += 1
+                self._connecting_conjuction += 1
 
             elif token.pos_ == 'SCONJ':
 
-                self.__subor_conjunc += 1
+                self._subor_conjunc += 1
 
             elif token.pos_ == 'INTJ':
 
-                self.__interjection += 1
+                self._interjection += 1
 
             elif token.pos_ == 'NUM': 
 
-                self.__numeral += 1 
+                self._numeral += 1 
 
             elif token.pos_ == 'AUX': 
 
-                self.__aux += 1
+                self._aux += 1
 
             elif token.pos_ == 'PUNCT': 
 
-                self.__punc += 1
+                self._punc += 1
 
             elif token.pos_ == 'SYM':
 
-                self.__symbl += 1
+                self._symbl += 1
 
             else:
 
-                self.__other += 1    
+                self._other += 1    
 
 
     def noun_count(self):
@@ -589,6 +589,58 @@ class PhraseExtract:
         print(f"sentence_complex : {self.sentence_complex}")
         print(f"topic_relevance_score : {self.topic_relevance_score}")
 
+    def displayFeaturesSample(self):
+
+        # self.wordCount = 0
+        # self.unique_words_ratio = 0
+        # self.avg_word_length = 0
+        # self.noun_count = self.__noun_freq
+        # self.adj_count = self.__adj_freq
+        # self.adv_count = self.__adv_freq
+        # self.pronoun_count = self.__pronoun_freq
+        # self.verb_count = self.__verb_freq
+        # #self.subordinate_clauses_count = None
+        # #self.grammar_error_count = None
+        # #self.spelling_error_count = None
+        # #self.sentiment_polarity
+        # #self.cohesive_device_count
+        # self.readability_score = self.__readability_score()
+        # self.sentence_variation = self.SentenceVariationAnalyzer()
+        # self.topic_relevance_score = self.TopicRelevance()
+
+        print(f"_word_count : {self._word_Count}")
+        print(f"unique_words_ratio: {self.unique_words_ratio}")
+        print(f"average_word_length : {self.average_word_length}")
+        print(f"_noun_count : {self._noun_count}")
+        print(f"_adj_count : {self._adj_count}")
+        print(f"_adv_count : {self._adv_count}")
+        print(f"_pronoun_count : {self._pronoun_count}")
+        print(f"_verb_count : {self._verb_count}")
+        print(f"_proper_noun_count : {self.__proper_noun_freq}")
+        print(f"_determiner : {self.__determiner}")
+        print(f"_adposition : {self.__adpostiton}")
+        print(f"_connecting_conjuction : {self.__connecting_conjuction}")
+        print(f"_subor_conjunc : {self.__subor_conjunc}")
+        print(f"_interjection : {self.__interjection}")
+        print(f"_numeral : {self.__numeral}")
+        print(f"_aux : {self.__aux}")
+        print(f"_punc : {self.__punc}")
+        print(f"_symb : {self.__symbl}")
+        print(f"subordinating_clauses_count : {'None for now'}")
+        print(f"grammar_error_count : {'None for now'}")
+        print(f"spelling_errpr_count : {'None for now'}")
+        print(f"sentiment_polarity : {'None for now'}")
+        print(f"cohesive_device_count : {self.cohesive_device_count}")
+        print(f"readability_score : {self.readability_score}")
+        print(f"avg_sentence_length : {self.avg_sentence_length}")
+        print(f"sentence_count: {self.number_of_sentence}")
+        # print(f"sentence_variation : {self.sentence_variation}")
+        print(f"sentence_simple : {self.sentence_simple}")
+        print(f"sentence_compound : {self.sentence_compound}")
+        print(f"sentence_complex : {self.sentence_complex}")
+        print(f"topic_relevance_score : {self.topic_relevance_score}")
+
+
 
     def getFeatures(self):
 
@@ -659,6 +711,38 @@ class PhraseExtract1(PhraseExtract):
             float(self.cohesive_device_count),
             float(self.readability_score),
             float(self.avg_sentence_length),
+            float(self.number_of_sentence),
+            float(self.sentence_simple),
+            float(self.sentence_compound),
+            float(self.sentence_complex),
+            float(self.topic_relevance_score)
+        ]
+    
+    def FeatureList(self):
+
+        return [
+            float(self._word_Count),
+            float(self.unique_words_ratio),
+            float(self.average_word_length),
+            float(self._noun_count),
+            float(self._adj_count),
+            float(self._adv_count),
+            float(self._pronoun_count),
+            float(self._proper_noun_freq),
+            float(self._determiner),
+            float(self._adpostiton),
+            float(self._connecting_conjuction),
+            float(self._subor_conjunc),
+            float(self._interjection),
+            float(self._numeral),
+            float(self._aux),
+            float(self._punc),
+            float(self._symbl),
+            float(self._verb_count),
+            float(self.cohesive_device_count),
+            float(self.readability_score),
+            float(self.avg_sentence_length),
+            float(self.number_of_sentence),
             float(self.sentence_simple),
             float(self.sentence_compound),
             float(self.sentence_complex),
