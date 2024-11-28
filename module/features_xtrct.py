@@ -721,7 +721,7 @@ class PhraseExtract1(PhraseExtract):
     def FeatureList(self):
 
         return [
-            float(self._word_Count),
+            # float(self._word_Count),
             float(self.unique_words_ratio),
             float(self.average_word_length),
             float(self._noun_count),
@@ -741,7 +741,7 @@ class PhraseExtract1(PhraseExtract):
             float(self._verb_count),
             float(self.cohesive_device_count),
             float(self.readability_score),
-            float(self.avg_sentence_length),
+            # float(self.avg_sentence_length),
             float(self.number_of_sentence),
             float(self.sentence_simple),
             float(self.sentence_compound),
