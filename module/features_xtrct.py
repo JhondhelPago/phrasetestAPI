@@ -697,31 +697,60 @@ class PhraseExtract1(PhraseExtract):
 
         return
     
-    def FeatureList(self):
+    # def FeatureList(self):
 
-        return [
-            float(self._word_Count),
-            float(self.unique_words_ratio),
-            float(self.average_word_length),
-            float(self._noun_count),
-            float(self._adj_count),
-            float(self._adv_count),
-            float(self._pronoun_count),
-            float(self._verb_count),
-            float(self.cohesive_device_count),
-            float(self.readability_score),
-            float(self.avg_sentence_length),
-            float(self.number_of_sentence),
-            float(self.sentence_simple),
-            float(self.sentence_compound),
-            float(self.sentence_complex),
-            float(self.topic_relevance_score)
-        ]
+    #     return [
+    #         float(self._word_Count),
+    #         float(self.unique_words_ratio),
+    #         float(self.average_word_length),
+    #         float(self._noun_count),
+    #         float(self._adj_count),
+    #         float(self._adv_count),
+    #         float(self._pronoun_count),
+    #         float(self._verb_count),
+    #         float(self.cohesive_device_count),
+    #         float(self.readability_score),
+    #         float(self.avg_sentence_length),
+    #         float(self.number_of_sentence),
+    #         float(self.sentence_simple),
+    #         float(self.sentence_compound),
+    #         float(self.sentence_complex),
+    #         float(self.topic_relevance_score)
+    #     ]
     
     def FeatureList(self):
 
+        # return [
+        #     # float(self._word_Count),
+        #     float(self.unique_words_ratio),
+        #     float(self.average_word_length),
+        #     float(self._noun_count),
+        #     float(self._adj_count),
+        #     float(self._adv_count),
+        #     float(self._pronoun_count),
+        #     float(self._proper_noun_freq),
+        #     float(self._determiner),
+        #     float(self._adpostiton),
+        #     float(self._connecting_conjuction),
+        #     float(self._subor_conjunc),
+        #     float(self._interjection),
+        #     float(self._numeral),
+        #     float(self._aux),
+        #     float(self._punc),
+        #     float(self._symbl),
+        #     float(self._verb_count),
+        #     float(self.cohesive_device_count),
+        #     float(self.readability_score),
+        #     # float(self.avg_sentence_length),
+        #     float(self.number_of_sentence),
+        #     float(self.sentence_simple),
+        #     float(self.sentence_compound),
+        #     float(self.sentence_complex),
+        #     float(self.topic_relevance_score)
+        # ]
+
         return [
-            # float(self._word_Count),
+            float(self._word_Count),
             float(self.unique_words_ratio),
             float(self.average_word_length),
             float(self._noun_count),
@@ -741,7 +770,7 @@ class PhraseExtract1(PhraseExtract):
             float(self._verb_count),
             float(self.cohesive_device_count),
             float(self.readability_score),
-            # float(self.avg_sentence_length),
+            float(self.avg_sentence_length),
             float(self.number_of_sentence),
             float(self.sentence_simple),
             float(self.sentence_compound),

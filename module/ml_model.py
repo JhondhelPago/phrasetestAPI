@@ -11,6 +11,9 @@ rf_model = joblib.load(rf_model_path)
 nb_model_path = os.path.join(current_dir, 'nb_model.pkl')
 nb_model = joblib.load(nb_model_path)
 
+knn_model_path = os.path.join(current_dir, 'knn_model2.pkl')
+knn_model = joblib.load(knn_model_path)
+
 def predict_writing_level(writing_composition: str):
 
     labels = ['below average', 'average', 'above average']
@@ -25,8 +28,18 @@ def predict_level(features_list : list) -> str:
     # 1 - good
     # 2 - fair
 
+
+    #rf model predict equivalent
+    #0 - inadequete
+    #1 - good
+    #2 - fair
+
+    print('feature_list')
+    print(features_list)
     result = rf_model_predict(features_list)
+    # result = knn_model_predict(features_list)
     print(f"result for  predict_level {result}")
+
     # if features_list[0] < 15:
 
     #     return 'inadequete'
@@ -35,7 +48,7 @@ def predict_level(features_list : list) -> str:
 
     if result == 0:
 
-        return 'inadequete'
+        return 'need improvement'
     
     elif result == 1: 
 
@@ -44,11 +57,6 @@ def predict_level(features_list : list) -> str:
     elif result == 2:
 
         return 'fair'
-    
-    else:
-
-        return 'not classified'
-    
 
 
 def rf_model_predict(feature_list : list):
@@ -79,6 +87,14 @@ def nb_model_predict(feature_list : list):
 # each model should have its own function
 # return value should be align to its label
 # ##
+
+
+def knn_model_predict(feature_list : list):
+
+    feature_list = [feature_list]
+    feature_list_array = np.array(feature_list)
+
+    result = knn_model.predict(feature_list)
 
     
 

@@ -338,7 +338,7 @@ def studentEssaySubmit(req):
         features_instance.sentence_compound = phrase_instance_features_dict['sentence_compound']
         features_instance.sentence_complex = phrase_instance_features_dict['sentence_complex']
         features_instance.topic_relevance_score = phrase_instance_features_dict['topic_relevance_score']
-
+        
         #saving the instance of features and inserting to the database
         features_instance.save()
 
