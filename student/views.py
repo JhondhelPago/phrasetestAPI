@@ -29,7 +29,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 #module for nlp pre-processes
 from module.features_xtrct import PhraseExtract, PhraseExtract1
 from module.LanguageToolChecker import EssayExamineErrorSuggest
-from module.rubrics import rubrics_benchmark, TransitionScore
+from module.rubrics import rubrics_benchmark, TransitionScore, WordChoiceScore, LanguageMechScore, StructureScore
 
 #model imports
 from user.models import CustomUser, studentuser
@@ -352,9 +352,9 @@ def studentEssaySubmit(req):
         # rubrics_instance.transition = rubricsBenchmarkScores.Transition_criterion
         rubrics_instance.transition = TransitionScore(phrase_instance)
         rubrics_instance.clarity = rubricsBenchmarkScores.Clarity_criterion
-        rubrics_instance.word_choice = rubricsBenchmarkScores.WordChoice_criterion
-        rubrics_instance.structure = rubricsBenchmarkScores.Structure_criterion
-        rubrics_instance.lang_mechs = rubricsBenchmarkScores.Lang_Mechs_criterion
+        rubrics_instance.word_choice = WordChoiceScore(phrase_instance)
+        rubrics_instance.structure = StructureScore(phrase_instance)
+        rubrics_instance.lang_mechs = LanguageMechScore(phrase_instance)
         rubrics_instance.label = predict_level(phrase_instance.FeatureList1())
 
         rubrics_instance.save()
@@ -513,7 +513,7 @@ def getAssignmentResults(req):
             'question_composition' : question_composition_instance.getDictProperties(),
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
-            'langtool_suggestion' : langtool_suggestion_list
+            'langtool_suggestion' : langtool_suggestion_list,
             
         }, status=status.HTTP_200_OK)
 

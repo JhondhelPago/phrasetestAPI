@@ -269,7 +269,7 @@ def TransitionScore(PhraseObj: PhraseExtract1):
 
     if count < 4 :
 
-        score = random.randint(0, 40)
+        score = random.randint(40, 50)
 
     elif count >= 4 and count <=6:
 
@@ -302,8 +302,40 @@ def StructureScore(PhraseObj: PhraseExtract1):
 
     #Using Sentence Structure
 
+
+
+
     return 0
 
+def LanguageMechScore(PhraseObj: PhraseExtract1):
+
+    score = random.randint(70, 85)
+
+    return score
+
+def WordChoiceScore(PhraseObj: PhraseExtract1):
+
+    score = random.randint(70, 90)
+
+    return score
+
+def StructureScore(PhraseObj: PhraseExtract1):
+
+    score = 0
+
+    if PhraseObj.sentence_simple <= 2 and PhraseObj.sentence_compound <= 2:
+
+        score = random.randint(70, 80)
+
+    elif PhraseObj.sentence_simple < 2  and PhraseObj.sentence_compound > 2:
+
+        score = random.randint(75, 85)
+
+    elif PhraseObj.sentence_compound > 5 or PhraseObj.sentence_complex > 3:
+
+        score = random.randint(80, 90)
+
+    return score
     
 
     
