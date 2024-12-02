@@ -1,5 +1,6 @@
 #import libraries
 # from sentence_transformers import SentenceTransformer, util # need to be uninstall to he virtual envs
+import random
 import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -149,7 +150,7 @@ def grade_corpus(text):
 #then define the condition ladder
 
 #this function is suject to be tested
-def IdeaCriterion(PhraseObj : PhraseExtract):
+def IdeaCriterion(PhraseObj : PhraseExtract1):
 
 
     similarity_score = PhraseObj.getSimilarityScore()
@@ -230,7 +231,7 @@ def IdeaCriterion(PhraseObj : PhraseExtract):
 
 
 #use the parameter readability_score from the PhraseExtract instance
-def ClarityAndConciseness(PhraseObj: PhraseExtract):
+def ClarityAndConciseness(PhraseObj: PhraseExtract1):
 
 
     alternative_return = None
@@ -258,6 +259,53 @@ def ClarityAndConciseness(PhraseObj: PhraseExtract):
 
     return  alternative_return
 
+def TransitionScore(PhraseObj: PhraseExtract1):
 
+
+
+    count = PhraseObj.cohesive_device_count
+
+    score = 0
+
+    if count < 4 :
+
+        score = random.randint(0, 40)
+
+    elif count >= 4 and count <=6:
+
+        score = random.randint(60, 70)
+
+    elif count >= 7 and count <= 9:
+
+        score = random.randint(70, 80)
+
+    elif count >= 10 and count <= 12:
+
+        score = random.randint(80, 85)
+
+    elif count >= 13 and count <= 15:
+
+        score  = random.randint(90, 93)
+
+    elif count >= 16:
+
+        score = random.randint(93, 96)
+
+    return score
+
+
+def StructureScore(PhraseObj: PhraseExtract1):
+
+    Simple = PhraseObj.sentence_simple
+    Compound = PhraseObj.sentence_compound
+    Complex = PhraseObj.sentence_complex
+
+    #Using Sentence Structure
+
+    return 0
+
+    
+
+    
     
 

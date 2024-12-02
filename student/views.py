@@ -29,7 +29,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 #module for nlp pre-processes
 from module.features_xtrct import PhraseExtract, PhraseExtract1
 from module.LanguageToolChecker import EssayExamineErrorSuggest
-from module.rubrics import rubrics_benchmark
+from module.rubrics import rubrics_benchmark, TransitionScore
 
 #model imports
 from user.models import CustomUser, studentuser
@@ -346,9 +346,11 @@ def studentEssaySubmit(req):
 
         rubrics_instance = rubrics()
         rubrics_instance.essay_submitted = assignment_submit_instance.id
-        rubrics_instance.ideas = rubricsBenchmarkScores.Ideas_criterion
+        # rubrics_instance.ideas = rubricsBenchmarkScores.Ideas_criterion
+        rubrics_instance.ideas = features_instance.topic_relevance_score
         rubrics_instance.gram_punc = rubricsBenchmarkScores.Gram_Punc_criterion
-        rubrics_instance.transition = rubricsBenchmarkScores.Transition_criterion
+        # rubrics_instance.transition = rubricsBenchmarkScores.Transition_criterion
+        rubrics_instance.transition = TransitionScore(phrase_instance)
         rubrics_instance.clarity = rubricsBenchmarkScores.Clarity_criterion
         rubrics_instance.word_choice = rubricsBenchmarkScores.WordChoice_criterion
         rubrics_instance.structure = rubricsBenchmarkScores.Structure_criterion
