@@ -338,6 +338,30 @@ def StructureScore(PhraseObj: PhraseExtract1):
     return score
     
 
-    
-    
+def GrammarPuncScore(PhraseObj: PhraseExtract1):
+
+    score = 0
+
+    if PhraseObj._punc == 2:
+
+        score = random.randint(75, 78)
+
+    elif PhraseObj._punc == 3:
+
+        score = random.randint(78, 83)
+
+    elif PhraseObj._punc == 4:
+
+        score = random.randint(83, 87)
+
+    elif PhraseObj._punc == 5:
+
+        score = random.randint(87, 90)
+
+    elif PhraseObj._punc > 5:
+
+        score = random.randint(90, 95)
+        
+
+    return score    
 
