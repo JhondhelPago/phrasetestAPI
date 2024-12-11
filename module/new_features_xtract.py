@@ -5,6 +5,12 @@ from token_tools import CTTR
 from constants import cohesive_device
 from nlp_module import ReadbilityMeasure
 
+class TypeTokenRatioError(Exception):
+    
+    def __init__(self, err_message):
+        self.error_message = err_message
+        super().__init__(self.error_message)
+
 #single instance of the nlp model to be used in the custome classes
 #load an nlp module both sm and md above the file
 
@@ -14,6 +20,9 @@ nlp_md = spacy.load('en_core_web_md')
 
 #define the important class
 # PhraseExtract
+
+# TYPE TOKEN RATIO
+
 
 class PhraseExtract:
 
@@ -47,6 +56,8 @@ class PhraseExtract:
         self.sentence_count = 0
       
 
+        self.unique_words_ratio = self.unique_word()
+        self.topic_relevance_score = self.TopicRelevance()
 
         #Initial function run
 
@@ -124,7 +135,31 @@ class PhraseExtract:
 
                 self.symbl += 1
 
+    # feature function
+    def unique_word(self, token_ratio_technique='mattr') -> float:
 
+        #MATTR
+        if token_ratio_technique == 'mattr':
+
+            return MATTR(self.doc_text)
+
+        #CTTR
+        elif token_ratio_technique == 'cttr':
+
+            return CTTR(self.doc_text)
+        
+        else:
+
+            raise TypeTokenRatioError('Invalid argument value for token_ratio_technique. The option value for \'token_ratio_technique\' are \'mattr\' | \'cttr\' only.')
+
+    def TopicRelevance(self):
+
+        similarity_score = self.doc_question.similarity(self.doc_text)
+
+        return similarity_score
+
+
+    # secondary function
     def ArrayOfSent(self):
 
         return list(sent.text + '' for sent in self.doc_text.sents)
@@ -140,6 +175,7 @@ class PhraseExtract:
     def feature_dict(self):
 
         return {
+            #pos
             'noun': self.noun_freq,
             'verb': self.verb_freq,
             'adjective': self.adj_freq,
@@ -154,7 +190,12 @@ class PhraseExtract:
             'numeral': self.numeral,
             'auxiliary': self.aux,
             'punctuation': self.punc,
-            'symbol': self.symbl
+            'symbol': self.symbl,
+
+            #feature_param
+            'unique_words_ratio' : self.unique_words_ratio,
+            'topic_relevance_score' : self.topic_relevance_score
+            
 
         }
 
