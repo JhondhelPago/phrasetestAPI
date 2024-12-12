@@ -34,3 +34,7 @@ class ReadbilityMeasure:
     @staticmethod
     def getReadabilityScore(text : str):
         return textstat.flesch_reading_ease(text)
+    
+    def getReadabilityGradeLevel(text : str):
+
+        return textstat.flesch_kincaid_grade(text)

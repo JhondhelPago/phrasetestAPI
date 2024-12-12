@@ -56,11 +56,21 @@ class PhraseExtract:
         self.sentence_count = 0
       
 
+        self.word_count = self.wordCount(self.doc_text)
         self.unique_words_ratio = self.unique_word()
         self.topic_relevance_score = self.TopicRelevance()
+        self.readability_score = ReadbilityMeasure.getReadabilityScore(self.text)
+        self.readability_grade_level = ReadbilityMeasure.getReadabilityGradeLevel(self.text)
+        self.avg_sentence_length = self.ave_sentence_len()
+        self.cohesive_device_count = self.cohesive_device_indentifier(only_count=True)
+        self.number_of_sentence = self.get_NumberOfSentence()
+        self.sentence_variation = self.SentenceVariationAnalyzer()
+        self.sentence_simple = self.sentence_variation['simple']
+        self.sentence_compound = self.sentence_variation['compound']
+        self.sentence_complex = self.sentence_variation['complex']
+
 
         #Initial function run
-
         self.Pos_Identifier()
       
 
@@ -136,6 +146,22 @@ class PhraseExtract:
                 self.symbl += 1
 
     # feature function
+    def wordCount(self, doc: spacy.tokens.doc):
+    
+        # tokenization of the word
+
+        token_list = [token for token in doc if token.is_alpha]
+
+        # count = 1
+        # for token in doc:
+
+        #     if token.is_alpha:
+
+        #         print(f"word: {token.text},  token_count: {count}")
+        #         count += 1
+
+        return len(token_list)
+
     def unique_word(self, token_ratio_technique='mattr') -> float:
 
         #MATTR
@@ -158,6 +184,125 @@ class PhraseExtract:
 
         return similarity_score
 
+    def SentenceVariationAnalyzer(self, with_sent_index=False):
+
+        #Diversity of Sentence Types approach
+
+
+        simple_sentence = 0
+        compound_sentence = 0
+        complex_sentence = 0
+
+        token_roots = []
+
+        sentence_index_variation = []
+
+        for index, sent in enumerate(self.doc_text.sents):
+
+            root_token = [token for token in sent if token.dep_ == 'ROOT'][0]
+
+            if any([token.dep_ == 'cc' for token in sent]):
+
+                compound_sentence += 1
+
+                sentence_index_variation.append((index, 'compound'))
+
+            elif any([token.dep_ == 'mark' for token in sent]):
+
+                complex_sentence += 1
+
+                sentence_index_variation.append((index, 'complex'))
+
+            else:
+
+                simple_sentence += 1 
+
+                sentence_index_variation.append((index, 'simple'))
+
+
+        #return [simple_sentence, compound_sentence, complex_sentence]
+        return {
+            'simple' : simple_sentence,
+            'compound' : compound_sentence,
+            'complex' : complex_sentence
+        }
+    
+    def ave_sentence_len(self):
+
+        #function here to clean the format of the text
+        # more than two white spaces must be automatically formatted before the code blocks below runs.
+
+        char_len = 0
+        sent_quanti = 0
+
+        #print('printing the sent from the generator')
+
+        for sent in self.doc_text.sents:
+
+            # print(f"sent: {sent}")
+            # print(len(str(sent)))
+            char_len += len(str(sent))
+            sent_quanti += 1
+
+        return char_len / sent_quanti
+    
+    
+    def cohesive_device_indentifier(self, only_count=False):
+
+        doc = self.doc_text
+       
+        cohesive_devices_freq = {
+            'addition' : 0,
+            'contrast' : 0,
+            'result' : 0,
+            'comparison' : 0,
+            'enumeration' : 0,
+            'exemplification' : 0,
+            'reformulation' : 0,
+            'summary' : 0,
+            'time' : 0,
+            'inference' : 0
+        }
+
+        key_list = list(cohesive_device.keys())
+
+        device_found = []
+
+        for sent in doc.sents:
+
+            # new condition to ask here
+            # loop to the cohesive device and ask if the cohive device is substring of a suoer string,  the super string is the sentence in lowercase format 
+
+            string_sent = sent.text
+
+            token_lower_list = [token.text.lower() for token in sent]
+
+            string_sent = ' '.join(token_lower_list)
+
+            for key in key_list:
+
+                for device in cohesive_device[key]:
+
+                    if device in string_sent:
+
+                        cohesive_devices_freq[key] += 1
+
+                        device_found.append(device)
+
+        COHESIVE_DEVICE_COUNT = 0
+        if only_count:
+
+            for key in key_list:
+
+                COHESIVE_DEVICE_COUNT += cohesive_devices_freq[key]
+
+            return COHESIVE_DEVICE_COUNT
+        
+
+
+        return cohesive_devices_freq
+    
+
 
     # secondary function
     def ArrayOfSent(self):
@@ -176,6 +321,7 @@ class PhraseExtract:
 
         return {
             #pos
+            'word_count' : self.word_count,
             'noun': self.noun_freq,
             'verb': self.verb_freq,
             'adjective': self.adj_freq,
@@ -194,7 +340,16 @@ class PhraseExtract:
 
             #feature_param
             'unique_words_ratio' : self.unique_words_ratio,
-            'topic_relevance_score' : self.topic_relevance_score
+            'avg_sentence_length' : self.avg_sentence_length,
+            'sentence_count' : self.number_of_sentence,
+            'sentence_variation' : self.sentence_variation,
+            'sentence_simple' : self.sentence_simple,
+            'sentence_compound' : self.sentence_compound,
+            'sentence_complex' : self.sentence_complex,
+            'cohesive_device_count' : self.cohesive_device_count,
+            'readability_score' : self.readability_score,
+            'readanility_grade_level' : self.readability_grade_level,
+            'topic_relevance_score' : self.topic_relevance_score,
             
 
         }
