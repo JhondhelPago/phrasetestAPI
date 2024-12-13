@@ -353,6 +353,38 @@ class PhraseExtract:
             
 
         }
+    
+    def feature_list_sample(self):
+
+        return [
+            float(self.noun_freq), #noun
+            float(self.verb_freq), #verb
+            float(self.adj_freq), #adjective
+            float(self.adv_freq),  #adverb
+            float(self.pronoun_freq), #pronoun
+            float(self.determiner), #determiner
+            float(self.proper_noun_freq), #propernoun
+            float(self.adpostiton), #adposition
+            float(self.connecting_conjuction), #conencting_conjuction
+            float(self.subor_conjunc), # subordinating_conjuction
+            float(self.interjection), #interjection
+            float(self.numeral), # numeral
+            float(self.aux), # auxilliary
+            float(self.punc), # punctuation
+            float(self.symbl), #symbol
+
+            float(self.word_count), # word_count
+            float(self.unique_words_ratio), #vocabulary_score
+            float(self.avg_sentence_length), #sentence_length
+            float(self.number_of_sentence), #number_of_setence
+            float(self.sentence_simple), #sentence_simmple
+            float(self.sentence_compound), #sentence_compound
+            float(self.sentence_complex), #sentence_complex
+            float(self.cohesive_device_count), #cohesive_device
+            float(self.readability_score), #readability_score
+            float(self.readability_grade_level), #readability_grade_level
+            float(self.topic_relevance_score) #topic_relevance
+        ]
 
 
     
