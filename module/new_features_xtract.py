@@ -316,6 +316,26 @@ class PhraseExtract:
     def get_NumberOfSentence(self):
 
         return len(self.ArrayOfSent())
+    
+    ## Analysing the topic Relevance of the sentence of each sentence to the context in this object
+    def topic_relevance_sent_level(self):
+
+        per_sent_relevance = list()
+
+        
+        for sent in self.doc_text.sents:
+
+            sent_doc = nlp_md(sent.text)
+
+            similarity = self.doc_question.similarity(sent_doc)
+
+            per_sent_relevance.append(similarity)
+
+
+
+        return per_sent_relevance
+
+
 
     def feature_dict(self):
 
@@ -350,8 +370,6 @@ class PhraseExtract:
             'readability_score' : self.readability_score,
             'readanility_grade_level' : self.readability_grade_level,
             'topic_relevance_score' : self.topic_relevance_score,
-            
-
         }
     
     def feature_list_sample(self):
@@ -386,6 +404,72 @@ class PhraseExtract:
             float(self.topic_relevance_score) #topic_relevance
         ]
 
+    def feature_dict_test(self):
+
+        return {
+            #pos
+            'word_count' : self.word_count,
+            'noun': self.noun_freq,
+            'verb': self.verb_freq,
+            'adjective': self.adj_freq,
+            'adverb': self.adv_freq,
+            'pronoun': self.pronoun_freq,
+            'determiner': self.determiner,
+            'proper_noun': self.proper_noun_freq,
+            'adposition': self.adpostiton,
+            'conjunction': self.connecting_conjuction,
+            'subordinating_conjunction': self.subor_conjunc,
+            'interjection': self.interjection,
+            'numeral': self.numeral,
+            'auxiliary': self.aux,
+            'punctuation': self.punc,
+            'symbol': self.symbl,
+
+            #feature_param
+            'unique_words_ratio' : self.unique_words_ratio,
+            'avg_sentence_length' : self.avg_sentence_length,
+            'sentence_count' : self.number_of_sentence,
+            'sentence_variation' : self.sentence_variation,
+            'sentence_simple' : self.sentence_simple,
+            'sentence_compound' : self.sentence_compound,
+            'sentence_complex' : self.sentence_complex,
+            'cohesive_device_count' : self.cohesive_device_count,
+            'readability_score' : self.readability_score,
+            'readanility_grade_level' : self.readability_grade_level,
+            'topic_relevance_score' : self.topic_relevance_score,
+        }
+    
+    def feature_list_sample_test(self):
+
+        return [
+            float(self.noun_freq), #noun
+            float(self.verb_freq), #verb
+            float(self.adj_freq), #adjective
+            float(self.adv_freq),  #adverb
+            float(self.pronoun_freq), #pronoun
+            float(self.determiner), #determiner
+            float(self.proper_noun_freq), #propernoun
+            float(self.adpostiton), #adposition
+            float(self.connecting_conjuction), #conencting_conjuction
+            float(self.subor_conjunc), # subordinating_conjuction
+            float(self.interjection), #interjection
+            float(self.numeral), # numeral
+            float(self.aux), # auxilliary
+            float(self.punc), # punctuation
+            float(self.symbl), #symbol
+
+            float(self.word_count), # word_count
+            float(self.unique_words_ratio), #vocabulary_score
+            float(self.avg_sentence_length), #sentence_length
+            float(self.number_of_sentence), #number_of_setence
+            float(self.sentence_simple), #sentence_simmple
+            float(self.sentence_compound), #sentence_compound
+            float(self.sentence_complex), #sentence_complex
+            float(self.cohesive_device_count), #cohesive_device
+            float(self.readability_score), #readability_score
+            float(self.readability_grade_level), #readability_grade_level
+            float(self.topic_relevance_score) #topic_relevance
+        ]
 
     
 
