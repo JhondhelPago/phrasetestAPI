@@ -1,5 +1,6 @@
 import sys
 import os
+import statistics
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -29,3 +30,4 @@ Phrase = PhraseExtract(question=context, text=essay_text)
 print(Phrase.topic_relevance_sent_level())
 sort_val =  sorted(Phrase.topic_relevance_sent_level(), reverse=True)
 print(sort_val)
+print(statistics.mean(sort_val))
