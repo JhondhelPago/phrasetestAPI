@@ -34,7 +34,9 @@ Phrase = PhraseExtract(question=context, text=essay_text)
 
 Vocab = Vocabulary(Phrase=Phrase)
 
-print(Vocab.wordList)
+#print(Vocab.wordList)
+print(Vocab.word_freq_pair)
 
-print(Vocab.freq_sample())
+
+
 
