@@ -305,6 +305,12 @@ class PhraseExtract:
 
 
     # secondary function
+    def pureWords(self) -> list[str]: # return a word -> str type, pure none stopping owrd from the text property of this class
+
+        words = [token.text.strip() for token in self.doc_text if not token.is_stop and not token.is_punct and token.text.strip() != '']
+
+        return words
+
     def ArrayOfSent(self):
 
         return list(sent.text + '' for sent in self.doc_text.sents)
