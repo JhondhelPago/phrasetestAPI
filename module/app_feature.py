@@ -12,10 +12,25 @@
 # Indentify the the repeated word and make and suggest the alternate word to enrich the vocabulary
 # Output - List of redundant word with its alternative replacement.
 
-from nltk.corpus import words
+from nltk.corpus import words, wordnet
 from wordfreq import word_frequency
+from PyDictionary import PyDictionary
 from new_features_xtract import PhraseExtract
 
+
+default_dictionary =  PyDictionary()
+
+
+def synonyms(word : str):
+
+    return default_dictionary.synonym(word.lower())
+
+def get_synonyms(word):
+    synonyms = set()
+    for syn in wordnet.synsets(word):
+        for lemma in syn.lemmas():
+            synonyms.add(lemma.name())
+    return list(synonyms)
 
 
 class Vocabulary:
@@ -96,6 +111,13 @@ class Vocabulary:
 
         
         self.repeated_word = sorted(self.repeated_word, key=lambda x: x[1], reverse=True)
+
+
+# cut the self.repeated_word.
+# get the top 10 and remove the single instance
+
+
+
 
 
 

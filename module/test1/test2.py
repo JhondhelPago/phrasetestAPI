@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 from new_features_xtract import PhraseExtract
-from app_feature import Vocabulary
+from app_feature import Vocabulary, synonyms, get_synonyms
 
 
 context = """Phones and driving"""
@@ -38,6 +38,15 @@ Vocab = Vocabulary(Phrase=Phrase)
 # print(Vocab.word_freq_pair)
 print(Vocab.repeated_word)
 
+
+print('Synonyms testing: \n')
+
+test_word = 'like'
+
+print(f"word : {test_word}")
+
+print('synonyms suggestion:')
+print(get_synonyms(test_word))
 
 
 
