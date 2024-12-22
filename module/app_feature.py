@@ -34,6 +34,7 @@ class Vocabulary:
         self.wordList = list(set(self.PhraseObject.pureWords()))
 
         self.word_freq_process()
+        self.repeatedWordPreProcess()
 
     def isWordExist(self, word : str):
 
@@ -72,7 +73,29 @@ class Vocabulary:
     #return the list of redundant word
     def repeatedWordPreProcess(self):
 
-        return
+        word_dict = dict()
+
+        for word in self.PhraseObject.pureWords():
+
+            word = word.lower()
+
+            if word in word_dict:
+
+                word_dict[word] += 1
+
+            else:
+
+                word_dict[word] = 1
+
+
+        dict_key_list = list(word_dict.keys())
+
+        for key in dict_key_list:
+
+            self.repeated_word.append((key, word_dict[key]))
+
+        
+        self.repeated_word = sorted(self.repeated_word, key=lambda x: x[1], reverse=True)
 
 
 
