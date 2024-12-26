@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 from new_features_xtract import PhraseExtract
-from app_feature import Vocabulary, synonyms, get_synonyms
+from app_feature import Vocabulary, synonyms, get_synonyms, underscoreTospace, sort_synonyms
 
 
 context = """Phones and driving"""
@@ -42,12 +42,22 @@ print(Vocab.repeated_word) # array of tuples arrange by the frequency of the wor
 
 print('Synonyms testing: \n')
 
-test_word = 'like'
+test_word = 'phone'
 
 print(f"word : {test_word}")
 
 print('synonyms suggestion:')
-print(get_synonyms(test_word))
+
+alternative_words = get_synonyms(test_word)
+print(alternative_words)
+
+print('\n')
+print('sematic relationship word by word')
+
+atlternative_words_relevance = sort_synonyms(test_word, alternative_words)
+
+print(atlternative_words_relevance)
+ 
 
 
 

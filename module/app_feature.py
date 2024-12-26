@@ -16,9 +16,12 @@ from nltk.corpus import words, wordnet
 from wordfreq import word_frequency
 from PyDictionary import PyDictionary
 from new_features_xtract import PhraseExtract
+import spacy
 
 
 default_dictionary =  PyDictionary()
+
+nlp_md = spacy.load('en_core_web_md')
 
 
 def synonyms(word : str):
@@ -34,9 +37,44 @@ def get_synonyms(word):
 
 def sort_synonyms(word : str, alter_word : list[str]):
 
+    original_word = nlp_md(word)
+
+    word_list = list()
+
+    for w in alter_word:
+
+        w = underscoreTospace(w)
+
+        matching_word = nlp_md(w)
+
+        word_list.append((w, original_word.similarity(matching_word)))
+
+    
+    # sort the word_list here, get the top 5, if there is
+    word_list = sorted(word_list, key=lambda x: x[1], reverse=True)
+
+    # return word_list
+
+    # if there the length of the word_list is more than 5, get only the top 5
+    # else get all of it
+
+    if len(word_list) > 5:
+
+        word_list_top = word_list[:5]
+
+        return [word_alter[0] for word_alter in word_list_top]
+
+    else:
+
+        return [word_alter[0] for word_alter in word_list]
 
 
-    return 
+
+def underscoreTospace(phrase : str):
+    
+    new_phrase  = phrase.replace('_', ' ')
+
+    return  new_phrase
 
 
 class Vocabulary:
