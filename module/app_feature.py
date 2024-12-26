@@ -168,10 +168,12 @@ class Vocabulary:
 
 
 
-
-
-
-
+# function to return the dictionary -> word_key : alternative_word_list
+# get the top redundant word in the repeated_word
+# only the top 12 with non-single instance, if there is length of 12 else get the non-single instance only
+# for each word run get_synonyms and sort_synonyms function the return
+# inlclude the word as key and the list of returned alternative_word as value in the dictionary
+# return the final dictionary
 
 
 
