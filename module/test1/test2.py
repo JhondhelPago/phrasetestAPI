@@ -57,6 +57,11 @@ print('sematic relationship word by word')
 atlternative_words_relevance = sort_synonyms(test_word, alternative_words)
 
 print(atlternative_words_relevance)
+
+
+print('\n')
+print('final words to make a vocabulary recommendation')
+print(Vocab.Vocab_Recom())
  
 
 

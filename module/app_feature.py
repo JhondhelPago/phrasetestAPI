@@ -165,15 +165,36 @@ class Vocabulary:
 
 
 
-
-
-
 # function to return the dictionary -> word_key : alternative_word_list
 # get the top redundant word in the repeated_word
 # only the top 12 with non-single instance, if there is length of 12 else get the non-single instance only
 # for each word run get_synonyms and sort_synonyms function the return
 # inlclude the word as key and the list of returned alternative_word as value in the dictionary
 # return the final dictionary
+
+    def Vocab_Recom(self):
+    
+        top_12_repeated = self.repeated_word[0:12]
+        final_words = dict()
+
+        for word_tuple in top_12_repeated:
+
+            if word_tuple[1] == 1:
+                continue
+
+            else:
+
+                original_word = word_tuple[0]
+                alternative_words = get_synonyms(original_word)
+                alternative_words_relevance = sort_synonyms(original_word, alternative_words)
+
+
+                final_words[original_word] = alternative_words_relevance
+        
+        
+
+        return final_words
+
 
 
 
