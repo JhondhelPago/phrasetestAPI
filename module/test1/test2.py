@@ -36,7 +36,8 @@ Vocab = Vocabulary(Phrase=Phrase)
 
 #print(Vocab.wordList)
 # print(Vocab.word_freq_pair)
-print(Vocab.repeated_word)
+print(Vocab.repeated_word) # array of tuples arrange by the frequency of the words
+
 
 
 print('Synonyms testing: \n')

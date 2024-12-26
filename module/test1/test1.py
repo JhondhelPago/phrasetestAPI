@@ -24,6 +24,7 @@ Phones are fine to use and it's also the best way to come over help. If you go t
 print(f"context: {context}")
 print(f"text: {essay_text}")
 
+print('\n')
 
 Phrase = PhraseExtract(question=context, text=essay_text)
 

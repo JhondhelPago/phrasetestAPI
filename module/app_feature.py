@@ -32,6 +32,12 @@ def get_synonyms(word):
             synonyms.add(lemma.name())
     return list(synonyms)
 
+def sort_synonyms(word : str, alter_word : list[str]):
+
+
+
+    return 
+
 
 class Vocabulary:
 
@@ -115,6 +121,9 @@ class Vocabulary:
 
 # cut the self.repeated_word.
 # get the top 10 and remove the single instance
+# for each word in list of ten words, pass the word to the get_synonyms funtion
+# return the list of synonyms, then pre-process it to the semanrtic similarity, and sort the result, get the only the relevant word for the final return
+
 
 
 
