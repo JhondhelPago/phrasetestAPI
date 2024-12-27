@@ -362,22 +362,6 @@ def studentEssaySubmit(req):
         rubrics_instance.save()
 
 
-        #Recommendation
-
-        #using the instance PhraseExtract from new_features_xtract.py
-        #Loop to the key of the Vocabulary.Vocab_Recom()
-        #insert in to the database
-
-        NewPhraseInstance = NewPhraseClass(question=question_para, text=essay_composition_para)
-        VocabInstance = Vocabulary(Phrase=NewPhraseInstance)
-
-        #saving the instance to the database
-
-        
-
-
-
-
         try:
 
             Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
@@ -420,6 +404,56 @@ def studentEssaySubmit(req):
                 'suggestion' : []
                 
             })
+        
+
+
+        #Recommendation
+
+        #using the instance PhraseExtract from new_features_xtract.py
+        #Loop to the key of the Vocabulary.Vocab_Recom()
+        #insert in to the database
+
+        try:
+
+            NewPhraseInstance = NewPhraseClass(question=question_para, text=essay_composition_para)
+            VocabInstance = Vocabulary(Phrase=NewPhraseInstance)
+            VocabRecomList = VocabInstance.Vocab_Recom()
+
+            print('VocabRecomList')
+            print(VocabRecomList)
+            
+            #saving the instance to the database
+
+            VocabInstancesList = list()
+
+            for word_suggestion in VocabRecomList:
+
+                vocab_recom_instance = vocab_recom()
+                vocab_recom_instance.essay_submitted = assignment_submit_instance.id
+                vocab_recom_instance.word = word_suggestion['word']
+                vocab_recom_instance.suggestion = word_suggestion['suggestions']
+
+                VocabInstancesList.append(vocab_recom_instance)
+
+            vocab_recom.objects.bulk_create(VocabRecomList)
+
+        except Exception as e:
+
+            print('Insertion of the vocab_recom failed.')
+            print(e)
+
+            return Response({
+                'message' : 'try block is executing',
+                'assignment_details' : assignment_instance.assignmentProperties(),
+                'assignment_submitted_id' : assignment_submit_instance.id, 
+                'phrase_features' : phrase_instance.getFeatures(),
+                'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
+                'label' : rubrics_instance.label,
+                'suggestion' : Examine_result,
+                'word_suggestion' : True
+                
+            })
+            
 
 
 
@@ -430,7 +464,8 @@ def studentEssaySubmit(req):
             'phrase_features' : phrase_instance.getFeatures(),
             'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
             'label' : rubrics_instance.label,
-            'suggestion' : Examine_result
+            'suggestion' : Examine_result,
+            'word_suggestion' : True
             
         })
 
