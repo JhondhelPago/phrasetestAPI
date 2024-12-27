@@ -402,6 +402,8 @@ def TeacherViewExamineResult(req):
         langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
         langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
 
+        #vocab_recom read here
+
         return Response({
             'message' : 'getAssignmentResults is executing',
             'student_name' : student_name,
@@ -411,8 +413,8 @@ def TeacherViewExamineResult(req):
             'question_composition' : question_composition_instance.getDictProperties(),
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
-            'langtool_suggestion' : langtool_suggestion_list
-            
+            'langtool_suggestion' : langtool_suggestion_list,
+            'vocab_recom' : []
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
