@@ -61,8 +61,24 @@ print(atlternative_words_relevance)
 
 print('\n')
 print('final words to make a vocabulary recommendation')
-print(Vocab.Vocab_Recom())
- 
+Vocab_Dict = Vocab.Vocab_Recom()
+
+print(Vocab_Dict)
+
+
+# print('\n')
+# print('printing the recom as list')
+
+
+# word_key_list = list(Vocab_Dict.keys())
+# for key in word_key_list:
+
+#     print(key)
+#     print(Vocab_Dict[key])
+
+#     Vocab_string = ','.join(Vocab_Dict[key])
+#     print(Vocab_string)
+
 
 
 

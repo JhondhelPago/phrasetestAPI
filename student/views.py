@@ -27,14 +27,16 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 
 #module for nlp pre-processes
-from module.features_xtrct import PhraseExtract, PhraseExtract1
+from module.features_xtrct import PhraseExtract1 , PhraseExtract
+from module.new_features_xtract import PhraseExtract as NewPhraseClass
 from module.LanguageToolChecker import EssayExamineErrorSuggest
 from module.rubrics import rubrics_benchmark, TransitionScore, WordChoiceScore, LanguageMechScore, StructureScore, GrammarPuncScore
+from module.app_feature import Vocabulary
 
 #model imports
 from user.models import CustomUser, studentuser
 from teacher.models import section, essay_assignment, context_question
-from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features
+from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features, vocab_recom
 
 #imports from other apps
 
@@ -359,6 +361,23 @@ def studentEssaySubmit(req):
 
         rubrics_instance.save()
 
+
+        #Recommendation
+
+        #using the instance PhraseExtract from new_features_xtract.py
+        #Loop to the key of the Vocabulary.Vocab_Recom()
+        #insert in to the database
+
+        NewPhraseInstance = NewPhraseClass(question=question_para, text=essay_composition_para)
+        VocabInstance = Vocabulary(Phrase=NewPhraseInstance)
+
+        #saving the instance to the database
+
+        
+
+
+
+
         try:
 
             Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
@@ -514,6 +533,7 @@ def getAssignmentResults(req):
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
             'langtool_suggestion' : langtool_suggestion_list,
+            'vocabulary_recommendation' : {'word1' : ['word1', 'word1'], 'word2' : ['word2', 'word2']}
             
         }, status=status.HTTP_200_OK)
 

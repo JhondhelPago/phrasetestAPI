@@ -155,4 +155,8 @@ class features(models.Model):
             'topic_relevance_score' : self.topic_relevance_score
         }
 
+class vocab_recom(models.Model):
 
+    essay_submitted = models.IntegerField(default=0)    
+    word = models.CharField(max_length=200, blank=True, default='')
+    suggestion = models.CharField(max_length=500, blank=True, default='')

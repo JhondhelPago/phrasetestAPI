@@ -156,6 +156,19 @@ class Vocabulary:
         
         self.repeated_word = sorted(self.repeated_word, key=lambda x: x[1], reverse=True)
 
+    def ReturnFormatDict(self, dict_obj : dict):
+
+        word_suggestion_list = list()
+
+        word_key =  list(dict_obj.keys())
+
+        for key in word_key:
+
+            word_suggestion_list.append({'word' : key, 'suggestions' : ','.join(dict_obj[key])})
+
+        return word_suggestion_list
+
+
 
 # cut the self.repeated_word.
 # get the top 10 and remove the single instance
@@ -193,7 +206,7 @@ class Vocabulary:
         
         
 
-        return final_words
+        return self.ReturnFormatDict(final_words)
 
 
 
