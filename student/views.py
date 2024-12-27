@@ -426,6 +426,7 @@ def studentEssaySubmit(req):
 
             VocabInstancesList = list()
 
+
             for word_suggestion in VocabRecomList:
 
                 vocab_recom_instance = vocab_recom()
@@ -435,7 +436,7 @@ def studentEssaySubmit(req):
 
                 VocabInstancesList.append(vocab_recom_instance)
 
-            vocab_recom.objects.bulk_create(VocabRecomList)
+            vocab_recom.objects.bulk_create(VocabInstancesList)
 
         except Exception as e:
 
