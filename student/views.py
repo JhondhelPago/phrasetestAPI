@@ -29,14 +29,14 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 #module for nlp pre-processes
 from module.features_xtrct import PhraseExtract1 , PhraseExtract
 from module.new_features_xtract import PhraseExtract as NewPhraseClass
-from module.LanguageToolChecker import EssayExamineErrorSuggest
+from module.LanguageToolChecker import EssayExamineErrorSuggest, ContextUnderStandingSuggestion
 from module.rubrics import rubrics_benchmark, TransitionScore, WordChoiceScore, LanguageMechScore, StructureScore, GrammarPuncScore
 from module.app_feature import Vocabulary
 
 #model imports
 from user.models import CustomUser, studentuser
 from teacher.models import section, essay_assignment, context_question
-from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features, vocab_recom
+from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features, vocab_recom, context_understanding
 
 #imports from other apps
 
@@ -414,40 +414,32 @@ def studentEssaySubmit(req):
             })
 
 
-
-
-
+        
         try:
 
-            Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
-            # for each match.getDictProperties, make an instance of match
-            # then balk_save 
+            Examine_result = ContextUnderStandingSuggestion(phrase_instance)
 
-            #list of match object
+            # list container for the orm -> context_understanding
             EssaySuggestionResult = list()
 
-            for matchObj in Examine_result:
 
-                match_parameters = matchObj
+            for ContextUnderstanding in Examine_result:
 
-                langtool_suggestion_instance = langtool_suggestion()
-                langtool_suggestion_instance.essay_submitted = assignment_submit_instance.id
-                langtool_suggestion_instance.message = match_parameters['message']
-                langtool_suggestion_instance.shortmessage = match_parameters['shortMessage']
-                langtool_suggestion_instance.replacements = match_parameters['replacements']
-                langtool_suggestion_instance.context = match_parameters['context']
-                langtool_suggestion_instance.sentence = match_parameters['sentence']
-                langtool_suggestion_instance.final_sentence = match_parameters['final_sentence']
-                langtool_suggestion_instance.sentence_index = match_parameters['sentence_id']
-                
+                context_understanding_instance = context_understanding()
+                context_understanding_instance.essay_submitted = assignment_submit_instance.id
+                context_understanding_instance.sentence_number = ContextUnderstanding['sentence_number']
+                context_understanding_instance.sentence_orig = ContextUnderstanding['original_sentence']
+                context_understanding_instance.messages = ','.join(ContextUnderstanding['messages'])
+                context_understanding_instance.sentence_modif = ContextUnderstanding['correction']
 
-                EssaySuggestionResult.append(langtool_suggestion_instance)
+                EssaySuggestionResult.append(context_understanding_instance)
 
-            langtool_suggestion.objects.bulk_create(EssaySuggestionResult)
+            context_understanding.objects.bulk_create(EssaySuggestionResult)
+
+            
 
         except Exception as e:
-
-            print('EssayExamineErrorSuggestion function failed.')
+            print('Insertion of the context_undestanding failed.')
             print(e)
 
             return Response({
@@ -457,9 +449,58 @@ def studentEssaySubmit(req):
                 'phrase_features' : phrase_instance.getFeatures(),
                 'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
                 'label' : rubrics_instance.label,
-                'suggestion' : []
+                'suggestion' : [],
+                'word_suggestion' : True
                 
             })
+
+
+
+
+
+        # try:
+
+        #     Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
+        #     # for each match.getDictProperties, make an instance of match
+        #     # then balk_save 
+
+        #     #list of match object
+        #     EssaySuggestionResult = list()
+
+        #     for matchObj in Examine_result:
+
+        #         match_parameters = matchObj
+
+        #         langtool_suggestion_instance = langtool_suggestion()
+        #         langtool_suggestion_instance.essay_submitted = assignment_submit_instance.id
+        #         langtool_suggestion_instance.message = match_parameters['message']
+        #         langtool_suggestion_instance.shortmessage = match_parameters['shortMessage']
+        #         langtool_suggestion_instance.replacements = match_parameters['replacements']
+        #         langtool_suggestion_instance.context = match_parameters['context']
+        #         langtool_suggestion_instance.sentence = match_parameters['sentence']
+        #         langtool_suggestion_instance.final_sentence = match_parameters['final_sentence']
+        #         langtool_suggestion_instance.sentence_index = match_parameters['sentence_id']
+                
+
+        #         EssaySuggestionResult.append(langtool_suggestion_instance)
+
+        #     langtool_suggestion.objects.bulk_create(EssaySuggestionResult)
+
+        # except Exception as e:
+
+        #     print('EssayExamineErrorSuggestion function failed.')
+        #     print(e)
+
+        #     return Response({
+        #         'message' : 'try block is executing',
+        #         'assignment_details' : assignment_instance.assignmentProperties(),
+        #         'assignment_submitted_id' : assignment_submit_instance.id, 
+        #         'phrase_features' : phrase_instance.getFeatures(),
+        #         'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
+        #         'label' : rubrics_instance.label,
+        #         'suggestion' : []
+                
+        #     })
         
 
 
@@ -469,47 +510,47 @@ def studentEssaySubmit(req):
         #Loop to the key of the Vocabulary.Vocab_Recom()
         #insert in to the database
 
-        try:
+        # try:
 
-            NewPhraseInstance = NewPhraseClass(question=question_para, text=essay_composition_para)
-            VocabInstance = Vocabulary(Phrase=NewPhraseInstance)
-            VocabRecomList = VocabInstance.Vocab_Recom()
+        #     NewPhraseInstance = NewPhraseClass(question=question_para, text=essay_composition_para)
+        #     VocabInstance = Vocabulary(Phrase=NewPhraseInstance)
+        #     VocabRecomList = VocabInstance.Vocab_Recom()
 
-            print('VocabRecomList')
-            print(VocabRecomList)
+        #     print('VocabRecomList')
+        #     print(VocabRecomList)
             
-            #saving the instance to the database
+        #     #saving the instance to the database
 
-            VocabInstancesList = list()
+        #     VocabInstancesList = list()
 
 
-            for word_suggestion in VocabRecomList:
+        #     for word_suggestion in VocabRecomList:
 
-                vocab_recom_instance = vocab_recom()
-                vocab_recom_instance.essay_submitted = assignment_submit_instance.id
-                vocab_recom_instance.word = word_suggestion['word']
-                vocab_recom_instance.suggestion = word_suggestion['suggestions']
+        #         vocab_recom_instance = vocab_recom()
+        #         vocab_recom_instance.essay_submitted = assignment_submit_instance.id
+        #         vocab_recom_instance.word = word_suggestion['word']
+        #         vocab_recom_instance.suggestion = word_suggestion['suggestions']
 
-                VocabInstancesList.append(vocab_recom_instance)
+        #         VocabInstancesList.append(vocab_recom_instance)
 
-            vocab_recom.objects.bulk_create(VocabInstancesList)
+        #     vocab_recom.objects.bulk_create(VocabInstancesList)
 
-        except Exception as e:
+        # except Exception as e:
 
-            print('Insertion of the vocab_recom failed.')
-            print(e)
+        #     print('Insertion of the vocab_recom failed.')
+        #     print(e)
 
-            return Response({
-                'message' : 'try block is executing',
-                'assignment_details' : assignment_instance.assignmentProperties(),
-                'assignment_submitted_id' : assignment_submit_instance.id, 
-                'phrase_features' : phrase_instance.getFeatures(),
-                'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
-                'label' : rubrics_instance.label,
-                'suggestion' : Examine_result,
-                'word_suggestion' : True
+        #     return Response({
+        #         'message' : 'try block is executing',
+        #         'assignment_details' : assignment_instance.assignmentProperties(),
+        #         'assignment_submitted_id' : assignment_submit_instance.id, 
+        #         'phrase_features' : phrase_instance.getFeatures(),
+        #         'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
+        #         'label' : rubrics_instance.label,
+        #         'suggestion' : Examine_result,
+        #         'word_suggestion' : True
                 
-            })
+        #     })
             
 
 
@@ -521,7 +562,7 @@ def studentEssaySubmit(req):
             'phrase_features' : phrase_instance.getFeatures(),
             'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
             'label' : rubrics_instance.label,
-            'suggestion' : Examine_result,
+            'suggestion' : [],
             'word_suggestion' : True
             
         })

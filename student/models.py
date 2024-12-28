@@ -160,3 +160,13 @@ class vocab_recom(models.Model):
     essay_submitted = models.IntegerField(default=0)    
     word = models.CharField(max_length=200, blank=True, default='')
     suggestion = models.CharField(max_length=500, blank=True, default='')
+
+
+class context_understanding(models.Model):
+
+    essay_submitted = models.IntegerField(default=0)
+    sentence_number = models.IntegerField(default=0)
+    sentence_orig = models.CharField(max_length=4000, blank=True, default='')
+    messages = models.CharField(max_length=2000, blank=True, default=0)
+    sentence_modif = models.CharField(max_length=4000, blank=True, default='')
+

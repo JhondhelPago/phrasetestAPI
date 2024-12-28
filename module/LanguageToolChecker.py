@@ -28,6 +28,20 @@ def LangToolChecker(text):
         return "request did not satisfy. no feedback response."
     
 
+def ContextUnderStandingSuggestion(PhraseInstance : PhraseExtract):
+
+    Matches_list = list()
+
+    Sentence_list = PhraseInstance.ArrayOfSentNoEndSpace()
+
+    for index, sentence in enumerate(Sentence_list):
+
+        ErrorSuggestion = ResultCheker(index, sentence)
+
+        Matches_list.append(ErrorSuggestion.getContextualUnderstading())
+
+    return Matches_list    
+
 
 def EssayExamineErrorSuggest(PhraseInstance : PhraseExtract):
 
