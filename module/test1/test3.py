@@ -22,11 +22,14 @@ print(Phrase.gb_model_param_list())
 Sentence_list = Phrase.ArrayOfSentNoEndSpace()
 
 
-for index, sentence in  enumerate(Sentence_list):
+for index, sentence in enumerate(Sentence_list):
 
     # print(f"index: {index}")
-    print(sentence)
-    print('\n')
+    # print(sentence)
+    # print('\n')
+
+    print(type(Sentence_list))
+    print(f"index type {type(index)}")
 
     ErrorSuggestion = ResultCheker(index, sentence)
 
@@ -36,8 +39,14 @@ for index, sentence in  enumerate(Sentence_list):
     # print(list(ErrorSuggestion.result_langtoolcheacker[0].keys()))
 
 
-    print(f"modify text: {ErrorSuggestion.modif_text}")
-    print(ErrorSuggestion.MessageList)
+    # print(f"modify text: {ErrorSuggestion.modif_text}")
+    # print(ErrorSuggestion.MessageList)
+
+    context_understanding = ErrorSuggestion.getContextualUnderstading()
+    print(f"sentence number : {context_understanding['sentence_number']} {type(context_understanding['sentence_number'])}")
+    print(f"original sentence : {context_understanding['original_sentence']}")
+    print(f"messages : {context_understanding['messages']}")
+    print(f"correction : {context_understanding['correction']}")
 
     print('\n\n')
 

@@ -306,7 +306,7 @@ class ResultCheker:
 
     def __init__(self, sent_index, text):
         
-        self.sent_index = sent_index,
+        self.sent_index = sent_index
         self.text = text
         self.modif_text = text
 
@@ -320,12 +320,17 @@ class ResultCheker:
 
         self.initial_call_langtoolcheacker()
 
-        self.ResolveSuggestion()
+        
     
     def initial_call_langtoolcheacker(self):
 
         
         self.result_langtoolcheacker = LangToolChecker(self.text)
+
+        self.ResolveSuggestion()
+
+        #making the self.errorMessageList as set()
+        self.MessageList = list(set(self.MessageList))
 
 
     def DisplayErrorList(self):
@@ -369,18 +374,33 @@ class ResultCheker:
 
             error_1 = mathces[0]
 
-
-            self.MessageList.append(error_1['message'])
+            #self.MessageList.append(error_1['message'])
             offset = error_1['offset']
             length = error_1['length']
             replacement = error_1['replacements'][0]['value']
 
+            message = error_1['message']
+
+            if message == 'Possible spelling mistake found.':
+
+                message =  message + f" corrected as '{replacement}'"
+
+            self.MessageList.append(message)
 
             self.modif_text = self.ReplacementInsertion(replacement, self.modif_text, offset, length)
 
             #Recursion
             self.ResolveSuggestion()
 
+
+    def getContextualUnderstading(self):
+
+        return {
+            'sentence_number' : self.sent_index,
+            "original_sentence" : self.text,
+            "messages" : self.MessageList,
+            "correction" : self.modif_text
+        }
 
 
 
