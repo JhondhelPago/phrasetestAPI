@@ -14,6 +14,11 @@ nb_model = joblib.load(nb_model_path)
 knn_model_path = os.path.join(current_dir, 'knn_model2.pkl')
 knn_model = joblib.load(knn_model_path)
 
+
+# gb_model
+gb_model_path = os.path.join(current_dir, 'main_gb_model.pkl')
+gb_model = joblib.load(gb_model_path)
+
 def predict_writing_level(writing_composition: str):
 
     labels = ['below average', 'average', 'above average']
@@ -95,6 +100,34 @@ def knn_model_predict(feature_list : list):
     feature_list_array = np.array(feature_list)
 
     result = knn_model.predict(feature_list)
+
+def gb_model_predict(feature_list : list):
+
+    # 0 = need improvement
+    # 1 = fair
+    # 2 = good
+
+    feature_list_array = np.array([feature_list])
+
+
+    result = gb_model.predict(feature_list_array)
+
+    if result == 0:
+
+        return 'need imporevements'
+    
+    elif result == 1:
+
+        return 'fair'
+    
+    elif result == 2:
+
+        return 'good'
+    
+    else:
+
+        return 'cannot be determined'
+
 
     
 

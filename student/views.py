@@ -11,7 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'm
 from module.features_xtrct import PhraseExtract
 from module.token_tools import SpellingDetector
 from module.token_tools import SpellCorrection
-from module.ml_model import predict_level
+from module.ml_model import predict_level, gb_model_predict
 
 #libary tools, classes and methods
 from urllib.parse import unquote
@@ -357,7 +357,16 @@ def studentEssaySubmit(req):
         rubrics_instance.word_choice = WordChoiceScore(phrase_instance)
         rubrics_instance.structure = StructureScore(phrase_instance)
         rubrics_instance.lang_mechs = LanguageMechScore(phrase_instance)
-        rubrics_instance.label = predict_level(phrase_instance.FeatureList1())
+
+        try:
+            rubrics_instance.label = gb_model_predict(phrase_instance.gb_model_param_list())
+            print('gb_model_classified.')
+        except Exception as e:
+
+            print(e)
+
+            rubrics_instance.label = predict_level(phrase_instance.FeatureList1())
+            print('old_model_classfied.')
 
         rubrics_instance.save()
 

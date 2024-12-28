@@ -555,7 +555,25 @@ class PhraseExtract:
             float(self.sentence_compound),
             float(self.sentence_complex),
             float(self.topic_relevance_score)
-        ]  
+        ]
+
+
+    #gb_model_param_list
+
+    def gb_model_param_list(self):
+
+        return [
+          float(self.word_count),
+          float(self.avg_sentence_length),
+          float(self.number_of_sentence),
+          float(self.sentence_simple),
+          float(self.sentence_compound),
+          float(self.sentence_complex),
+          float(self.cohesive_device_count),
+          float(self.readability_score),
+          float(self.readability_grade_level),
+          float(self.topic_relevance_score)
+
+        ]
 
     
-
