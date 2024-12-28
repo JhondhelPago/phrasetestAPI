@@ -13,6 +13,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'm
 
 from module.features_xtrct import PhraseExtract
 
+
 #libary tools, classes and methods
 from urllib.parse import unquote
 from rest_framework.decorators import api_view, permission_classes
@@ -28,7 +29,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 #model imports
 from user.models import CustomUser, studentuser, teacheruser
-from student.models import essay_submitted, rubrics, langtool_suggestion, features, question_composition
+from student.models import essay_submitted, rubrics, langtool_suggestion, features, question_composition, vocab_recom
 from . models import section, essay_assignment, context_question
 from . teacher_module import get_submitted_students
 
@@ -403,6 +404,22 @@ def TeacherViewExamineResult(req):
         langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
 
         #vocab_recom read here
+        vocab_recom_instance = vocab_recom.objects.filter(essay_submitted=essay_submitted_instance.id)
+        vocab_recom_list = list()
+
+        for word_suggestion in vocab_recom_instance:
+
+            word_suggestion.suggestion = word_suggestion.suggestion.split(',')
+
+            vocab_recom_list.append(
+                {
+                    'word' : word_suggestion.word,
+                    'suggestion' : word_suggestion.suggestion
+                }
+            )
+            
+
+        
 
         return Response({
             'message' : 'getAssignmentResults is executing',
@@ -414,7 +431,7 @@ def TeacherViewExamineResult(req):
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
             'langtool_suggestion' : langtool_suggestion_list,
-            'vocab_recom' : []
+            'vocab_recom' : vocab_recom_list
         }, status=status.HTTP_200_OK)
 
     except Exception as e:

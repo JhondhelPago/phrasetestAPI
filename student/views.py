@@ -560,6 +560,21 @@ def getAssignmentResults(req):
         langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
         langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
 
+        vocab_recom_instance = vocab_recom.objects.filter(essay_submitted=essay_submitted_instance.id)
+        vocab_recom_list = list()
+
+        for word_suggestion in vocab_recom_instance:
+
+            word_suggestion.suggestion = word_suggestion.suggestion.split(',')
+
+            vocab_recom_list.append(
+                {
+                    'word': word_suggestion.word,
+                    'suggestion': word_suggestion.suggestion
+                }
+            )
+        
+
         return Response({
             'message' : 'getAssignmentResults is executing',
             'student_id' : student_id,
@@ -569,7 +584,7 @@ def getAssignmentResults(req):
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
             'langtool_suggestion' : langtool_suggestion_list,
-            'vocabulary_recommendation' : {'word1' : ['word1', 'word1'], 'word2' : ['word2', 'word2']}
+            'vocab_recom' :  vocab_recom_list
             
         }, status=status.HTTP_200_OK)
 
