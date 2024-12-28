@@ -302,9 +302,86 @@ def MatchMerger(MatchObjectList : list[Match]) -> Match:
 
 
 
+class ResultCheker:
+
+    def __init__(self, sent_index, text):
+        
+        self.sent_index = sent_index,
+        self.text = text
+        self.modif_text = text
 
 
+        self.result_langtoolcheacker = None
+        self.MessageList = list()
+
+        self.errorMessageList = None
+        self.corrected_text = None
+
+
+        self.initial_call_langtoolcheacker()
+
+        self.ResolveSuggestion()
     
+    def initial_call_langtoolcheacker(self):
+
+        
+        self.result_langtoolcheacker = LangToolChecker(self.text)
+
+
+    def DisplayErrorList(self):
+
+        for error_dict in self.result_langtoolcheacker:
+
+            print(f"sentence number {self.sent_index} \n")
+
+            print(f"message:  {error_dict['message']}")
+            print(f"shortMessage: {error_dict['shortMessage']}")
+            print(f"replacements: {error_dict['replacements']}")
+            print(f"offset: {error_dict['offset']}")
+            print(f"length: {error_dict['length']}")
+            print(f"context: {error_dict['context']}")
+            print(f"sentence: {error_dict['sentence']}")
+            print(f"type: {error_dict['type']}")
+            print(f"rule: {error_dict['rule']}")
+            print(f"ignoreForIncompleteSentence: {error_dict['ignoreForIncompleteSentence']}")
+            print(f"contextForSureMatch: {error_dict['contextForSureMatch']}")
+
+            print('\n\n')
+
+    def ReplacementInsertion(self, replacement_string, original_string, offset, length):
+
+        left_string = original_string[:offset]
+        right_string = original_string[offset+length:]
+
+
+        # return (left_string, replacement, right_string) 
+        return left_string + replacement_string + right_string
+
+    def ResolveSuggestion(self):
+
+        mathces = LangToolChecker(self.modif_text)
+
+        if not mathces:
+
+            return
+        
+        else:
+
+            error_1 = mathces[0]
+
+
+            self.MessageList.append(error_1['message'])
+            offset = error_1['offset']
+            length = error_1['length']
+            replacement = error_1['replacements'][0]['value']
+
+
+            self.modif_text = self.ReplacementInsertion(replacement, self.modif_text, offset, length)
+
+            #Recursion
+            self.ResolveSuggestion()
+
+
 
 
 
