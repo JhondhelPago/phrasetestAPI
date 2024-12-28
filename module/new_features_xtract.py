@@ -59,6 +59,7 @@ class PhraseExtract:
         self.word_count = self.wordCount(self.doc_text)
         self.unique_words_ratio = self.unique_word()
         self.topic_relevance_score = self.TopicRelevance()
+        self.average_word_length = self.avg_word_length()
         self.readability_score = ReadbilityMeasure.getReadabilityScore(self.text)
         self.readability_grade_level = ReadbilityMeasure.getReadabilityGradeLevel(self.text)
         self.avg_sentence_length = self.ave_sentence_len()
@@ -315,7 +316,7 @@ class PhraseExtract:
 
         return list(sent.text + '' for sent in self.doc_text.sents)
 
-    def ArrayOfSentNOEndSpace(self):
+    def ArrayOfSentNoEndSpace(self):
                               
         return list(sent.text for sent in self.doc_text.sents)
     
@@ -340,6 +341,35 @@ class PhraseExtract:
 
 
         return per_sent_relevance
+
+    def avg_word_length(self):
+
+        list_token_len = list()
+
+        for token in self.doc_text:
+
+            if token.is_alpha:
+
+                list_token_len.append(len(token.text))
+
+        return sum(list_token_len)/len(list_token_len)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -476,6 +506,56 @@ class PhraseExtract:
             float(self.readability_grade_level), #readability_grade_level
             float(self.topic_relevance_score) #topic_relevance
         ]
+    
+
+
+    # method imitation of "getFeatures()"" from the original class on the first module
+
+    def getFeatures(self):
+
+        return {
+            "word_count" : self.word_count,
+            "unique_word_ratio" : self.unique_words_ratio,
+            "average_word_length" : self.average_word_length,
+            "noun_count" : self.noun_freq,
+            "adj_count" : self.adj_freq,
+            "adv_count" : self.adv_freq,
+            "pronoun_count" : self.pronoun_freq,
+            "verb_count" : self.verb_freq,
+            "subordinating_clauses_count" : self. subor_conjunc,
+            "grammar_error_count" : 0,
+            "spelling_error_count" : 0,
+            "sentiment_polarity" : 0,
+            "cohesive_device_count" : self.cohesive_device_count,
+            "readability_score" : self.readability_score,
+            "avg_sentence_length" : self.avg_sentence_length,
+            "sentence_variation" : self.sentence_variation,
+            "sentence_simple" : self.sentence_simple,
+            "sentence_compound" : self.sentence_compound,
+            "sentence_complex" : self.sentence_complex,
+            "topic_relevance_score" : self.topic_relevance_score
+        } 
+    
+    # method imitation of "FeatureList1()" from the original class on the first module
+
+    def FeatureList1(self):
+
+        return [
+            float(self.unique_words_ratio),
+            float(self.average_word_length),
+            float(self.noun_freq),
+            float(self.adj_freq),
+            float(self.adv_freq),
+            float(self.pronoun_freq),
+            float(self.verb_freq),
+            float(self.cohesive_device_count),
+            float(self.readability_score),
+            # float(self.avg_sentence_length)
+            float(self.sentence_simple),
+            float(self.sentence_compound),
+            float(self.sentence_complex),
+            float(self.topic_relevance_score)
+        ]  
 
     
 

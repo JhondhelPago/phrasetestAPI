@@ -5,8 +5,8 @@ import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from rake_nltk import Rake
-from features_xtrct import PhraseExtract, PhraseExtract1
-
+# from features_xtrct import PhraseExtract, PhraseExtract1
+from new_features_xtract import PhraseExtract
 
 import random
 
@@ -150,7 +150,7 @@ def grade_corpus(text):
 #then define the condition ladder
 
 #this function is suject to be tested
-def IdeaCriterion(PhraseObj : PhraseExtract1):
+def IdeaCriterion(PhraseObj : PhraseExtract):
 
 
     similarity_score = PhraseObj.getSimilarityScore()
@@ -231,7 +231,7 @@ def IdeaCriterion(PhraseObj : PhraseExtract1):
 
 
 #use the parameter readability_score from the PhraseExtract instance
-def ClarityAndConciseness(PhraseObj: PhraseExtract1):
+def ClarityAndConciseness(PhraseObj: PhraseExtract):
 
 
     alternative_return = None
@@ -259,7 +259,7 @@ def ClarityAndConciseness(PhraseObj: PhraseExtract1):
 
     return  alternative_return
 
-def TransitionScore(PhraseObj: PhraseExtract1):
+def TransitionScore(PhraseObj: PhraseExtract):
 
 
 
@@ -294,7 +294,7 @@ def TransitionScore(PhraseObj: PhraseExtract1):
     return score
 
 
-def StructureScore(PhraseObj: PhraseExtract1):
+def StructureScore(PhraseObj: PhraseExtract):
 
     Simple = PhraseObj.sentence_simple
     Compound = PhraseObj.sentence_compound
@@ -307,19 +307,19 @@ def StructureScore(PhraseObj: PhraseExtract1):
 
     return 0
 
-def LanguageMechScore(PhraseObj: PhraseExtract1):
+def LanguageMechScore(PhraseObj: PhraseExtract):
 
     score = random.randint(70, 85)
 
     return score
 
-def WordChoiceScore(PhraseObj: PhraseExtract1):
+def WordChoiceScore(PhraseObj: PhraseExtract):
 
     score = random.randint(70, 90)
 
     return score
 
-def StructureScore(PhraseObj: PhraseExtract1):
+def StructureScore(PhraseObj: PhraseExtract):
 
     score = 0
 
@@ -338,27 +338,27 @@ def StructureScore(PhraseObj: PhraseExtract1):
     return score
     
 
-def GrammarPuncScore(PhraseObj: PhraseExtract1):
+def GrammarPuncScore(PhraseObj: PhraseExtract):
 
     score = 0
 
-    if PhraseObj._punc == 2:
+    if PhraseObj.punc == 2:
 
         score = random.randint(75, 78)
 
-    elif PhraseObj._punc == 3:
+    elif PhraseObj.punc == 3:
 
         score = random.randint(78, 83)
 
-    elif PhraseObj._punc == 4:
+    elif PhraseObj.punc == 4:
 
         score = random.randint(83, 87)
 
-    elif PhraseObj._punc == 5:
+    elif PhraseObj.punc == 5:
 
         score = random.randint(87, 90)
 
-    elif PhraseObj._punc > 5:
+    elif PhraseObj.punc > 5:
 
         score = random.randint(90, 95)
         

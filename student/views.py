@@ -308,7 +308,7 @@ def studentEssaySubmit(req):
         # question_para = 'What is your biggest fear?'
         # essay_composition_para = 'The advancments in technolagy have revolutionized the way we comunicate and access information. With the rise of smartphons, tablets, and computers, people can now conect with others around the globe instanly. However, this rapid devlopment also comes with some challenges, such as the increase in cybercrime and the growing dependency on digital devices. As technolagy continues to evolve, it is crucial for societys to find a balance between embracing innovation and ensuring securty.'
 
-        phrase_instance = PhraseExtract1(question=question_para, text=essay_composition_para)
+        phrase_instance = NewPhraseClass(question=question_para, text=essay_composition_para)
 
 
         # simulate the model prediction here
@@ -364,6 +364,52 @@ def studentEssaySubmit(req):
 
         try:
 
+            NewPhraseInstance = NewPhraseClass(question=question_para, text=essay_composition_para)
+            VocabInstance = Vocabulary(Phrase=NewPhraseInstance)
+            VocabRecomList = VocabInstance.Vocab_Recom()
+
+            print('VocabRecomList')
+            print(VocabRecomList)
+            
+            #saving the instance to the database
+
+            VocabInstancesList = list()
+
+
+            for word_suggestion in VocabRecomList:
+
+                vocab_recom_instance = vocab_recom()
+                vocab_recom_instance.essay_submitted = assignment_submit_instance.id
+                vocab_recom_instance.word = word_suggestion['word']
+                vocab_recom_instance.suggestion = word_suggestion['suggestions']
+
+                VocabInstancesList.append(vocab_recom_instance)
+
+            vocab_recom.objects.bulk_create(VocabInstancesList)
+
+        except Exception as e:
+
+            print('Insertion of the vocab_recom failed.')
+            print(e)
+
+            return Response({
+                'message' : 'try block is executing',
+                'assignment_details' : assignment_instance.assignmentProperties(),
+                'assignment_submitted_id' : assignment_submit_instance.id, 
+                'phrase_features' : phrase_instance.getFeatures(),
+                'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
+                'label' : rubrics_instance.label,
+                'suggestion' : [],
+                'word_suggestion' : True
+                
+            })
+
+
+
+
+
+        try:
+
             Examine_result = [match.getImportantBody() for match in EssayExamineErrorSuggest(PhraseInstance=phrase_instance)]
             # for each match.getDictProperties, make an instance of match
             # then balk_save 
@@ -393,6 +439,7 @@ def studentEssaySubmit(req):
         except Exception as e:
 
             print('EssayExamineErrorSuggestion function failed.')
+            print(e)
 
             return Response({
                 'message' : 'try block is executing',

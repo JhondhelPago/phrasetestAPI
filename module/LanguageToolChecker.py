@@ -1,7 +1,8 @@
 import requests
 import json
 
-from features_xtrct import PhraseExtract
+# from features_xtrct import PhraseExtract
+from new_features_xtract import PhraseExtract
 
 LanguageToolAPI = 'https://api.languagetool.org/v2/check'
 

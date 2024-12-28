@@ -80,5 +80,11 @@ print(Vocab_Dict)
 #     print(Vocab_string)
 
 
+print('\n')
+print('testing the getFeatures() method')
+print(Phrase.getFeatures())
 
 
+print('\n')
+print('testing the FeatureList1() method')
+print(Phrase.FeatureList1())
