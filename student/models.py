@@ -177,6 +177,6 @@ class context_understanding(models.Model):
             'essay_submitted' : self.essay_submitted,
             'sentece_number' : self.sentence_number,
             'sentence_orig' : self.sentence_orig,
-            'messages' : self.messages,
+            'messages' : self.messages.split('>'),
             'sentence_modif' : self.sentence_modif
         }

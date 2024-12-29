@@ -429,7 +429,7 @@ def studentEssaySubmit(req):
                 context_understanding_instance.essay_submitted = assignment_submit_instance.id
                 context_understanding_instance.sentence_number = ContextUnderstanding['sentence_number']
                 context_understanding_instance.sentence_orig = ContextUnderstanding['original_sentence']
-                context_understanding_instance.messages = ','.join(ContextUnderstanding['messages'])
+                context_understanding_instance.messages = '>'.join(ContextUnderstanding['messages'])
                 context_understanding_instance.sentence_modif = ContextUnderstanding['correction']
 
                 EssaySuggestionResult.append(context_understanding_instance)
