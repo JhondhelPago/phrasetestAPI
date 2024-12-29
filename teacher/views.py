@@ -29,7 +29,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 #model imports
 from user.models import CustomUser, studentuser, teacheruser
-from student.models import essay_submitted, rubrics, langtool_suggestion, features, question_composition, vocab_recom
+from student.models import essay_submitted, rubrics, langtool_suggestion, features, question_composition, vocab_recom, context_understanding
 from . models import section, essay_assignment, context_question
 from . teacher_module import get_submitted_students
 
@@ -400,8 +400,15 @@ def TeacherViewExamineResult(req):
         question_composition_instance = question_composition.objects.get(essay_submitted=essay_submitted_instance.id)
         rubrics_instance = rubrics.objects.get(essay_submitted=essay_submitted_instance.id)
         features_instance = features.objects.get(essay_submitted=essay_submitted_instance.id)
-        langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
-        langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
+
+        context_understanding_instances = context_understanding.objects.filter(essay_submitted=essay_submitted_instance.id)
+        context_understanding_list = [context_understanding_obj.getDictProperties() for context_understanding_obj in context_understanding_instances]
+
+        
+        
+        # commented langtool_suggestion ORM
+        # langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
+        # langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
 
         #vocab_recom read here
         vocab_recom_instance = vocab_recom.objects.filter(essay_submitted=essay_submitted_instance.id)
@@ -422,7 +429,7 @@ def TeacherViewExamineResult(req):
         
 
         return Response({
-            'message' : 'getAssignmentResults is executing',
+            'message' : 'This json return is from the TeacherViewExamineResult()',
             'student_name' : student_name,
             'student_id' : student_id,
             'assignment_id' : assignment_id,
@@ -430,7 +437,7 @@ def TeacherViewExamineResult(req):
             'question_composition' : question_composition_instance.getDictProperties(),
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
-            'langtool_suggestion' : langtool_suggestion_list,
+            'langtool_suggestion' : context_understanding_list,
             'vocab_recom' : vocab_recom_list
         }, status=status.HTTP_200_OK)
 
