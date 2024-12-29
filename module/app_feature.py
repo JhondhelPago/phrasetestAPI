@@ -207,9 +207,28 @@ class Vocabulary:
         
 
         return self.ReturnFormatDict(final_words)
+    
+
+
+def DifficultyAssessment(Phrase_instance : PhraseExtract):
+
+    
+    # needed parameters
+    # Readability Score
+    # Readability Grade Level
+    # Topic Relevance
+    # Error from CheckResult
+    # Syntactic Complexity -> possible from the Phrase_instance
+
+
+    
 
 
 
+
+
+
+    return
 
 
     

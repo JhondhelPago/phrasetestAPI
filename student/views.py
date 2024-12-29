@@ -31,7 +31,7 @@ from module.features_xtrct import PhraseExtract1 , PhraseExtract
 from module.new_features_xtract import PhraseExtract as NewPhraseClass
 from module.LanguageToolChecker import EssayExamineErrorSuggest, ContextUnderStandingSuggestion
 from module.rubrics import rubrics_benchmark, TransitionScore, WordChoiceScore, LanguageMechScore, StructureScore, GrammarPuncScore
-from module.app_feature import Vocabulary
+from module.app_feature import Vocabulary, DifficultyAssessment
 
 #model imports
 from user.models import CustomUser, studentuser
@@ -552,6 +552,9 @@ def studentEssaySubmit(req):
                 
         #     })
             
+
+        # DifficultyAssessment() should be called here and return the output value for the json return of this endpoint
+
 
 
 
