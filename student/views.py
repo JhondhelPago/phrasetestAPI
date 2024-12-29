@@ -562,7 +562,7 @@ def studentEssaySubmit(req):
             'phrase_features' : phrase_instance.getFeatures(),
             'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
             'label' : rubrics_instance.label,
-            'suggestion' : [],
+            'suggestion' : Examine_result,
             'word_suggestion' : True
             
         })
@@ -654,8 +654,14 @@ def getAssignmentResults(req):
         question_composition_instance = question_composition.objects.get(essay_submitted=essay_submitted_instance.id)
         rubrics_instance = rubrics.objects.get(essay_submitted=essay_submitted_instance.id)
         features_instance = features.objects.get(essay_submitted=essay_submitted_instance.id)
-        langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
-        langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
+
+        # commented lang_suggestion ORM
+        # langtool_suggestion_instances = langtool_suggestion.objects.filter(essay_submitted=essay_submitted_instance.id)
+        # langtool_suggestion_list = [langtool_obj.getDictProperties() for langtool_obj in langtool_suggestion_instances]
+
+
+        context_understanding_instances = context_understanding.objects.filter(essay_submitted=essay_submitted_instance.id)
+        context_understanding_list = [context_understanding_obj.getDictProperties() for context_understanding_obj in context_understanding_instances]
 
         vocab_recom_instance = vocab_recom.objects.filter(essay_submitted=essay_submitted_instance.id)
         vocab_recom_list = list()
@@ -680,7 +686,7 @@ def getAssignmentResults(req):
             'question_composition' : question_composition_instance.getDictProperties(),
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
-            'langtool_suggestion' : langtool_suggestion_list,
+            'langtool_suggestion' : context_understanding_list,
             'vocab_recom' :  vocab_recom_list
             
         }, status=status.HTTP_200_OK)

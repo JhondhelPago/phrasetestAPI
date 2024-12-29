@@ -170,3 +170,13 @@ class context_understanding(models.Model):
     messages = models.CharField(max_length=2000, blank=True, default=0)
     sentence_modif = models.CharField(max_length=4000, blank=True, default='')
 
+
+    def getDictProperties(self):
+
+        return {
+            'essay_submitted' : self.essay_submitted,
+            'sentece_number' : self.sentence_number,
+            'sentence_orig' : self.sentence_orig,
+            'messages' : self.messages,
+            'sentence_modif' : self.sentence_modif
+        }
