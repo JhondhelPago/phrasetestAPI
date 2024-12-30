@@ -221,14 +221,71 @@ def DifficultyAssessment(Phrase_instance : PhraseExtract):
     # Syntactic Complexity -> possible from the Phrase_instance
 
 
+    #Dictionary Object to return in this method scope
+    AssessmentDict = {
+        'strength' : dict(),
+        'weakness' : dict(),
+    }
+
+    AssessmentDict['strength']['readability_ease'] = ReadabilityAssess.AssessReadabilityEase(Phrase_instance.readability_score)
+    AssessmentDict['strength']['readability_gradelevel'] = ReadabilityAssess.AssessReadabilityGradeLevel(Phrase_instance.readability_grade_level)
+
+    return AssessmentDict
+
+
+class ReadabilityAssess:
+
+    @staticmethod
+    def AssessReadabilityEase(ReadabilityEaseScore: int | float):
+
+        # Easy readability 90 - and above (11 years old)
+        # Moderate readability 70 - 90 
+        # Difficult readability 50 - 70
+        # Very Difficult readability and below - 50
+
+        print(f"from ReadabilityAssess.AssessReadabilityEase() : {ReadabilityEaseScore}")
+
+
+        if ReadabilityEaseScore >= 90:
+
+            return 'Easy Readability'
+        
+        elif ReadabilityEaseScore >= 70 and ReadabilityEaseScore < 90:
+
+            return 'Moderate Readability'
+        
+        elif ReadabilityEaseScore >= 50 and ReadabilityEaseScore < 70:
+
+            return 'Difficult Readability'
+        
+        else:
+
+            return 'Very Difficult Readability'
     
+    @staticmethod
+    def AssessReadabilityGradeLevel(ReadabilityGradeLevelScore: int | float):
 
+        # The score directly correlates to the grade level
 
+        print(f"from ReadabilityAssess.AssessReadabilityGradeLevel() : {ReadabilityGradeLevelScore}")
 
+        grade_string = ''
+        ReadabilityGradeLevelScore = int(ReadabilityGradeLevelScore)
 
+        if ReadabilityGradeLevelScore == 1:
 
+            grade_string = '1st'
 
-    return
+        elif ReadabilityGradeLevelScore == 2:
 
+            grade_string = '2nd'
 
-    
+        elif ReadabilityGradeLevelScore == 3:
+
+            grade_string = '3rd'
+
+        else:
+
+            grade_string = str(ReadabilityGradeLevelScore) + 'th'
+        
+        return f"The writing's readability is clearly understandable by level of {grade_string} grader."
