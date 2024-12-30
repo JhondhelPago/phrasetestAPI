@@ -50,3 +50,10 @@ print('average depth')
 ave_depth = VocabularyChoice.AverageWordDepth(Phrase)
 
 print(ave_depth)
+
+print('depth group of the words')
+WordDepthGroup = VocabularyChoice.depth_groups(Phrase)
+print(f"common terms: {WordDepthGroup['common_term']} \n")
+print(f"generalized term : {WordDepthGroup['generalized_term']} \n")
+print(f"specific term : {WordDepthGroup['specific_term']} \n")
+print(f"specialized term : {WordDepthGroup['specialized_term']} \n")

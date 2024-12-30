@@ -405,6 +405,59 @@ class VocabularyChoice:
 
 
         return WordDepth_temp / words_with_returneed_depth
+    
+    @staticmethod
+    def depth_groups(Phrase_instance : PhraseExtract):
+
+        word_list = Phrase_instance.pureWords()
+
+        # Very General/Common terms 0 - 4
+        # General Terms 5 - 7
+        # Specific Terms 8 - 10
+        # Specilized Terms 11 - 15
+
+
+        WordGroup = {
+            'common_term' : [],
+            'generalized_term' : [],
+            'specific_term' : [],
+            'specialized_term' : []
+         }
+        
+
+        for word in word_list:
+
+            word = word.lower()
+
+            depth = VocabularyChoice.get_word_depth(word)
+
+            if depth is None:
+
+                continue
+
+            else: 
+
+                if depth >= 11:
+
+                    WordGroup['specialized_term'].append(word)
+
+                elif depth >= 8 and depth < 11:
+
+                    WordGroup['specific_term'].append(word)
+
+                elif depth >= 5 and depth < 8:
+
+                    WordGroup['generalized_term'].append(word)
+
+                elif depth < 5:
+                    WordGroup['common_term'].append(word)
+
+        WordGroup['common_term'] = list(set(WordGroup['common_term']))
+        WordGroup['generalized_term'] = list(set(WordGroup['generalized_term']))
+        WordGroup['specific_term'] = list(set(WordGroup['specific_term']))
+        WordGroup['specialized_term'] = list(set(WordGroup['specialized_term']))
+
+        return WordGroup
 
 
     
