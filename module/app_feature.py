@@ -460,4 +460,85 @@ class VocabularyChoice:
         return WordGroup
 
 
-    
+class ErrorsCheckResult:
+
+    @staticmethod
+    def errors_group(error_list : list[str]):
+
+        # Spelling Mistakes
+        # Grammar Issues
+        # Punctuation issue
+        # Stylistic Suggestion
+        # Word Choice Issue
+        # Tense and Aspect Errors
+        # Number and Article Errors
+        # Confusables
+        # Typographical Issue
+        # Other Suggestion
+
+        spelling_mistakes_err_messages = ["Possible spelling mistake found."]
+        grammar_issues_err_messages = ["This sentence does not start with an uppercase letter.", "A sentence should not begin with a conjunction.", "The use of the passive voice is discouraged.", "This is a possible agreement error."]
+        punctuation_issues_err_messages = ["Unnecessary comma in this sentence.", "Missing period.", "Double punctuation detected."]
+        stylistic_suggestions_err_messages = ["Word repetition detected.", "This sentence is too long. Consider breaking it up.", "This word is too informal for the context."]
+        word_choice_issues_err_messages = ["This word does not seem to fit the context.", "This expression is redundant."]
+        tense_and_aspect_errors_err_messages = ["This verb is in the wrong tense.", "Consider using the past perfect tense here."]
+        number_and_article_errors_err_messages = ["Missing article.", "Consider using the plural form of this word.", "The definite article 'the' might be required here."]
+        confusables_err_messages = ["Did you mean"]
+        typographical_issues_err_messages = ["Extra space detected.", "Non-standard quotation mark used."]
+        other_suggestions_err_messages = ["This phrasing is overly complex."]
+
+
+        error_tracker = {
+            'spelling_mistakes' : 0,
+            'grammar_issues' : 0,
+            'punctuation_issues' : 0,
+            'stylistic_issues' : 0,
+            'word_choice_issues' : 0,
+            'tense_and_aspect_errors' : 0,
+            'number_and_article_errors' : 0,
+            'confusables_errors' : 0,
+            'typographical_issues' : 0,
+            'other_suggestion_errors' : 0
+        }
+
+        for err_message in error_list:
+
+            if err_message in spelling_mistakes_err_messages:
+
+                error_tracker['spelling_mistakes'] += 1
+
+            elif err_message in grammar_issues_err_messages:
+
+                error_tracker['grammar_issues'] += 1
+
+            elif err_message in punctuation_issues_err_messages:
+
+                error_tracker['punctuation_issues'] += 1
+
+            elif err_message in stylistic_suggestions_err_messages:
+
+                error_tracker['stylistic_issues'] += 1
+
+            elif err_message in word_choice_issues_err_messages:
+
+                error_tracker['word_choice_issues'] += 1
+
+            elif err_message in tense_and_aspect_errors_err_messages:
+
+                error_tracker['tense_and_aspect_errors'] += 1
+
+            elif err_message in typographical_issues_err_messages:
+
+                error_tracker['typographical_issues'] += 1
+
+            else:
+
+                if err_message in confusables_err_messages[0]:
+
+                    error_tracker['confusables_errors'] += 1
+                
+                else:
+
+                    error_tracker['other_suggestion_errors'] += 1
+
+        return
