@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 from new_features_xtract import PhraseExtract
-from app_feature import DifficultyAssessment
+from app_feature import DifficultyAssessment, VocabularyChoice
 
 
 context = """Phones and driving"""
@@ -31,3 +31,22 @@ print('Result:')
 print(Result)
 
 
+# print('\n\n')
+# print('Frequency Distribution of the words')
+
+# Frequency_Distribution = VocabularyChoice.WordDificulty(Phrase)
+
+# print(Frequency_Distribution.most_common(100))
+
+
+print('sample output for the get_word_depth().')
+
+depth = VocabularyChoice.get_word_depth('keyboard')
+
+print(f"depth : {depth}")
+
+print('average depth')
+
+ave_depth = VocabularyChoice.AverageWordDepth(Phrase)
+
+print(ave_depth)

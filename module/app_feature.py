@@ -12,6 +12,7 @@
 # Indentify the the repeated word and make and suggest the alternate word to enrich the vocabulary
 # Output - List of redundant word with its alternative replacement.
 
+import nltk
 from nltk.corpus import words, wordnet
 from wordfreq import word_frequency
 from PyDictionary import PyDictionary
@@ -304,7 +305,7 @@ class TopicRelevanceAssess:
         # A bit off the context 0.4 - 0.6
         # Did not deliver the context below - 0.4
 
-        print(f"TopicRelevanceAssess.RelevanceLabel() : {Score}")
+        print(f"from TopicRelevanceAssess.RelevanceLabel() : {Score}")
 
 
         if Score >= .8:
@@ -327,6 +328,21 @@ class TopicRelevanceAssess:
 class VocabularyChoice:
 
     @staticmethod
+    def get_word_depth(word : str):
+
+        synsets = wordnet.synsets(word.lower())
+
+        if not synsets:
+
+            return None
+        
+        hypernyms_paths = synsets[0].hypernym_paths()
+
+        max_depth = max(len(path) for path in hypernyms_paths)
+
+        return max_depth
+
+    @staticmethod
     def LexicalDensity(Phrase_instance : PhraseExtract):
         
         # Very High Lexical Density - .80 - above
@@ -336,7 +352,7 @@ class VocabularyChoice:
 
         LexicalDensityScore = Phrase_instance.unique_words_ratio
 
-        print(f"VocabularyChoice.LexicalDensity() : {LexicalDensityScore}")
+        print(f"from VocabularyChoice.LexicalDensity() : {LexicalDensityScore}")
 
         if LexicalDensityScore >= .80:
 
@@ -357,6 +373,38 @@ class VocabularyChoice:
     @staticmethod
     def WordDificulty(Phrase_instance : PhraseExtract):
 
+        tokenized_words = nltk.word_tokenize(Phrase_instance.text)
 
-        return
+        fdist = nltk.FreqDist(tokenized_words)
+
+
+        return fdist
+    
+    @staticmethod
+    def AverageWordDepth(Phrase_instance : PhraseExtract):
+
+        WordDepth_temp = 0
+
+        word_list = Phrase_instance.pureWords()
+
+
+        words_with_returneed_depth = 0
+
+        for word in word_list:
+
+            depth = VocabularyChoice.get_word_depth(word)
+
+            if depth is None:
+
+                continue
+
+            else:
+
+                WordDepth_temp += depth
+                words_with_returneed_depth += 1 
+
+
+        return WordDepth_temp / words_with_returneed_depth
+
+
     
