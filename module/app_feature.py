@@ -230,7 +230,7 @@ def DifficultyAssessment(Phrase_instance : PhraseExtract):
     AssessmentDict['strength']['readability_ease'] = ReadabilityAssess.AssessReadabilityEase(Phrase_instance.readability_score)
     AssessmentDict['strength']['readability_gradelevel'] = ReadabilityAssess.AssessReadabilityGradeLevel(Phrase_instance.readability_grade_level)
     AssessmentDict['weakness']['topic_relevance'] = TopicRelevanceAssess.RelevanceLabel(Phrase_instance.topic_relevance_score)
-
+    AssessmentDict['weakness']['lexical_density'] = VocabularyChoice.LexicalDensity(Phrase_instance)
 
 
     return AssessmentDict
@@ -322,3 +322,41 @@ class TopicRelevanceAssess:
         else:
 
             return 'Did not deliver the context.'
+
+
+class VocabularyChoice:
+
+    @staticmethod
+    def LexicalDensity(Phrase_instance : PhraseExtract):
+        
+        # Very High Lexical Density - .80 - above
+        # High Lexical Density - .60 - .80
+        # Medium Lexical Density - .40 - .60
+        # Low Lexical Density - below- .40
+
+        LexicalDensityScore = Phrase_instance.unique_words_ratio
+
+        print(f"VocabularyChoice.LexicalDensity() : {LexicalDensityScore}")
+
+        if LexicalDensityScore >= .80:
+
+            return 'Very High Lexical Density.'
+        
+        elif LexicalDensityScore >= .60 and LexicalDensityScore < .80:
+
+            return 'High Lexical Density.'
+        
+        elif LexicalDensityScore >= .40 and LexicalDensityScore < .60:
+
+            return 'Medium Lexical Density.'
+        
+        elif LexicalDensityScore < .40:
+
+            return 'Low Lexical Density.'
+    
+    @staticmethod
+    def WordDificulty(Phrase_instance : PhraseExtract):
+
+
+        return
+    
