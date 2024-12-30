@@ -229,6 +229,9 @@ def DifficultyAssessment(Phrase_instance : PhraseExtract):
 
     AssessmentDict['strength']['readability_ease'] = ReadabilityAssess.AssessReadabilityEase(Phrase_instance.readability_score)
     AssessmentDict['strength']['readability_gradelevel'] = ReadabilityAssess.AssessReadabilityGradeLevel(Phrase_instance.readability_grade_level)
+    AssessmentDict['weakness']['topic_relevance'] = TopicRelevanceAssess.RelevanceLabel(Phrase_instance.topic_relevance_score)
+
+
 
     return AssessmentDict
 
@@ -289,3 +292,33 @@ class ReadabilityAssess:
             grade_string = str(ReadabilityGradeLevelScore) + 'th'
         
         return f"The writing's readability is clearly understandable by level of {grade_string} grader."
+    
+
+class TopicRelevanceAssess:
+
+    @staticmethod
+    def RelevanceLabel(Score: int | float):
+
+        # Accurately deliver the context 0.8 - above
+        # Contextually connected to the given topic  0.6 - 0.8
+        # A bit off the context 0.4 - 0.6
+        # Did not deliver the context below - 0.4
+
+        print(f"TopicRelevanceAssess.RelevanceLabel() : {Score}")
+
+
+        if Score >= .8:
+
+            return "Accurately deliver the context."
+
+        elif Score >= .6 and Score < .8:
+
+            return 'Contextually connected to the given topic.'
+
+        elif Score >= .4 and Score < .6:
+
+            return 'A bit off the context.' 
+
+        else:
+
+            return 'Did not deliver the context.'
