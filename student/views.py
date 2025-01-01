@@ -31,12 +31,12 @@ from module.features_xtrct import PhraseExtract1 , PhraseExtract
 from module.new_features_xtract import PhraseExtract as NewPhraseClass
 from module.LanguageToolChecker import EssayExamineErrorSuggest, ContextUnderStandingSuggestion
 from module.rubrics import rubrics_benchmark, TransitionScore, WordChoiceScore, LanguageMechScore, StructureScore, GrammarPuncScore
-from module.app_feature import Vocabulary, DifficultyAssessment, ErrorsCheckResult
+from module.app_feature import Vocabulary, DifficultyAssessment, ErrorsCheckResult, VocabularyChoice, ReadabilityAssess, TopicRelevanceAssess
 
 #model imports
 from user.models import CustomUser, studentuser
 from teacher.models import section, essay_assignment, context_question
-from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features, vocab_recom, context_understanding, error_summary
+from .models import essay_submitted, question_composition, langtool_suggestion, rubrics, features, vocab_recom, context_understanding, error_summary, difficulty_dictionary_str
 
 #imports from other apps
 
@@ -470,9 +470,25 @@ def studentEssaySubmit(req):
             
             error_summary_instance.save()
 
-        #Difficulty Assessment return construction
-        
-            
+            #Difficulty Assessment return construction
+
+            DifficultyAssessmentObject = {
+                'readability_ease' : ReadabilityAssess.AssessReadabilityEase(phrase_instance.readability_score),
+                # 'readability_gradelevel' : ReadabilityAssess.AssessReadabilityGradeLevel(phrase_instance.readability_grade_level),
+                'topic_relevance' : TopicRelevanceAssess.RelevanceLabel(phrase_instance.topic_relevance_score),
+                'lexical_density' : VocabularyChoice.LexicalDensity(phrase_instance),
+                'difficulty_summary' : ErrorsCheckResult.difficultySummary(UniList_errors), 
+                'depth_words' : VocabularyChoice.depth_groups(phrase_instance)
+            }
+
+            print('DifficultAssessmentObject output:')
+            print(DifficultyAssessmentObject)
+
+            difficulty_dictionary_str_instance = difficulty_dictionary_str()
+
+            difficulty_dictionary_str_instance.essay_submitted = assignment_submit_instance.id
+            difficulty_dictionary_str_instance.dictionary_str = json.dumps(DifficultyAssessmentObject)
+            difficulty_dictionary_str_instance.save()            
 
         except Exception as e:
             print('Insertion of the context_undestanding failed.')
@@ -602,7 +618,8 @@ def studentEssaySubmit(req):
             'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
             'label' : rubrics_instance.label,
             'suggestion' : Examine_result,  
-            'word_suggestion' : True
+            'word_suggestion' : True,
+            'difficulty_assessment_obj' : DifficultyAssessmentObject 
             
         })
 
@@ -716,6 +733,11 @@ def getAssignmentResults(req):
                 }
             )
         
+        # Difficulty Assessment return Construction
+        # fetching the error_summary
+        # 
+
+
 
         return Response({
             'message' : 'getAssignmentResults is executing',

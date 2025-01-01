@@ -223,16 +223,13 @@ def DifficultyAssessment(Phrase_instance : PhraseExtract):
 
 
     #Dictionary Object to return in this method scope
-    AssessmentDict = {
-        'strength' : dict(),
-        'weakness' : dict(),
-    }
+    AssessmentDict = dict()
 
-    AssessmentDict['strength']['readability_ease'] = ReadabilityAssess.AssessReadabilityEase(Phrase_instance.readability_score)
-    AssessmentDict['strength']['readability_gradelevel'] = ReadabilityAssess.AssessReadabilityGradeLevel(Phrase_instance.readability_grade_level)
-    AssessmentDict['weakness']['topic_relevance'] = TopicRelevanceAssess.RelevanceLabel(Phrase_instance.topic_relevance_score)
-    AssessmentDict['weakness']['lexical_density'] = VocabularyChoice.LexicalDensity(Phrase_instance)
-
+    AssessmentDict['readability_ease'] = ReadabilityAssess.AssessReadabilityEase(Phrase_instance.readability_score)
+    AssessmentDict['readability_gradelevel'] = ReadabilityAssess.AssessReadabilityGradeLevel(Phrase_instance.readability_grade_level)
+    AssessmentDict['topic_relevance'] = TopicRelevanceAssess.RelevanceLabel(Phrase_instance.topic_relevance_score)
+    AssessmentDict['lexical_density'] = VocabularyChoice.LexicalDensity(Phrase_instance)
+    
 
     return AssessmentDict
 
@@ -531,3 +528,27 @@ class ErrorsCheckResult:
 
 
         return error_id_found
+    
+    @staticmethod
+    def difficultySummary(error_list: list[dict]):
+
+        error_id_found = ErrorsCheckResult.errors_group(error_list)
+
+        error_id_keys = list(error_id_found.keys())
+
+        id_value_list = list()
+
+        for key in error_id_keys:
+
+            id_value_list.append([key, error_id_found[key]])
+
+
+        sorted_error_list = sorted(id_value_list, key=lambda x: x[1], reverse=True)
+
+        #get the top 5 non-zero element
+
+        top_5_error = sorted_error_list[:5]
+
+
+
+        return [pair for pair in top_5_error if pair[1] != 0]

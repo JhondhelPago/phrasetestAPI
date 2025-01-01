@@ -207,3 +207,37 @@ class error_summary(models.Model):
     nonstandard_phrase = models.IntegerField(default=0)
     comma = models.IntegerField(default=0)
     colon_semicolon = models.IntegerField(default=0)
+
+
+    def getDictProperties(self):
+
+        return {
+            'grammar' : self.grammar,
+            'typos' : self.typos,
+            'typography' : self.typography,
+            'casing' : self.casing,
+            'punctuation' : self.punctuation,
+            'spelling' : self.spelling,
+            'style' : self.style,
+            'redundancy' : self.redundancy,
+            'whitespace' : self.whitespace,
+            'misc' : self.misc,
+            'confused_words' : self.confused_words,
+            'contradiction' : self.contradiction,
+            'wordiness' : self.wordiness,
+            'date_time' : self.date_time,
+            'names' : self.names,
+            'numbers' : self.numbers,
+            'inconsistency' : self.inconsistency,
+            'passive_voice' : self.passive_voice,
+            'missing_words' : self.missing_words,
+            'nonstandard_phrase' : self.nonstandard_phrase,
+            'comma' : self.comma,
+            'colon_semicolon' : self.colon_semicolon
+        }
+    
+class difficulty_dictionary_str(models.Model):
+
+    essay_submitted = models.IntegerField(default=0)
+
+    dictionary_str = models.CharField(max_length=5000, blank=True, default='')

@@ -136,11 +136,17 @@ print(UniList_errors)
 
 
 
+
 print('error_tacker sample output: \n')
 # The UniList_error : list[str] will be an input the the ErrorCheckResult.errors_group()
 
 error_tracker = ErrorsCheckResult.errors_group(UniList_errors)
 print(error_tracker)
+
+
+print('\ndifficulty summary: \n')
+difficultysummary = ErrorsCheckResult.difficultySummary(UniList_errors)
+print(difficultysummary)
 
 
 
