@@ -463,7 +463,7 @@ class VocabularyChoice:
 class ErrorsCheckResult:
 
     @staticmethod
-    def errors_group(error_list : list[str]):
+    def errors_group(error_list : list[dict]):
 
         # Spelling Mistakes
         # Grammar Issues
@@ -476,73 +476,58 @@ class ErrorsCheckResult:
         # Typographical Issue
         # Other Suggestion
 
-        spelling_mistakes_err_messages = ["Possible spelling mistake found."]
-        grammar_issues_err_messages = ["This sentence does not start with an uppercase letter.", "A sentence should not begin with a conjunction.", "The use of the passive voice is discouraged.", "This is a possible agreement error."]
-        punctuation_issues_err_messages = ["Unnecessary comma in this sentence.", "Missing period.", "Double punctuation detected."]
-        stylistic_suggestions_err_messages = ["Word repetition detected.", "This sentence is too long. Consider breaking it up.", "This word is too informal for the context."]
-        word_choice_issues_err_messages = ["This word does not seem to fit the context.", "This expression is redundant."]
-        tense_and_aspect_errors_err_messages = ["This verb is in the wrong tense.", "Consider using the past perfect tense here."]
-        number_and_article_errors_err_messages = ["Missing article.", "Consider using the plural form of this word.", "The definite article 'the' might be required here."]
-        confusables_err_messages = ["Did you mean"]
-        typographical_issues_err_messages = ["Extra space detected.", "Non-standard quotation mark used."]
-        other_suggestions_err_messages = ["This phrasing is overly complex."]
 
-
-        error_tracker = {
-            'spelling_mistakes' : 0,
-            'grammar_issues' : 0,
-            'punctuation_issues' : 0,
-            'stylistic_issues' : 0,
-            'word_choice_issues' : 0,
-            'tense_and_aspect_errors' : 0,
-            'number_and_article_errors' : 0,
-            'confusables_errors' : 0,
-            'typographical_issues' : 0,
-            'other_suggestion_errors' : 0
+        error_id_found = {
+            'GRAMMAR' : 0,
+            'TYPOS' : 0,
+            'TYPOGRAPHY' : 0,
+            'CASING' : 0,
+            'PUNCTUATION' : 0,
+            'SPELLING' : 0,
+            'STYLE' : 0,
+            'REDUNDANCY' : 0,
+            'WHITESPACE' : 0,
+            'MISC' : 0,
+            'CONFUSED_WORDS' : 0,
+            'CONTRADICTION' : 0,
+            'WORDINESS' : 0,
+            'DATE_TIME' : 0,
+            'NAMES' : 0, 
+            'NUMBERS' : 0,
+            'INCONSISTENCY' : 0,
+            'PASSIVE_VOICE' : 0,
+            'MISSING_WORDS' : 0,
+            'NONSTANDARD_PHRASE' : 0,
+            'COMMA' : 0,
+            'COLON_SEMICOLON' : 0
         }
 
-        for err_message in error_list:
 
-            if err_message in spelling_mistakes_err_messages:
 
-                error_tracker['spelling_mistakes'] += 1
+        for error_dict in error_list:
 
-            elif err_message in grammar_issues_err_messages:
+            error_id_found['GRAMMAR'] += error_dict['GRAMMAR']
+            error_id_found['TYPOS'] += error_dict['TYPOS']
+            error_id_found['TYPOGRAPHY'] += error_dict['TYPOGRAPHY']
+            error_id_found['CASING'] += error_dict['CASING']
+            error_id_found['PUNCTUATION'] += error_dict['PUNCTUATION']
+            error_id_found['SPELLING'] += error_dict['SPELLING']
+            error_id_found['STYLE'] += error_dict['STYLE']
+            error_id_found['REDUNDANCY'] += error_dict['REDUNDANCY']
+            error_id_found['WHITESPACE'] += error_dict['WHITESPACE']
+            error_id_found['MISC'] += error_dict['MISC']
+            error_id_found['CONFUSED_WORDS'] += error_dict['CONFUSED_WORDS']
+            error_id_found['CONTRADICTION'] += error_dict['CONTRADICTION']
+            error_id_found['WORDINESS'] += error_dict['WORDINESS']
+            error_id_found['DATE_TIME'] += error_dict['DATE_TIME']
+            error_id_found['NAMES'] += error_dict['NAMES']
+            error_id_found['NUMBERS'] += error_dict['NUMBERS']
+            error_id_found['INCONSISTENCY'] += error_dict['INCONSISTENCY']
+            error_id_found['PASSIVE_VOICE'] += error_dict['PASSIVE_VOICE']
+            error_id_found['MISSING_WORDS'] += error_dict['MISSING_WORDS']
+            error_id_found['NONSTANDARD_PHRASE'] += error_dict['NONSTANDARD_PHRASE']
+            error_id_found['COMMA'] += error_dict['COMMA']
+            error_id_found['COLON_SEMICOLON'] += error_dict['COLON_SEMICOLON']
 
-                error_tracker['grammar_issues'] += 1
 
-            elif err_message in punctuation_issues_err_messages:
-
-                error_tracker['punctuation_issues'] += 1
-
-            elif err_message in stylistic_suggestions_err_messages:
-
-                error_tracker['stylistic_issues'] += 1
-
-            elif err_message in word_choice_issues_err_messages:
-
-                error_tracker['word_choice_issues'] += 1
-
-            elif err_message in tense_and_aspect_errors_err_messages:
-
-                error_tracker['tense_and_aspect_errors'] += 1
-
-            elif err_message in number_and_article_errors_err_messages:
-
-                error_tracker['number_and_article_errors'] += 1
-
-            elif err_message in typographical_issues_err_messages:
-
-                error_tracker['typographical_issues'] += 1
-
-            else:
-
-                if err_message in confusables_err_messages[0]:
-
-                    error_tracker['confusables_errors'] += 1
-                
-                else:
-
-                    error_tracker['other_suggestion_errors'] += 1
-
-        return error_tracker
+        return error_id_found

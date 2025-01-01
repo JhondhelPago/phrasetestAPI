@@ -10,19 +10,8 @@ from app_feature import DifficultyAssessment, VocabularyChoice, ErrorsCheckResul
 from LanguageToolChecker import ContextUnderStandingSuggestion
 
 
-context = """Phones and driving"""
-essay_text = """ Phones
-
-Modern humans today are always on their phone. They are always on their phone more than 5 hours a day no stop .All they do is text back and forward and just have group Chats on social media. They even do it while driving. They are some really bad consequences when stuff happens when it comes to a phone. Some certain areas in the United States ban phones from class rooms just because of it.
-
-When people have phones, they know about certain apps that they have .Apps like Facebook Twitter Instagram and Snapchat. So like if a friend moves away and you want to be in contact you can still be in contact by posting videos or text messages. People always have different ways how to communicate with a phone. Phones have changed due to our generation.
-
-Driving is one of the way how to get around. People always be on their phones while doing it. Which can cause serious Problems. That's why there's a thing that's called no texting while driving. That's a really important thing to remember. Some people still do it because they think It's stupid. No matter what they do they still have to obey it because that's the only way how did he save.
-
-Sometimes on the news there is either an accident or a suicide. It might involve someone not looking where they're going or tweet that someone sent. It either injury or death. If a mysterious number says I'm going to kill you and they know where you live but you don't know the person's contact ,It makes you puzzled and make you start to freak out. Which can end up really badly.
-
-Phones are fine to use and it's also the best way to come over help. If you go through a problem and you can't find help you ,always have a phone there with you. Even though phones are used almost every day as long as you're safe it would come into use if you get into trouble. Make sure you do not be like this phone while you're in the middle of driving. The news always updated when people do something stupid around that involves their phones. The safest way is the best way to stay safe.    """
-
+context = """What do you want to be when you grow up? How will you get there?"""
+essay_text = """First, I want to be a flight attendant but i have fear of heights so i thought i can be that. The second one is nurse, but someone said being nurse is hard, so my best decision is architecture. I will get there by studying hard and studying math, I'll do my best to reach my dream and to be architecture, even though studying architecture is being hard, i'll make sure to be one of that, i also want to make my family proud and be the first daughter/grandaughter to reach my dream i've been inspired by other architectures, so why not fulfill my dream being an architecture? I also want to inspire other kids who want to be a architecture, to be an architecture i promise to myself to reach and fulfill my dream being an architect, life can be tough but all people can make it through hard life, trust yourself, be yourself, if you need to reach one dream you want, trust god, he is the only way that can make your life successful."""
 
 Phrase = PhraseExtract(question=context, text=essay_text)
 
@@ -70,7 +59,6 @@ Message_list = ContextUnderStandingSuggestion(Phrase)
 
 
 
-
 original_errors = Message_list
 
 UniList_errors = list()
@@ -78,6 +66,7 @@ UniList_errors = list()
 
 error_id_found = {
         'GRAMMAR' : 0,
+        'TYPOS' : 0,
         'TYPOGRAPHY' : 0,
         'CASING' : 0,
         'PUNCTUATION' : 0,
@@ -107,12 +96,13 @@ for index, C_U in enumerate(original_errors):
     print(f"error_list : {C_U['messages']}")
 
 
-    UniList_errors = list(chain(UniList_errors, C_U['messages']))
+    UniList_errors = list(chain(UniList_errors, [C_U['error_indentifiers']]))
 
     print('Error Indentifiers: \n')
     print(C_U['error_indentifiers'])
 
     error_id_found['GRAMMAR'] += C_U['error_indentifiers']['GRAMMAR']
+    error_id_found['TYPOS'] += C_U['error_indentifiers']['TYPOS']
     error_id_found['TYPOGRAPHY'] += C_U['error_indentifiers']['TYPOGRAPHY']
     error_id_found['CASING'] += C_U['error_indentifiers']['CASING']
     error_id_found['PUNCTUATION'] += C_U['error_indentifiers']['PUNCTUATION']
@@ -152,8 +142,5 @@ print('error_tacker sample output: \n')
 error_tracker = ErrorsCheckResult.errors_group(UniList_errors)
 print(error_tracker)
 
-
-print('\nprinting the API mathces: \n')
-print()
 
 

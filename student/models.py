@@ -180,3 +180,30 @@ class context_understanding(models.Model):
             'messages' : self.messages.split('>'),
             'sentence_modif' : self.sentence_modif
         }
+    
+class error_summary(models.Model):
+
+    essay_submitted = models.IntegerField(default=0)
+
+    grammar = models.IntegerField(default=0)
+    typos = models.IntegerField(default=0)
+    typography = models.IntegerField(default=0)
+    casing = models.IntegerField(default=0)
+    punctuation = models.IntegerField(default=0)    
+    spelling = models.IntegerField(default=0)
+    style = models.IntegerField(default=0)
+    redundancy = models.IntegerField(default=0)
+    whitespace = models.IntegerField(default=0)
+    misc = models.IntegerField(default=0)
+    confused_words = models.IntegerField(default=0)
+    contradiction = models.IntegerField(default=0)
+    wordiness = models.IntegerField(default=0)
+    date_time = models.IntegerField(default=0)
+    names = models.IntegerField(default=0)
+    numbers = models.IntegerField(default=0)
+    inconsistency = models.IntegerField(default=0)
+    passive_voice = models.IntegerField(default=0)
+    missing_words = models.IntegerField(default=0)
+    nonstandard_phrase = models.IntegerField(default=0)
+    comma = models.IntegerField(default=0)
+    colon_semicolon = models.IntegerField(default=0)

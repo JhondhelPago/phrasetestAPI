@@ -361,6 +361,7 @@ class ResultChecker:
         
         error_id_found = {
             'GRAMMAR' : 0,
+            'TYPOS' : 0,
             'TYPOGRAPHY' : 0,
             'CASING' : 0,
             'PUNCTUATION' : 0,
