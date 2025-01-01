@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from new_features_xtract import PhraseExtract
 from app_feature import DifficultyAssessment, VocabularyChoice
+from LanguageToolChecker import ContextUnderStandingSuggestion
 
 
 context = """Phones and driving"""
@@ -57,3 +58,21 @@ print(f"common terms: {WordDepthGroup['common_term']} \n")
 print(f"generalized term : {WordDepthGroup['generalized_term']} \n")
 print(f"specific term : {WordDepthGroup['specific_term']} \n")
 print(f"specialized term : {WordDepthGroup['specialized_term']} \n")
+
+
+
+print('\n\n')
+
+print('sample output of error_group\n')
+
+Message_list = ContextUnderStandingSuggestion(Phrase)
+
+
+original_errors = [match['original_errors'] for match in Message_list]
+
+for index, error_message in enumerate(original_errors):
+
+    print(f"from sentence number : {index}")
+    print(f"error_list : {error_message}")
+    
+

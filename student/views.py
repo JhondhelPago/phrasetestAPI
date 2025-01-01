@@ -422,6 +422,7 @@ def studentEssaySubmit(req):
             # list container for the orm -> context_understanding
             EssaySuggestionResult = list()
 
+            # appending the ContecxtUnderstanding['original_errors'] in this scope
 
             for ContextUnderstanding in Examine_result:
 

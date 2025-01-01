@@ -36,7 +36,7 @@ def ContextUnderStandingSuggestion(PhraseInstance : PhraseExtract):
 
     for index, sentence in enumerate(Sentence_list):
 
-        ErrorSuggestion = ResultCheker(index, sentence)
+        ErrorSuggestion = ResultChecker(index, sentence)
 
         Matches_list.append(ErrorSuggestion.getContextualUnderstading())
 
@@ -316,14 +316,14 @@ def MatchMerger(MatchObjectList : list[Match]) -> Match:
 
 
 
-class ResultCheker:
+class ResultChecker:
 
     def __init__(self, sent_index, text):
         
         self.sent_index = sent_index
         self.text = text
         self.modif_text = text
-
+        self.OriginalErrorsMessages = None
 
         self.result_langtoolcheacker = None
         self.MessageList = list()
@@ -332,20 +332,27 @@ class ResultCheker:
         self.corrected_text = None
 
 
-        self.initial_call_langtoolcheacker()
+        self.initial_call_langtoolchecker()
 
         
     
-    def initial_call_langtoolcheacker(self):
+    def initial_call_langtoolchecker(self):
 
         
         self.result_langtoolcheacker = LangToolChecker(self.text)
+
+        # before the recursion need, the error message shoud save to this class as its own property for other logic reference
+        self.setOriginalErrorsMessages()
 
         self.ResolveSuggestion()
 
         #making the self.errorMessageList as set()
         self.MessageList = list(set(self.MessageList))
 
+
+    def setOriginalErrorsMessages(self):
+
+        self.OriginalErrorsMessages = [error_message['message'] for error_message in self.result_langtoolcheacker]
 
     def DisplayErrorList(self):
 
@@ -391,7 +398,7 @@ class ResultCheker:
             #self.MessageList.append(error_1['message'])
             offset = error_1['offset']
             length = error_1['length']
-            replacement = error_1['replacements'][0]['value']
+            replacement = error_1['replacements'][0]['value'] if error_1['replacements'] else '' # pontentially to be an empty list
 
             message = error_1['message']
 
@@ -413,7 +420,8 @@ class ResultCheker:
             'sentence_number' : self.sent_index,
             "original_sentence" : self.text,
             "messages" : self.MessageList,
-            "correction" : self.modif_text
+            "correction" : self.modif_text,
+            "original_errors" : self.OriginalErrorsMessages
         }
 
 

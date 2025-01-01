@@ -527,6 +527,10 @@ class ErrorsCheckResult:
 
                 error_tracker['tense_and_aspect_errors'] += 1
 
+            elif err_message in number_and_article_errors_err_messages:
+
+                error_tracker['number_and_article_errors'] += 1
+
             elif err_message in typographical_issues_err_messages:
 
                 error_tracker['typographical_issues'] += 1
@@ -541,4 +545,4 @@ class ErrorsCheckResult:
 
                     error_tracker['other_suggestion_errors'] += 1
 
-        return
+        return error_tracker
