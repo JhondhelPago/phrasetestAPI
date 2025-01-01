@@ -735,7 +735,9 @@ def getAssignmentResults(req):
         
         # Difficulty Assessment return Construction
         # fetching the error_summary
-        # 
+        
+        difficulty_dictionary_str_instance = difficulty_dictionary_str.objects.get(essay_submitted=essay_submitted_instance.id)
+        difficulty_assessment_dict = json.loads(difficulty_dictionary_str_instance.dictionary_str)
 
 
 
@@ -748,7 +750,8 @@ def getAssignmentResults(req):
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
             'langtool_suggestion' : context_understanding_list,
-            'vocab_recom' :  vocab_recom_list
+            'vocab_recom' :  vocab_recom_list,
+            'difficulty_assessment' : difficulty_assessment_dict
             
         }, status=status.HTTP_200_OK)
 
