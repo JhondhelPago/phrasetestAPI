@@ -324,6 +324,7 @@ class ResultChecker:
         self.text = text
         self.modif_text = text
         self.OriginalErrorsMessages = None
+        self.ErrorIndentifiers = None
 
         self.result_langtoolcheacker = None
         self.MessageList = list()
@@ -341,6 +342,8 @@ class ResultChecker:
         
         self.result_langtoolcheacker = LangToolChecker(self.text)
 
+        self.setErrorIndentifiers()
+
         # before the recursion need, the error message shoud save to this class as its own property for other logic reference
         self.setOriginalErrorsMessages()
 
@@ -353,6 +356,39 @@ class ResultChecker:
     def setOriginalErrorsMessages(self):
 
         self.OriginalErrorsMessages = [error_message['message'] for error_message in self.result_langtoolcheacker]
+
+    def setErrorIndentifiers(self):
+        
+        error_id_found = {
+            'GRAMMAR' : 0,
+            'TYPOGRAPHY' : 0,
+            'CASING' : 0,
+            'PUNCTUATION' : 0,
+            'SPELLING' : 0,
+            'STYLE' : 0,
+            'REDUNDANCY' : 0,
+            'WHITESPACE' : 0,
+            'MISC' : 0,
+            'CONFUSED_WORDS' : 0,
+            'CONTRADICTION' : 0,
+            'WORDINESS' : 0,
+            'DATE_TIME' : 0,
+            'NAMES' : 0, 
+            'NUMBERS' : 0,
+            'INCONSISTENCY' : 0,
+            'PASSIVE_VOICE' : 0,
+            'MISSING_WORDS' : 0,
+            'NONSTANDARD_PHRASE' : 0,
+            'COMMA' : 0,
+            'COLON_SEMICOLON' : 0
+        }
+
+
+        for match in self.result_langtoolcheacker:
+
+            error_id_found[match['rule']['category']['id']] += 1
+
+        self.ErrorIndentifiers = error_id_found
 
     def DisplayErrorList(self):
 
@@ -421,7 +457,8 @@ class ResultChecker:
             "original_sentence" : self.text,
             "messages" : self.MessageList,
             "correction" : self.modif_text,
-            "original_errors" : self.OriginalErrorsMessages
+            "original_errors" : self.OriginalErrorsMessages,
+            "error_indentifiers" : self.ErrorIndentifiers
         }
 
 

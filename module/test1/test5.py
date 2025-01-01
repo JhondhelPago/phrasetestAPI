@@ -3,9 +3,10 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from itertools import chain
 
 from new_features_xtract import PhraseExtract
-from app_feature import DifficultyAssessment, VocabularyChoice
+from app_feature import DifficultyAssessment, VocabularyChoice, ErrorsCheckResult
 from LanguageToolChecker import ContextUnderStandingSuggestion
 
 
@@ -68,11 +69,38 @@ print('sample output of error_group\n')
 Message_list = ContextUnderStandingSuggestion(Phrase)
 
 
-original_errors = [match['original_errors'] for match in Message_list]
 
-for index, error_message in enumerate(original_errors):
+
+original_errors = Message_list
+
+UniList_errors = list()
+
+for index, C_U in enumerate(original_errors):
 
     print(f"from sentence number : {index}")
-    print(f"error_list : {error_message}")
-    
+    print(f"error_list : {C_U['messages']}")
+
+
+    UniList_errors = list(chain(UniList_errors, C_U['messages']))
+
+    print('Error Indentifiers: \n')
+    print(C_U['error_indentifiers'])
+    print('\n')
+
+
+print('\n UniList_errors : \n')
+print(UniList_errors)
+
+
+
+print('error_tacker sample output: \n')
+# The UniList_error : list[str] will be an input the the ErrorCheckResult.errors_group()
+
+error_tracker = ErrorsCheckResult.errors_group(UniList_errors)
+print(error_tracker)
+
+
+print('\nprinting the API mathces: \n')
+print()
+
 

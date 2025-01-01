@@ -566,7 +566,7 @@ def studentEssaySubmit(req):
             'phrase_features' : phrase_instance.getFeatures(),
             'rubrics_benchmarks' : rubrics_instance.getBenchMarkScores(),
             'label' : rubrics_instance.label,
-            'suggestion' : Examine_result,
+            'suggestion' : Examine_result,  
             'word_suggestion' : True
             
         })
