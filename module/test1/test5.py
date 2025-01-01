@@ -75,6 +75,32 @@ original_errors = Message_list
 
 UniList_errors = list()
 
+
+error_id_found = {
+        'GRAMMAR' : 0,
+        'TYPOGRAPHY' : 0,
+        'CASING' : 0,
+        'PUNCTUATION' : 0,
+        'SPELLING' : 0,
+        'STYLE' : 0,
+        'REDUNDANCY' : 0,
+        'WHITESPACE' : 0,
+        'MISC' : 0,
+        'CONFUSED_WORDS' : 0,
+        'CONTRADICTION' : 0,
+        'WORDINESS' : 0,
+        'DATE_TIME' : 0,
+        'NAMES' : 0, 
+        'NUMBERS' : 0,
+        'INCONSISTENCY' : 0,
+        'PASSIVE_VOICE' : 0,
+        'MISSING_WORDS' : 0,
+        'NONSTANDARD_PHRASE' : 0,
+        'COMMA' : 0,
+        'COLON_SEMICOLON' : 0
+    }
+
+
 for index, C_U in enumerate(original_errors):
 
     print(f"from sentence number : {index}")
@@ -85,7 +111,34 @@ for index, C_U in enumerate(original_errors):
 
     print('Error Indentifiers: \n')
     print(C_U['error_indentifiers'])
+
+    error_id_found['GRAMMAR'] += C_U['error_indentifiers']['GRAMMAR']
+    error_id_found['TYPOGRAPHY'] += C_U['error_indentifiers']['TYPOGRAPHY']
+    error_id_found['CASING'] += C_U['error_indentifiers']['CASING']
+    error_id_found['PUNCTUATION'] += C_U['error_indentifiers']['PUNCTUATION']
+    error_id_found['SPELLING'] += C_U['error_indentifiers']['SPELLING']
+    error_id_found['STYLE'] += C_U['error_indentifiers']['STYLE']
+    error_id_found['REDUNDANCY'] += C_U['error_indentifiers']['REDUNDANCY']
+    error_id_found['WHITESPACE'] += C_U['error_indentifiers']['WHITESPACE']
+    error_id_found['MISC'] += C_U['error_indentifiers']['MISC']
+    error_id_found['CONFUSED_WORDS'] += C_U['error_indentifiers']['CONFUSED_WORDS']
+    error_id_found['CONTRADICTION'] += C_U['error_indentifiers']['CONTRADICTION']
+    error_id_found['WORDINESS'] += C_U['error_indentifiers']['WORDINESS']
+    error_id_found['DATE_TIME'] += C_U['error_indentifiers']['DATE_TIME']
+    error_id_found['NAMES'] += C_U['error_indentifiers']['NAMES']
+    error_id_found['NUMBERS'] += C_U['error_indentifiers']['NUMBERS']
+    error_id_found['INCONSISTENCY'] += C_U['error_indentifiers']['INCONSISTENCY']
+    error_id_found['PASSIVE_VOICE'] += C_U['error_indentifiers']['PASSIVE_VOICE']
+    error_id_found['MISSING_WORDS'] += C_U['error_indentifiers']['MISSING_WORDS']
+    error_id_found['NONSTANDARD_PHRASE'] += C_U['error_indentifiers']['NONSTANDARD_PHRASE']
+    error_id_found['COMMA'] += C_U['error_indentifiers']['COMMA']
+    error_id_found['COLON_SEMICOLON'] += C_U['error_indentifiers']['COLON_SEMICOLON']
+
     print('\n')
+
+print(f"Error Indentifiers summary : {error_id_found}")
+
+
 
 
 print('\n UniList_errors : \n')
