@@ -470,6 +470,8 @@ def studentEssaySubmit(req):
             
             error_summary_instance.save()
 
+        #Difficulty Assessment return construction
+        
             
 
         except Exception as e:

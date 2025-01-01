@@ -39,7 +39,7 @@ class question_composition(models.Model):
 
     essay_submitted = models.IntegerField()
     question = models.CharField(max_length=500, blank=True)
-    composition = models.CharField(max_length=5000, blank=True)
+    composition = models.CharField(max_length=16000, blank=True)
     comment = models.CharField(max_length=4000, default='')
 
     def getDictProperties(self):
