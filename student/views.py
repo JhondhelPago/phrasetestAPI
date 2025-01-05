@@ -739,6 +739,13 @@ def getAssignmentResults(req):
         difficulty_dictionary_str_instance = difficulty_dictionary_str.objects.get(essay_submitted=essay_submitted_instance.id)
         difficulty_assessment_dict = json.loads(difficulty_dictionary_str_instance.dictionary_str)
 
+        suggested_sentence_list = list()
+
+        for C_U_L in context_understanding_list:
+
+            suggested_sentence_list.append(C_U_L['sentence_modif'])
+
+        suggested_fix_string = ' '.join(suggested_sentence_list)
 
 
         return Response({
@@ -751,7 +758,8 @@ def getAssignmentResults(req):
             'features' : features_instance.getProperties(),
             'langtool_suggestion' : context_understanding_list,
             'vocab_recom' :  vocab_recom_list,
-            'difficulty_assessment' : difficulty_assessment_dict
+            'difficulty_assessment' : difficulty_assessment_dict,
+            'Suggested_Fix' : suggested_fix_string
             
         }, status=status.HTTP_200_OK)
 
