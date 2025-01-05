@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 import json
+import traceback
 from itertools import chain
 
 import sys
@@ -425,6 +426,9 @@ def studentEssaySubmit(req):
             # appending the ContextUnderstanding['original_errors'] in this scope
             UniList_errors = list()
 
+            print("Examine Result")
+            print(Examine_result)
+
 
             for ContextUnderstanding in Examine_result:
 
@@ -445,28 +449,52 @@ def studentEssaySubmit(req):
             print(f"Error Tracker dictionary : {error_tracker}")
             error_summary_instance = error_summary()
             error_summary_instance.essay_submitted = assignment_submit_instance.id
-            error_summary_instance.grammar = error_tracker['GRAMMAR']
-            error_summary_instance.typos = error_tracker['TYPOS']
-            error_summary_instance.typography = error_tracker['TYPOGRAPHY']
-            error_summary_instance.casing = error_tracker['CASING']
-            error_summary_instance.punctuation = error_tracker['PUNCTUATION']
-            error_summary_instance.spelling = error_tracker['SPELLING']
-            error_summary_instance.style = error_tracker['STYLE']
-            error_summary_instance.redundancy = error_tracker['REDUNDANCY']
-            error_summary_instance.whitespace = error_tracker['WHITESPACE']
-            error_summary_instance.misc = error_tracker['MISC']
-            error_summary_instance.confused_words = error_tracker['CONFUSED_WORDS']
-            error_summary_instance.contradiction = error_tracker['CONTRADICTION']
-            error_summary_instance.wordiness = error_tracker['WORDINESS']
-            error_summary_instance.date_time = error_tracker['DATE_TIME']
-            error_summary_instance.names = error_tracker['NAMES']
-            error_summary_instance.numbers = error_tracker['NUMBERS']
-            error_summary_instance.inconsistency = error_tracker['INCONSISTENCY']
-            error_summary_instance.passive_voice = error_tracker['PASSIVE_VOICE']
-            error_summary_instance.missing_words = error_tracker['MISSING_WORDS']
-            error_summary_instance.nonstandard_phrase = error_tracker['NONSTANDARD_PHRASE']
-            error_summary_instance.comma = error_tracker['COMMA']
-            error_summary_instance.colon_semicolon = error_tracker['COLON_SEMICOLON']
+            # error_summary_instance.grammar = error_tracker['GRAMMAR']
+            # error_summary_instance.typos = error_tracker['TYPOS']
+            # error_summary_instance.typography = error_tracker['TYPOGRAPHY']
+            # error_summary_instance.casing = error_tracker['CASING']
+            # error_summary_instance.punctuation = error_tracker['PUNCTUATION']
+            # error_summary_instance.spelling = error_tracker['SPELLING']
+            # error_summary_instance.style = error_tracker['STYLE']
+            # error_summary_instance.redundancy = error_tracker['REDUNDANCY']
+            # error_summary_instance.whitespace = error_tracker['WHITESPACE']
+            # error_summary_instance.misc = error_tracker['MISC']
+            # error_summary_instance.confused_words = error_tracker['CONFUSED_WORDS']
+            # error_summary_instance.contradiction = error_tracker['CONTRADICTION']
+            # error_summary_instance.wordiness = error_tracker['WORDINESS']
+            # error_summary_instance.date_time = error_tracker['DATE_TIME']
+            # error_summary_instance.names = error_tracker['NAMES']
+            # error_summary_instance.numbers = error_tracker['NUMBERS']
+            # error_summary_instance.inconsistency = error_tracker['INCONSISTENCY']
+            # error_summary_instance.passive_voice = error_tracker['PASSIVE_VOICE']
+            # error_summary_instance.missing_words = error_tracker['MISSING_WORDS']
+            # error_summary_instance.nonstandard_phrase = error_tracker['NONSTANDARD_PHRASE']
+            # error_summary_instance.comma = error_tracker['COMMA']
+            # error_summary_instance.colon_semicolon = error_tracker['COLON_SEMICOLON']
+
+            error_summary_instance.grammar = error_tracker.get('GRAMMAR', 0)
+            error_summary_instance.typos = error_tracker.get('TYPOS', 0)
+            error_summary_instance.typography = error_tracker.get('TYPOGRAPHY', 0)
+            error_summary_instance.casing = error_tracker.get('CASING', 0)
+            error_summary_instance.punctuation = error_tracker.get('PUNCTUATION', 0)
+            error_summary_instance.spelling = error_tracker.get('SPELLING', 0)
+            error_summary_instance.style = error_tracker.get('STYLE', 0)
+            error_summary_instance.redundancy = error_tracker.get('REDUNDANCY', 0)
+            error_summary_instance.whitespace = error_tracker.get('WHITESPACE', 0)
+            error_summary_instance.misc = error_tracker.get('MISC', 0)
+            error_summary_instance.confused_words = error_tracker.get('CONFUSED_WORDS', 0)
+            error_summary_instance.contradiction = error_tracker.get('CONTRADICTION', 0)
+            error_summary_instance.wordiness = error_tracker.get('WORDINESS', 0)
+            error_summary_instance.date_time = error_tracker.get('DATE_TIME', 0)
+            error_summary_instance.names = error_tracker.get('NAMES', 0)
+            error_summary_instance.numbers = error_tracker.get('NUMBERS', 0)
+            error_summary_instance.inconsistency = error_tracker.get('INCONSISTENCY', 0)
+            error_summary_instance.passive_voice = error_tracker.get('PASSIVE_VOICE', 0)
+            error_summary_instance.missing_words = error_tracker.get('MISSING_WORDS', 0)
+            error_summary_instance.nonstandard_phrase = error_tracker.get('NONSTANDARD_PHRASE', 0)
+            error_summary_instance.comma = error_tracker.get('COMMA', 0)
+            error_summary_instance.colon_semicolon = error_tracker.get('COLON_SEMICOLON', 0)
+
             
             error_summary_instance.save()
 
@@ -493,6 +521,8 @@ def studentEssaySubmit(req):
         except Exception as e:
             print('Insertion of the context_undestanding failed.')
             print(e)
+            traceback.print_exc()
+          
 
             return Response({
                 'message' : 'try block is executing',
