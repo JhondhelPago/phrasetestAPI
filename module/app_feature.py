@@ -18,7 +18,7 @@ from wordfreq import word_frequency
 from PyDictionary import PyDictionary
 from new_features_xtract import PhraseExtract
 import spacy
-
+import random
 
 default_dictionary =  PyDictionary()
 
@@ -453,6 +453,13 @@ class VocabularyChoice:
         WordGroup['generalized_term'] = list(set(WordGroup['generalized_term']))
         WordGroup['specific_term'] = list(set(WordGroup['specific_term']))
         WordGroup['specialized_term'] = list(set(WordGroup['specialized_term']))
+
+
+        WordGroup['common_term'] = random.sample(WordGroup['common_term'], 10) if len(WordGroup['common_term']) > 10 else WordGroup['common_term']
+        WordGroup['generalized_term'] = random.sample(WordGroup['generalized_term'], 10) if len(WordGroup['generalized_term']) > 10 else WordGroup['generalized_term']
+        WordGroup['specific_term'] = random.sample(WordGroup['specific_term'], 10) if len(WordGroup['specific_term']) > 10 else WordGroup['specific_term']
+        WordGroup['specialized_term'] = random.sample(WordGroup['specialized_term'], 10) if len(WordGroup['specialized_term']) > 10 else WordGroup['specialized_term']
+
 
         return WordGroup
 
