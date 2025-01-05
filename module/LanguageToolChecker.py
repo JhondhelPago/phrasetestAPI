@@ -387,7 +387,11 @@ class ResultChecker:
 
         for match in self.result_langtoolcheacker:
 
-            error_id_found[match['rule']['category']['id']] += 1
+            #error_id_found[match['rule']['category']['id']] += 1
+
+            if match['rule']['category']['id'] in error_id_found:
+
+                error_id_found[match['rule']['category']['id']] += 1
 
         self.ErrorIndentifiers = error_id_found
 
