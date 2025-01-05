@@ -29,7 +29,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenOb
 
 #model imports
 from user.models import CustomUser, studentuser, teacheruser
-from student.models import essay_submitted, rubrics, langtool_suggestion, features, question_composition, vocab_recom, context_understanding
+from student.models import essay_submitted, rubrics, langtool_suggestion, features, question_composition, vocab_recom, context_understanding, difficulty_dictionary_str
 from . models import section, essay_assignment, context_question
 from . teacher_module import get_submitted_students
 
@@ -424,7 +424,17 @@ def TeacherViewExamineResult(req):
                     'suggestion' : word_suggestion.suggestion
                 }
             )
-            
+
+        difficulty_dictionary_str_instance = difficulty_dictionary_str.objects.get(essay_submitted=essay_submitted_instance.id)
+        difficulty_assessment_dict = json.loads(difficulty_dictionary_str_instance.dictionary_str)
+
+        suggested_sentence_list = list()
+
+        for C_U_L in context_understanding_list:
+
+            suggested_sentence_list.append(C_U_L['sentence_modif'])
+
+        suggested_fix_string = ' '.join(suggested_sentence_list)
 
         
 
@@ -438,7 +448,9 @@ def TeacherViewExamineResult(req):
             'rubrics' : rubrics_instance.getBenchMarkScores(),
             'features' : features_instance.getProperties(),
             'langtool_suggestion' : context_understanding_list,
-            'vocab_recom' : vocab_recom_list
+            'vocab_recom' : vocab_recom_list,
+            'difficulty_assessment' : difficulty_assessment_dict,
+            'Suggested_Fix' : suggested_fix_string
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
