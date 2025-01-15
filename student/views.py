@@ -320,6 +320,9 @@ def studentEssaySubmit(req):
         print('Phase features')
         print(phrase_instance_features_dict)
 
+        print('Phrase features new')
+        print(phrase_instance.feature_list_sample())
+
         features_instance = features()
         features_instance.essay_submitted = assignment_submit_instance.id
 
