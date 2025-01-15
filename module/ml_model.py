@@ -114,7 +114,7 @@ def gb_model_predict(feature_list : list):
 
     if result == 0:
 
-        return 'need imporevements'
+        return 'need improvements'
     
     elif result == 1:
 
